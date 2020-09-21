@@ -1,0 +1,147 @@
+[
+	{
+		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/main.c",
+		"bookmarks": [
+			{
+				"line": 199,
+				"column": 44,
+				"label": ""
+			},
+			{
+				"line": 588,
+				"column": 64,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/input/input.c",
+		"bookmarks": [
+			{
+				"line": 147,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 156,
+				"column": 32,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/cmd/printset_impl.c",
+		"bookmarks": [
+			{
+				"line": 537,
+				"column": 48,
+				"label": "_do_set_frequency"
+			},
+			{
+				"line": 578,
+				"column": 65,
+				"label": "set_frequency"
+			},
+			{
+				"line": 628,
+				"column": 72,
+				"label": "set_frecuency Rx,Tx"
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/libbladeRF/src/board/bladerf2/bladerf2.c",
+		"bookmarks": [
+			{
+				"line": 1204,
+				"column": 63,
+				"label": "set frecuency callback"
+			},
+			{
+				"line": 2823,
+				"column": 55,
+				"label": "set_frecuency pointer"
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/libbladeRF/src/board/bladerf2/rfic_host.c",
+		"bookmarks": [
+			{
+				"line": 73,
+				"column": 53,
+				"label": "_rfic_host_initialize"
+			},
+			{
+				"line": 90,
+				"column": 69,
+				"label": "ad_init"
+			},
+			{
+				"line": 390,
+				"column": 56,
+				"label": ""
+			},
+			{
+				"line": 954,
+				"column": 49,
+				"label": "Function pointers"
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/build/common/thirdparty/ad936x/ad9361_api.c",
+		"bookmarks": [
+			{
+				"line": 72,
+				"column": 53,
+				"label": "ad9361_init"
+			},
+			{
+				"line": 1482,
+				"column": 57,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/cmd/printset.c",
+		"bookmarks": [
+			{
+				"line": 30,
+				"column": 52,
+				"label": "set_frecuency definition"
+			},
+			{
+				"line": 108,
+				"column": 42,
+				"label": "set comands table"
+			},
+			{
+				"line": 299,
+				"column": 59,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/cmd/cmd.c",
+		"bookmarks": [
+			{
+				"line": 294,
+				"column": 35,
+				"label": "exec set"
+			},
+			{
+				"line": 474,
+				"column": 31,
+				"label": ""
+			},
+			{
+				"line": 512,
+				"column": 51,
+				"label": "exec command"
+			}
+		]
+	}
+]
