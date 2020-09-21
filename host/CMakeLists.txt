@@ -4,7 +4,7 @@ project(bladeRF C)
 ################################################################################
 # Project configuration
 ################################################################################
-
+set( CMAKE_BUILD_TYPE Debug)
 # All build output lands in this directory:
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/output)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/output)
@@ -52,7 +52,7 @@ option(BUILD_DOCUMENTATION
 
 option(TREAT_WARNINGS_AS_ERRORS
        "Treat compiler warnings as errors."
-       ON)
+       OFF)
 
 if(ENABLE_LOG_FILE_INFO)
     add_definitions(-DLOG_INCLUDE_FILE_INFO)
@@ -105,9 +105,9 @@ if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
     endif(${ENABLE_GDB_EXTENSIONS})
 
 
-    add_definitions(-Wall)
-    add_definitions(-Wextra)
-    add_definitions(-Wno-unused-parameter)
+    #add_definitions(-Wall)
+    #add_definitions(-Wextra)
+    #add_definitions(-Wno-unused-parameter)
 
     if(TREAT_WARNINGS_AS_ERRORS)
         add_definitions(-Werror)
