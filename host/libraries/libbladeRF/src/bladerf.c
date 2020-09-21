@@ -92,7 +92,7 @@ int bladerf_open_with_devinfo(struct bladerf **opened_device,
     }
 
     /* Open backend */
-    status = backend_open(dev, devinfo);
+    status = backend_open(dev, devinfo);//Connect by USB
     if (status != 0) {
         free(dev);
         return status;
