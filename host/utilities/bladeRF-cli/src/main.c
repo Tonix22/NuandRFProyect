@@ -252,7 +252,6 @@ int main(int argc, char *argv[])
     str_queue_init(&exec_list);
     init_rc_config(&rc);
 
-    rc.interactive_mode = true;
     rc.verbosity = BLADERF_LOG_LEVEL_VERBOSE;
 
     state = cli_state_create();
@@ -265,7 +264,7 @@ int main(int argc, char *argv[])
     /* Conditionally performed items, depending on runtime config */
     status = open_device(&rc, state);
 
-    status = input_loop(state, rc.interactive_mode);
+    status = input_loop(state, true);
     
     cli_state_destroy(state);
     str_queue_deinit(&exec_list);

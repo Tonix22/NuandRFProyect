@@ -57,16 +57,62 @@
 /* dev path becomes device specifier string (osmosdr-like) */
 int bladerf_open(struct bladerf **dev, const char *dev_id)
 {
-    struct bladerf_devinfo devinfo;
     int status;
+    unsigned int i;
+    struct bladerf_devinfo devinfo;
+    struct bladerf *conection_data; // Has de USB or Cable conection data
+    
+    //Fill dev info structure, because is emtpy and NULL
+    bladerf_init_devinfo(&devinfo);
 
-    *dev = NULL;
+    *dev = NULL;// this variable is going to be update later with conection_data
 
-    /* Populate dev-info from string */
-    status = str2devinfo(dev_id, &devinfo);
-    if (!status) {
-        status = bladerf_open_with_devinfo(dev, &devinfo);
+    conection_data  = calloc(1, sizeof(struct bladerf));
+    if (conection_data == NULL) {return BLADERF_ERR_MEM;}
+
+    status = backend_open(conection_data, &devinfo);//Connect by USB
+    if (status != 0) {
+        free(conection_data);
+        return status;
     }
+
+    /* Find matching board */
+    
+    /* bladerf2_board_fns  */
+    for (i = 0; i < bladerf_boards_len; i++) {
+        if (bladerf_boards[i]->matches(conection_data)) {
+            conection_data->board = bladerf_boards[i];
+            break;
+        }
+    }
+    /* If no matching board was found */
+    if (i == bladerf_boards_len) {
+        conection_data->backend->close(conection_data);
+        free(conection_data);
+        return BLADERF_ERR_NODEV;
+    }
+
+    MUTEX_INIT(&conection_data->lock);
+
+    /* Open board */
+    status = conection_data->board->open(conection_data, &devinfo);
+
+    if (status < 0) {
+        bladerf_close(conection_data);
+        return status;
+    }
+
+    /* Load configuration file */
+    status = config_load_options_file(conection_data);
+
+    if (status < 0) {
+        bladerf_close(conection_data);
+        return status;
+    }
+
+    *dev = conection_data;
+
+    //status = bladerf_open_with_devinfo(dev, &devinfo);
 
     return status;
 }
@@ -74,24 +120,22 @@ int bladerf_open(struct bladerf **dev, const char *dev_id)
 int bladerf_open_with_devinfo(struct bladerf **opened_device,
                               struct bladerf_devinfo *devinfo)
 {
-    struct bladerf *dev;
+    struct bladerf *dev; // Has de USB or Cable conection data
     struct bladerf_devinfo any_device;
     unsigned int i;
     int status;
 
-    if (devinfo == NULL) {
-        bladerf_init_devinfo(&any_device);
-        devinfo = &any_device;
-    }
+    bladerf_init_devinfo(devinfo);
 
     *opened_device = NULL;
 
     dev = calloc(1, sizeof(struct bladerf));
-    if (dev == NULL) {
-        return BLADERF_ERR_MEM;
-    }
+    if (dev == NULL) {return BLADERF_ERR_MEM;}
 
     /* Open backend */
+    /* This function setup dev func pointers*/
+
+
     status = backend_open(dev, devinfo);//Connect by USB
     if (status != 0) {
         free(dev);
@@ -99,6 +143,7 @@ int bladerf_open_with_devinfo(struct bladerf **opened_device,
     }
 
     /* Find matching board */
+    /* bladerf2_board_fns  */
     for (i = 0; i < bladerf_boards_len; i++) {
         if (bladerf_boards[i]->matches(dev)) {
             dev->board = bladerf_boards[i];
