@@ -26,12 +26,15 @@
 #include <pthread.h>
 #include <string.h>
 #include <libbladeRF.h>
+#include <pthread.h>
 #include "input/input.h"
 #include "str_queue.h"
 #include "script.h"
 #include "common.h"
 #include "cmd.h"
 #include "version.h"
+#include "board/board.h"
+#include "cmd/rxtx_impl.h"
 
 #if BLADERF_OS_WINDOWS
 #include "setenv.h"
@@ -241,6 +244,57 @@ void check_for_bootloader_devs()
            "      were detected. Run 'help recover' to view information about\n"
            "      downloading firmware to the device(s).\n\n");
 }
+static int tx_cmd_start(struct cli_state *s)
+{
+    int status = 0;
+
+    /* Check that we're able to start up in our current state */
+    status = rxtx_cmd_start_check(s, s->tx, "tx");
+    if (status != 0) {
+        return status;
+    }
+
+    /* Perform file conversion (if needed) and open input file */
+    MUTEX_LOCK(&s->tx->file_mgmt.file_meta_lock);
+
+    if (s->tx->file_mgmt.format == RXTX_FMT_CSV_SC16Q11) {
+        status = tx_csv_to_sc16q11(s);
+
+        if (status == 0) {
+            printf("  Converted CSV to SC16 Q11 file and "
+                   "switched to converted file.\n\n");
+        }
+    }
+
+    if (status == 0) {
+        MUTEX_LOCK(&s->tx->file_mgmt.file_lock);
+
+        assert(s->tx->file_mgmt.format == RXTX_FMT_BIN_SC16Q11);
+        status = expand_and_open(s->tx->file_mgmt.path, "rb",
+                                 &s->tx->file_mgmt.file);
+        MUTEX_UNLOCK(&s->tx->file_mgmt.file_lock);
+    }
+
+    MUTEX_UNLOCK(&s->tx->file_mgmt.file_meta_lock);
+
+    if (status != 0) {
+        return status;
+    }
+
+    /* Request thread to start running */
+    rxtx_submit_request(s->tx, RXTX_TASK_REQ_START);
+    status = rxtx_wait_for_state(s->tx, RXTX_STATE_RUNNING, 3000);
+
+    /* This should never occur. If it does, there's likely a defect
+     * present in the tx task */
+    if (status != 0) {
+        cli_err(s, "tx", "TX did not start up in the alloted time\n");
+        status = CLI_RET_UNKNOWN;
+    }
+
+    return status;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -252,7 +306,7 @@ int main(int argc, char *argv[])
     str_queue_init(&exec_list);
     init_rc_config(&rc);
 
-    rc.verbosity = BLADERF_LOG_LEVEL_VERBOSE;
+    rc.verbosity = BLADERF_LOG_LEVEL_SILENT;
 
     state = cli_state_create();
 
@@ -262,9 +316,60 @@ int main(int argc, char *argv[])
     check_for_bootloader_devs();
 
     /* Conditionally performed items, depending on runtime config */
+    // =========================================================================
+    // OPEN DEVICE
+    // =========================================================================
+    
     status = open_device(&rc, state);
+    
+    // =========================================================================
+    // RX AND TX Threads init
+    // =========================================================================
+    
     cli_start_tasks(state);
-    status = input_loop(state, true);
+    
+    // =========================================================================
+    // Frequency
+    // =========================================================================
+    
+    MUTEX_LOCK(&(state->dev->lock));
+    state->dev->board->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+    MUTEX_UNLOCK(&(state->dev->lock));
+    
+    // =========================================================================
+    // Sample Rate
+    // =========================================================================
+    
+    struct bladerf_rational_rate rate;
+    rate.integer = 1500000;
+    rate.num = 0;
+    rate.den = 1;
+    state->dev->board->set_rational_sample_rate(state->dev,BLADERF_CHANNEL_TX(0), &rate, &rate);
+    
+    // =========================================================================
+    // bandwidth
+    // =========================================================================
+    state->dev->board->set_bandwidth(state->dev,BLADERF_CHANNEL_TX(0), 1500000, NULL);
+    
+    // =========================================================================
+    // Read data
+    // =========================================================================
+    rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/setp-dic_2020/bladeRF/raw.csv");
+    rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
+    struct tx_params *tx_params = state->tx->params;
+    tx_params->repeat = 0;
+    tx_params->repeat_delay = 1000;
+    tx_cmd_start(state);
+
+    printf("\r\n");
+    printf("press any key to end");
+    system ("/bin/stty raw");
+    getc(stdin);
+    system ("/bin/stty cooked");
+    printf("\r\n");
+
+
+    //status = input_loop(state, true);
     
     cli_state_destroy(state);
     str_queue_deinit(&exec_list);

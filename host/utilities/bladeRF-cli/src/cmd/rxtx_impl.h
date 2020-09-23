@@ -146,6 +146,7 @@ extern const struct numeric_suffix rxtx_kmg_suffixes[];
 extern const size_t rxtx_kmg_suffixes_len;
 
 /* Forward declare thread entry points implemented by rx/tx code */
+int tx_csv_to_sc16q11(struct cli_state *s);
 void *rx_task(void *cli_state);
 void *tx_task(void *cli_state);
 

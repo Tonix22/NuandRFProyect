@@ -228,7 +228,7 @@ static int tx_task_exec_running(struct rxtx_data *tx, struct cli_state *s)
  *
  * return 0 on success, CLI_RET_* on failure
  */
-static int tx_csv_to_sc16q11(struct cli_state *s)
+int tx_csv_to_sc16q11(struct cli_state *s)
 {
     struct rxtx_data *tx = s->tx;
     char buf[81]         = { 0 };

@@ -99,7 +99,6 @@ static inline char * zeroize_next_delimiter(char *line)
 
 int input_loop(struct cli_state *s, bool interactive)
 {
-    char *line;
     char command[110];
     int status;
     const char *error;
@@ -107,157 +106,101 @@ int input_loop(struct cli_state *s, bool interactive)
     char quit;
 
     status = input_init();
-    if (status < 0) {
-        return status;
-    }
+
     status = 0;
-
-    /* Do we have a queue of commands provided by the '-e' cmdline option? */
-    s->exec_from_cmdline = !str_queue_empty(s->exec_list);
-
     
     while (!cli_fatal(status) && status != CLI_RET_QUIT) {
 
         /* Give priority to commands issued via the '-e' cmdline option */
-        if (s->exec_from_cmdline) {
-            line = str_queue_deq(s->exec_list);
-            assert(line != NULL);
-        } else {
             
-            //line = input_get_line(CLI_DEFAULT_PROMPT);
-            
-            
-            memset(command,0,sizeof(command));
-            counter++;
-            printf("***********counter: %d********\r\n",counter);
-            switch (counter)
-            {
-            case 1:
-                strcpy(command,"set frequency 1.5G");
-                break;
-            case 2:
-                strcpy(command,"set samplerate 1.5M");
-                break;
-            case 3:
-                strcpy(command,"set bandwidth 1.5M");
-                break;
-            case 4:
-                strcpy(command,"tx config file=/home/tonix/Documents/CINVESTAV/setp-dic_2020/bladeRF/raw.csv format=csv");
-                break;
-            case 5:
-                strcpy(command,"tx config repeat=0 delay=1000");
-                break;
-            case 6:
-                strcpy(command,"tx start");
-                break;
-            default:
-                sleep(2);
-                printf("\r\n");
-                printf("press any key to end");
-                system ("/bin/stty raw");
-                quit = getc(stdin);
-                strcpy(command,"exit");
-                system ("/bin/stty cooked");
-                break;
-            }
-            line = command;
-            
+        //line = input_get_line(CLI_DEFAULT_PROMPT);
+        
+        memset(command,0,sizeof(command));
+        counter++;
+        switch (counter)
+        {
+        case 1:
+            //strcpy(command,"tx config file=/home/tonix/Documents/CINVESTAV/setp-dic_2020/bladeRF/raw.csv format=csv");
+            break;
+        case 2:
+            //strcpy(command,"tx config repeat=0 delay=1000");
+            break;
+        case 3:
+            strcpy(command,"tx start");
+            break;
+        default:
+            sleep(2);
+            printf("\r\n");
+            printf("press any key to end");
+            system ("/bin/stty raw");
+            quit = getc(stdin);
+            strcpy(command,"exit");
+            system ("/bin/stty cooked");
+            printf("\r\n");
+            break;
         }
 
-        if (!line && !s->exec_from_cmdline) {
-            if (cli_script_loaded(s->scripts)) {
-                /* We've completed a script */
-                exit_script(s);
+        char *next_cmd = command;
+        char *cmd;
+        bool stop_execing_line = false;
 
-                /* Exit if we were run with a script, but not asked
-                 * to drop into interactive mode */
+        do {
+            cmd = next_cmd;
+            next_cmd = zeroize_next_delimiter(cmd);
+
+            status = cmd_handle(s, cmd);
+
+            if (status < 0) {
+                /* Unlike a shell, we'll stop processing at the first
+                    * command in a line that returned an error, as
+                    * this is generally most appropriate. For example:
+                    *   rx config ffile=samples.bin n=1M; rx start; rx wait 5s;
+                    *
+                    * Here it wouldn't make sense to try to execute 'rx start'
+                    * if since the rx config was bogus.
+                    */
+                stop_execing_line = true;
+
+                error = cli_strerror(status, s->last_lib_error);
+                if (error) {
+                    cli_err(s, "Error", "%s\n", error);
+                }
+
+                /* Stop executing script or command list */
+                if (s->exec_from_cmdline) {
+                    str_queue_clear(s->exec_list);
+                } else {
+                    exit_script(s);
+                }
+
+                /* Quit if we're not supposed to drop to a prompt */
                 if (!interactive) {
                     status = CLI_RET_QUIT;
                 }
-            } else {
-                /* Leaving interactive mode */
-                break;
-            }
-        } else {
-            char *next_cmd = line;
-            char *cmd;
-            bool stop_execing_line = false;
 
-            do {
-                cmd = next_cmd;
-                next_cmd = zeroize_next_delimiter(cmd);
-
-				status = cmd_handle(s, cmd);
-
-                if (status < 0) {
-                    /* Unlike a shell, we'll stop processing at the first
-                     * command in a line that returned an error, as
-                     * this is generally most appropriate. For example:
-                     *   rx config ffile=samples.bin n=1M; rx start; rx wait 5s;
-                     *
-                     * Here it wouldn't make sense to try to execute 'rx start'
-                     * if since the rx config was bogus.
-                     */
-                    stop_execing_line = true;
-
-                    error = cli_strerror(status, s->last_lib_error);
-                    if (error) {
-                        cli_err(s, "Error", "%s\n", error);
-                    }
-
-                    /* Stop executing script or command list */
-                    if (s->exec_from_cmdline) {
-                        str_queue_clear(s->exec_list);
-                    } else {
-                        exit_script(s);
-                    }
-
-                    /* Quit if we're not supposed to drop to a prompt */
-                    if (!interactive) {
-                        status = CLI_RET_QUIT;
-                    }
-
-                } else if (status > 0){
-                    switch (status) {
-                        case CLI_RET_CLEAR_TERM:
-                            input_clear_terminal();
-                            break;
-                        case CLI_RET_RUN_SCRIPT:
-                            status = input_set_input(
-                                    cli_script_file(s->scripts));
-
-                            if (status < 0) {
-                                cli_err(s, "Error",
-                                        "Failed to begin executing script\n");
-                            }
-                            break;
-                        default:
-                            cli_err(s, "Error", "Unknown return code: %d\n",
-                                    status);
-                    }
+            } else if (status > 0){
+                switch (status) {
+                    case CLI_RET_CLEAR_TERM:
+                        input_clear_terminal();
+                        break;
+                    case CLI_RET_RUN_SCRIPT:
+                        status = input_set_input(
+                                cli_script_file(s->scripts));
+                        if (status < 0) {
+                            cli_err(s, "Error",
+                                    "Failed to begin executing script\n");
+                        }
+                        break;
+                    default:
+                        cli_err(s, "Error", "Unknown return code: %d\n",
+                                status);
                 }
-            } while (next_cmd != NULL && stop_execing_line == false);
-        }
-
-        if (s->exec_from_cmdline) {
-            /* Fetch the next item from the queue of commands provided from
-             * the '-e' cmdline argument. */
-            free(line);
-            line = NULL;
-            s->exec_from_cmdline = !str_queue_empty(s->exec_list);
-
-            /* Nothing left to do here if we aren't dropping into a script
-             * next, or entering interactive mode. */
-            if (!interactive &&
-                !s->exec_from_cmdline && !cli_script_loaded(s->scripts)) {
-                status = CLI_RET_QUIT;
             }
+        } while (next_cmd != NULL && stop_execing_line == false);
 
-        } else {
-            /* Keep track our our script line count so we can report where
-             * an error occurred. */
-            cli_script_bump_line_count(s->scripts);
-        }
+        /* Keep track our our script line count so we can report where
+            * an error occurred. */
+        cli_script_bump_line_count(s->scripts);
     }
 
     input_deinit();
