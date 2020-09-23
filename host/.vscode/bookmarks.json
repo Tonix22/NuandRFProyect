@@ -8,7 +8,7 @@
 				"label": ""
 			},
 			{
-				"line": 270,
+				"line": 269,
 				"column": 64,
 				"label": ""
 			}
@@ -18,17 +18,12 @@
 		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/input/input.c",
 		"bookmarks": [
 			{
-				"line": 125,
-				"column": 54,
-				"label": ""
-			},
-			{
-				"line": 180,
+				"line": 145,
 				"column": 16,
 				"label": ""
 			},
 			{
-				"line": 189,
+				"line": 161,
 				"column": 32,
 				"label": ""
 			}

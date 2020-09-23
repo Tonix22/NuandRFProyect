@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
 
     /* Conditionally performed items, depending on runtime config */
     status = open_device(&rc, state);
-
+    cli_start_tasks(state);
     status = input_loop(state, true);
     
     cli_state_destroy(state);

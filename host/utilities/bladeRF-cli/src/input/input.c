@@ -19,6 +19,7 @@
  */
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 #include "input.h"
 #include "input_impl.h"
 #include "cmd.h"
@@ -99,28 +100,22 @@ static inline char * zeroize_next_delimiter(char *line)
 int input_loop(struct cli_state *s, bool interactive)
 {
     char *line;
+    char command[110];
     int status;
     const char *error;
+    int counter = 0;
+    char quit;
 
     status = input_init();
     if (status < 0) {
         return status;
     }
-
     status = 0;
-
-    /* Set input source to script, if we have any */
-    if (cli_script_loaded(s->scripts)) {
-        status = input_set_input(cli_script_file(s->scripts));
-        if (status < 0) {
-            cli_err(s, "Error", "Failed to load script. Aborting!\n");
-            status = CLI_RET_QUIT;
-        }
-    }
 
     /* Do we have a queue of commands provided by the '-e' cmdline option? */
     s->exec_from_cmdline = !str_queue_empty(s->exec_list);
 
+    
     while (!cli_fatal(status) && status != CLI_RET_QUIT) {
 
         /* Give priority to commands issued via the '-e' cmdline option */
@@ -128,7 +123,45 @@ int input_loop(struct cli_state *s, bool interactive)
             line = str_queue_deq(s->exec_list);
             assert(line != NULL);
         } else {
-            line = input_get_line(CLI_DEFAULT_PROMPT);
+            
+            //line = input_get_line(CLI_DEFAULT_PROMPT);
+            
+            
+            memset(command,0,sizeof(command));
+            counter++;
+            printf("***********counter: %d********\r\n",counter);
+            switch (counter)
+            {
+            case 1:
+                strcpy(command,"set frequency 1.5G");
+                break;
+            case 2:
+                strcpy(command,"set samplerate 1.5M");
+                break;
+            case 3:
+                strcpy(command,"set bandwidth 1.5M");
+                break;
+            case 4:
+                strcpy(command,"tx config file=/home/tonix/Documents/CINVESTAV/setp-dic_2020/bladeRF/raw.csv format=csv");
+                break;
+            case 5:
+                strcpy(command,"tx config repeat=0 delay=1000");
+                break;
+            case 6:
+                strcpy(command,"tx start");
+                break;
+            default:
+                sleep(2);
+                printf("\r\n");
+                printf("press any key to end");
+                system ("/bin/stty raw");
+                quit = getc(stdin);
+                strcpy(command,"exit");
+                system ("/bin/stty cooked");
+                break;
+            }
+            line = command;
+            
         }
 
         if (!line && !s->exec_from_cmdline) {
