@@ -361,15 +361,21 @@ int main(int argc, char *argv[])
     tx_params->repeat_delay = 1000;
     tx_cmd_start(state);
 
+    //status = input_loop(state, true); // leave this when debu is needed
+    // =========================================================================
+    // Format to end C script
+    // =========================================================================
     printf("\r\n");
     printf("press any key to end");
     system ("/bin/stty raw");
     getc(stdin);
     system ("/bin/stty cooked");
     printf("\r\n");
+    // =========================================================================
+    // Free Resources
+    // =========================================================================
 
-
-    //status = input_loop(state, true);
+    
     
     cli_state_destroy(state);
     str_queue_deinit(&exec_list);
