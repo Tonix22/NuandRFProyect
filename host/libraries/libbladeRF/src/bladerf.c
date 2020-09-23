@@ -62,6 +62,10 @@ int bladerf_open(struct bladerf **dev, const char *dev_id)
     struct bladerf_devinfo devinfo;
     struct bladerf *conection_data; // Has de USB or Cable conection data
     
+    // =========================================================================
+    // Set up default value of variable
+    // =========================================================================
+
     //Fill dev info structure, because is emtpy and NULL
     bladerf_init_devinfo(&devinfo);
 
@@ -76,12 +80,14 @@ int bladerf_open(struct bladerf **dev, const char *dev_id)
         return status;
     }
 
-    /* Find matching board */
+    // =========================================================================
+    // Find matching board and load board functions
+    // =========================================================================
     
     /* bladerf2_board_fns  */
     for (i = 0; i < bladerf_boards_len; i++) {
         if (bladerf_boards[i]->matches(conection_data)) {
-            conection_data->board = bladerf_boards[i];
+            conection_data->board = bladerf_boards[i]; // load execution board functions
             break;
         }
     }
@@ -94,16 +100,12 @@ int bladerf_open(struct bladerf **dev, const char *dev_id)
 
     MUTEX_INIT(&conection_data->lock);
 
+    // =========================================================================
+    // Initialize Board
+    // =========================================================================
+
     /* Open board */
     status = conection_data->board->open(conection_data, &devinfo);
-
-    if (status < 0) {
-        bladerf_close(conection_data);
-        return status;
-    }
-
-    /* Load configuration file */
-    status = config_load_options_file(conection_data);
 
     if (status < 0) {
         bladerf_close(conection_data);

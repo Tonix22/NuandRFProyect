@@ -3,12 +3,12 @@
 		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/main.c",
 		"bookmarks": [
 			{
-				"line": 199,
-				"column": 44,
+				"line": 105,
+				"column": 55,
 				"label": ""
 			},
 			{
-				"line": 588,
+				"line": 270,
 				"column": 64,
 				"label": ""
 			}
@@ -18,12 +18,17 @@
 		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/input/input.c",
 		"bookmarks": [
 			{
-				"line": 147,
+				"line": 125,
+				"column": 54,
+				"label": ""
+			},
+			{
+				"line": 180,
 				"column": 16,
 				"label": ""
 			},
 			{
-				"line": 156,
+				"line": 189,
 				"column": 32,
 				"label": ""
 			}
@@ -53,12 +58,12 @@
 		"path": "$ROOTPATH$/libraries/libbladeRF/src/board/bladerf2/bladerf2.c",
 		"bookmarks": [
 			{
-				"line": 1204,
+				"line": 1220,
 				"column": 63,
 				"label": "set frecuency callback"
 			},
 			{
-				"line": 2823,
+				"line": 2839,
 				"column": 55,
 				"label": "set_frecuency pointer"
 			}
@@ -128,6 +133,11 @@
 		"path": "$ROOTPATH$/utilities/bladeRF-cli/src/cmd/cmd.c",
 		"bookmarks": [
 			{
+				"line": 79,
+				"column": 39,
+				"label": ""
+			},
+			{
 				"line": 294,
 				"column": 35,
 				"label": "exec set"
@@ -141,6 +151,16 @@
 				"line": 512,
 				"column": 51,
 				"label": "exec command"
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/libraries/libbladeRF/src/bladerf.c",
+		"bookmarks": [
+			{
+				"line": 107,
+				"column": 67,
+				"label": ""
 			}
 		]
 	}

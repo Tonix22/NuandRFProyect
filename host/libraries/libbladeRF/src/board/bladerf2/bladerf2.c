@@ -258,6 +258,9 @@ static int bladerf2_open(struct bladerf *dev, struct bladerf_devinfo *devinfo)
     int ready, status;
 
     size_t const MAX_RETRIES = 30;
+    // =========================================================================
+    // Allocate: {Board Data, Flash Architecture}
+    // =========================================================================
 
     /* Allocate board data */
     board_data = calloc(1, sizeof(struct bladerf2_board_data));
@@ -272,6 +275,9 @@ static int bladerf2_open(struct bladerf *dev, struct bladerf_devinfo *devinfo)
     if (NULL == dev->flash_arch) {
         return BLADERF_ERR_MEM;
     }
+    //=========================================================================
+    // Init values: {Board Data, Flash Architecture}
+    // =========================================================================
 
     /* Initialize board data */
     board_data->fpga_version.describe = board_data->fpga_version_str;
@@ -285,6 +291,10 @@ static int bladerf2_open(struct bladerf *dev, struct bladerf_devinfo *devinfo)
     dev->flash_arch->device_id       = 0x0;
 
     board_data->rfic_reset_on_close = false;
+
+    //=========================================================================
+    // Validate Fwr version and check is ready
+    // =========================================================================
 
     /* Read firmware version */
     CHECK_STATUS(dev->backend->get_fw_version(dev, &board_data->fw_version));
@@ -319,7 +329,11 @@ static int bladerf2_open(struct bladerf *dev, struct bladerf_devinfo *devinfo)
     if (ready != 1) {
         RETURN_ERROR_STATUS("is_fw_ready", BLADERF_ERR_TIMEOUT);
     }
-
+    
+    //=========================================================================
+    // USB,SPI and FPGA check and open
+    // =========================================================================
+    
     /* Determine data message size */
     CHECK_STATUS(dev->backend->get_device_speed(dev, &usb_speed));
 
@@ -458,7 +472,9 @@ static int bladerf2_open(struct bladerf *dev, struct bladerf_devinfo *devinfo)
             return 0;
         }
     }
-
+    //=========================================================================
+    // Initialize Bladerf2
+    // =========================================================================
     /* Initialize the board */
     CHECK_STATUS(_bladerf2_initialize(dev));
 
