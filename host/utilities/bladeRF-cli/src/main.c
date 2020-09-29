@@ -28,19 +28,12 @@
 #include <libbladeRF.h>
 #include <pthread.h>
 #include "input/input.h"
-#include "str_queue.h"
-#include "script.h"
 #include "common.h"
-#include "cmd.h"
-#include "version.h"
 #include "board/board.h"
 #include "cmd/rxtx_impl.h"
 
-#if BLADERF_OS_WINDOWS
-#include "setenv.h"
-#endif
 
-#define OPTSTR "e:L:d:f:l:s:ipv:h"
+//#include "board/bladerf2/common.h"
 
 /* Runtime configuration items */
 struct rc_config {
@@ -301,16 +294,13 @@ int main(int argc, char *argv[])
     int status = 0;
     struct rc_config rc;
     struct cli_state *state;
-    struct str_queue exec_list;
-
-    str_queue_init(&exec_list);
+   
     init_rc_config(&rc);
 
     rc.verbosity = BLADERF_LOG_LEVEL_SILENT;
 
     state = cli_state_create();
 
-    state->exec_list = &exec_list;
     bladerf_log_set_verbosity(rc.verbosity);
 
     check_for_bootloader_devs();
@@ -334,6 +324,10 @@ int main(int argc, char *argv[])
     
     MUTEX_LOCK(&(state->dev->lock));
     state->dev->board->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+    //state->dev->board_data->rfic->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+    struct bladerf2_board_data *board_data = state->dev->board_data;
+    //struct controller_fns const * fanfic = board_data->rfic;
+    //board_data->rfic;//->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
     MUTEX_UNLOCK(&(state->dev->lock));
     
     // =========================================================================
@@ -378,7 +372,6 @@ int main(int argc, char *argv[])
     
     
     cli_state_destroy(state);
-    str_queue_deinit(&exec_list);
     deinit_rc_config(&rc);
     return status;
 }
