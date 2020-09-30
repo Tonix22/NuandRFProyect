@@ -33,7 +33,7 @@
 #include "cmd/rxtx_impl.h"
 
 
-//#include "board/bladerf2/common.h"
+#include "board/bladerf2/common.h"
 
 /* Runtime configuration items */
 struct rc_config {
@@ -323,11 +323,11 @@ int main(int argc, char *argv[])
     // =========================================================================
     
     MUTEX_LOCK(&(state->dev->lock));
-    state->dev->board->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+    //state->dev->board->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
     //state->dev->board_data->rfic->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
     struct bladerf2_board_data *board_data = state->dev->board_data;
-    //struct controller_fns const * fanfic = board_data->rfic;
-    //board_data->rfic;//->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+    struct controller_fns const * fanfic = board_data->rfic;
+    board_data->rfic->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
     MUTEX_UNLOCK(&(state->dev->lock));
     
     // =========================================================================
