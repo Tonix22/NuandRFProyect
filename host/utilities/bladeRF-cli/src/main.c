@@ -32,6 +32,8 @@
 #include "board/board.h"
 #include "cmd/rxtx_impl.h"
 
+#include <unistd.h>
+
 
 #include "board/bladerf2/common.h"
 
@@ -322,13 +324,15 @@ int main(int argc, char *argv[])
     // Frequency
     // =========================================================================
     
-    MUTEX_LOCK(&(state->dev->lock));
-    //state->dev->board->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
-    //state->dev->board_data->rfic->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
+   
     struct bladerf2_board_data *board_data = state->dev->board_data;
-    struct controller_fns const * fanfic = board_data->rfic;
-    board_data->rfic->set_frequency(state->dev,BLADERF_CHANNEL_TX(0),1500000000);
-    MUTEX_UNLOCK(&(state->dev->lock));
+    struct bladerf_range const *range      = NULL;
+    bladerf_frequency frequency = 150000000;
+
+    /* Set up band selection */
+    CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency));
+
+    ad9361_set_tx_lo_freq(board_data->phy, frequency);
     
     // =========================================================================
     // Sample Rate
@@ -352,9 +356,16 @@ int main(int argc, char *argv[])
     rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
     struct tx_params *tx_params = state->tx->params;
     tx_params->repeat = 0;
-    tx_params->repeat_delay = 1000;
+    //tx_params->repeat_delay = 1000;
     tx_cmd_start(state);
-
+    for(long i=150000000;i<150050000;i+=1000)
+    {
+        rxtx_cmd_stop(state,state->tx);
+        CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency+i));
+        ad9361_set_tx_lo_freq(board_data->phy, frequency+i);
+        tx_cmd_start(state);
+        usleep(1000*150);
+    }
     //status = input_loop(state, true); // leave this when debu is needed
     // =========================================================================
     // Format to end C script
