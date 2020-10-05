@@ -330,9 +330,9 @@ int main(int argc, char *argv[])
     bladerf_frequency frequency = 150000000;
 
     /* Set up band selection */
-    CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency));
+    CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency*2));
 
-    ad9361_set_tx_lo_freq(board_data->phy, frequency);
+    ad9361_set_tx_lo_freq(board_data->phy, frequency*2);
     
     // =========================================================================
     // Sample Rate
@@ -381,7 +381,7 @@ int main(int argc, char *argv[])
     // =========================================================================
 
     
-    
+    rxtx_cmd_stop(state,state->tx);
     cli_state_destroy(state);
     deinit_rc_config(&rc);
     return status;
