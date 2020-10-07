@@ -37,6 +37,8 @@
 
 #include "board/bladerf2/common.h"
 
+#define FREQUENCY_TEST (0)
+
 /* Runtime configuration items */
 struct rc_config {
     bool interactive_mode;
@@ -319,30 +321,60 @@ int main(int argc, char *argv[])
     // =========================================================================
     
     cli_start_tasks(state);
-    
+
+
+    // =========================================================================
+    // GENERAL
+    // =========================================================================
+    struct bladerf2_board_data *board_data = state->dev->board_data;
+    struct ad9361_rf_phy *phy              = board_data->phy;
     // =========================================================================
     // Frequency
     // =========================================================================
     
-   
-    struct bladerf2_board_data *board_data = state->dev->board_data;
-    struct bladerf_range const *range      = NULL;
     bladerf_frequency frequency = 150000000;
 
     /* Set up band selection */
     CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency*2));
 
-    ad9361_set_tx_lo_freq(board_data->phy, frequency*2);
+    ad9361_set_tx_lo_freq(phy, frequency*2);
     
     // =========================================================================
     // Sample Rate
     // =========================================================================
+    bladerf_sample_rate current;
+    bladerf_rfic_rxfir  rxfir;
+    bladerf_rfic_txfir  txfir;
+    bladerf_sample_rate rate = 1500000;
+
+    int max_range            = 2083334; //2MHZ
+    int min_range            = 520834; // 520KHz
+    bool old_rate, new_rate;
+
+    /* Sample rates requiring a 4x interpolation/decimation */
+    ad9361_get_tx_sampling_freq(phy, &current);
     
-    struct bladerf_rational_rate rate;
-    rate.integer = 1500000;
-    rate.num = 0;
-    rate.den = 1;
-    state->dev->board->set_rational_sample_rate(state->dev,BLADERF_CHANNEL_TX(0), &rate, &rate);
+    old_rate = (current >= min_range) && ( current <= max_range);
+    new_rate = (rate    >= min_range) && ( rate    <= max_range);
+    
+    ///* Get current filter status */
+    if (old_rate || new_rate) {
+        rxfir = board_data->rxfir;
+        txfir = board_data->txfir;
+    }
+    if(new_rate) // check if rfic needs configuration
+    {
+        if (rxfir != BLADERF_RFIC_RXFIR_DEC4 ||
+            txfir != BLADERF_RFIC_TXFIR_INT4) {
+            //fpga_common/src/ad936x_params.c:604
+            ad9361_set_rx_fir_config(phy,bladerf2_rfic_rx_fir_config_dec4);
+            ad9361_set_rx_fir_en_dis(phy, 1);//1 = enable
+
+            ad9361_set_tx_fir_config(phy,bladerf2_rfic_tx_fir_config_int4);
+            ad9361_set_tx_fir_en_dis(phy,1);// 1 = enable
+        }
+    }
+    ad9361_set_tx_sampling_freq(phy, rate);        
     
     // =========================================================================
     // bandwidth
@@ -358,7 +390,8 @@ int main(int argc, char *argv[])
     tx_params->repeat = 0;
     //tx_params->repeat_delay = 1000;
     tx_cmd_start(state);
-    for(long i=150000000;i<150050000;i+=1000)
+    #if FREQUENCY_TEST
+    for(long i=150000000; i < 150050000;i+=1000)
     {
         rxtx_cmd_stop(state,state->tx);
         CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency+i));
@@ -366,6 +399,7 @@ int main(int argc, char *argv[])
         tx_cmd_start(state);
         usleep(1000*150);
     }
+    #endif
     //status = input_loop(state, true); // leave this when debu is needed
     // =========================================================================
     // Format to end C script
