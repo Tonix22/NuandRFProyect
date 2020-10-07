@@ -379,7 +379,8 @@ int main(int argc, char *argv[])
     // =========================================================================
     // bandwidth
     // =========================================================================
-    state->dev->board->set_bandwidth(state->dev,BLADERF_CHANNEL_TX(0), 1500000, NULL);
+    ad9361_set_tx_rf_bandwidth(phy,1500000);
+    //state->dev->board->set_bandwidth(state->dev,BLADERF_CHANNEL_TX(0), 1500000, NULL);
     
     // =========================================================================
     // Read data
