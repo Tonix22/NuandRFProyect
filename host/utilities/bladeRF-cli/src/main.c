@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
     // =========================================================================
     // Read data
     // =========================================================================
-    rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/setp-dic_2020/bladeRF/raw.csv");
+    rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/raw.csv");
     rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
     struct tx_params *tx_params = state->tx->params;
     tx_params->repeat = 0;
