@@ -99,20 +99,20 @@ int bladerf_open(struct bladerf **dev, const char *dev_id)
     }
 
     MUTEX_INIT(&conection_data->lock);
-
+    *dev = conection_data;
     // =========================================================================
     // Initialize Board
     // =========================================================================
 
     /* Open board */
-    status = conection_data->board->open(conection_data, &devinfo);
+    status = (*dev)->board->open(conection_data, &devinfo);
 
     if (status < 0) {
         bladerf_close(conection_data);
         return status;
     }
 
-    *dev = conection_data;
+    
 
     //status = bladerf_open_with_devinfo(dev, &devinfo);
 

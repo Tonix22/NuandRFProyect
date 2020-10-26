@@ -37,7 +37,10 @@
 
 #include "board/bladerf2/common.h"
 
-#define FREQUENCY_TEST (0)
+#define TEST (0)
+#define FREQUENCY (0)
+#define GAIN      (0)
+#define BANDWIDHT (1)
 
 /* Runtime configuration items */
 struct rc_config {
@@ -102,43 +105,7 @@ static void print_error_need_devarg()
 static int open_device(struct rc_config *rc,
                        struct cli_state *state)
 {
-    
     int status = bladerf_open(&state->dev, rc->device);
-
-    if (status) //NUAND ERROR
-    {
-
-        /* Just warn if no device is attached; don't error out */
-        if (!rc->device && status == BLADERF_ERR_NODEV){
-            fprintf(stderr, "\n");
-            fprintf(stderr, "No bladeRF device(s) available.\n");
-            status = 0;
-        } 
-        else {
-            fprintf(stderr, "Failed to open device (%s): %s\n",
-                    rc->device ? rc->device : "first available",
-                    bladerf_strerror(status));
-            status = -1;
-        }
-    } 
-    else {
-        status = bladerf_get_fpga_size(state->dev, &state->dev_info.fpga_size);
-
-        if (status != 0) {
-            fprintf(stderr, "Could not determine FPGA size.\n");
-        } else {
-            if (state->dev_info.fpga_size == BLADERF_FPGA_40KLE ||
-                    state->dev_info.fpga_size == BLADERF_FPGA_115KLE) {
-                state->dev_info.is_bladerf_x40_x115 = true;
-            }
-
-            if (state->dev_info.fpga_size == BLADERF_FPGA_A4 ||
-                    state->dev_info.fpga_size == BLADERF_FPGA_A9) {
-                state->dev_info.is_bladerf_micro = true;
-            }
-        }
-    }
-
     return status;
 }
 
@@ -292,6 +259,46 @@ static int tx_cmd_start(struct cli_state *s)
     return status;
 }
 
+static int rx_cmd_start(struct cli_state *s)
+{
+    int status;
+
+    /* Check that we can start up in our current state */
+    status = rxtx_cmd_start_check(s, s->rx, "rx");
+    if (status != 0) {
+        return status;
+    }
+
+    /* Set up output file */
+    MUTEX_LOCK(&s->rx->file_mgmt.file_lock);
+    if (s->rx->file_mgmt.format == RXTX_FMT_CSV_SC16Q11) {
+        status =
+            expand_and_open(s->rx->file_mgmt.path, "w", &s->rx->file_mgmt.file);
+
+    } else {
+        /* RXTX_FMT_BIN_SC16Q11, open file in binary mode */
+        status = expand_and_open(s->rx->file_mgmt.path, "wb",
+                                 &s->rx->file_mgmt.file);
+    }
+    MUTEX_UNLOCK(&s->rx->file_mgmt.file_lock);
+
+    if (status != 0) {
+        return status;
+    }
+
+    /* Request thread to start running */
+    rxtx_submit_request(s->rx, RXTX_TASK_REQ_START);
+    status = rxtx_wait_for_state(s->rx, RXTX_STATE_RUNNING, 3000);
+
+    /* This should never occur. If it does, there's likely a defect
+     * present in the rx task */
+    if (status != 0) {
+        cli_err(s, "rx", "RX did not start up in the allotted time.\n");
+        status = CLI_RET_UNKNOWN;
+    }
+
+    return status;
+}
 
 int main(int argc, char *argv[])
 {
@@ -313,9 +320,7 @@ int main(int argc, char *argv[])
     // =========================================================================
     // OPEN DEVICE
     // =========================================================================
-    
-    status = open_device(&rc, state);
-    
+    bladerf_open(&state->dev, rc.device);
     // =========================================================================
     // RX AND TX Threads init
     // =========================================================================
@@ -332,24 +337,26 @@ int main(int argc, char *argv[])
     // Frequency
     // =========================================================================
     
-    bladerf_frequency frequency = 150000000;
+    bladerf_frequency frequency = 150000000; // 150MHZ
 
     /* Set up band selection */
     CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency*2));
 
     ad9361_set_tx_lo_freq(phy, frequency*2);
-    
+    ad9361_set_rx_lo_freq(phy, 95000000);//950MHZ
     // =========================================================================
     // Sample Rate
     // =========================================================================
     bladerf_sample_rate current;
     bladerf_rfic_rxfir  rxfir;
     bladerf_rfic_txfir  txfir;
-    bladerf_sample_rate rate = 1500000;
+    bladerf_sample_rate rate = 5000000; // 10Mhz
 
     int max_range            = 2083334; //2MHZ
     int min_range            = 520834; // 520KHz
     bool old_rate, new_rate;
+
+    /*Check if data doesnt need interpolation*/
 
     /* Sample rates requiring a 4x interpolation/decimation */
     ad9361_get_tx_sampling_freq(phy, &current);
@@ -375,32 +382,69 @@ int main(int argc, char *argv[])
         }
     }
     ad9361_set_tx_sampling_freq(phy, rate);        
-    
+    ad9361_set_rx_sampling_freq(phy, rate);
     // =========================================================================
     // bandwidth
     // =========================================================================
-    ad9361_set_tx_rf_bandwidth(phy,1500000);
-    //state->dev->board->set_bandwidth(state->dev,BLADERF_CHANNEL_TX(0), 1500000, NULL);
-    
+    ad9361_set_tx_rf_bandwidth(phy,0); // 1.5Mhz -- reach to 56Mhz
+    ad9361_set_rx_rf_bandwidth(phy, 56000000);
     // =========================================================================
     // Read data
     // =========================================================================
     rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/raw.csv");
     rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
+    rxtx_set_file_path(state->rx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/rx.csv");
+    rxtx_set_file_format(state->rx,RXTX_FMT_CSV_SC16Q11);
     struct tx_params *tx_params = state->tx->params;
     tx_params->repeat = 0;
     //tx_params->repeat_delay = 1000;
-    tx_cmd_start(state);
-    #if FREQUENCY_TEST
+    //tx_cmd_start(state);
+    rx_cmd_start(state);
+    usleep(1000*1000);
+    rxtx_cmd_stop(state,state->rx);
+#if TEST
+
+#if FREQUENCY
     for(long i=150000000; i < 150050000;i+=1000)
     {
         rxtx_cmd_stop(state,state->tx);
+        
+       
         CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency+i));
         ad9361_set_tx_lo_freq(board_data->phy, frequency+i);
+        
+
         tx_cmd_start(state);
         usleep(1000*150);
     }
-    #endif
+#endif
+#if GAIN
+    struct bladerf_range const *range      = NULL;
+    for(long i=0; i < 1000;i++)
+    {
+        rxtx_cmd_stop(state,state->tx);
+        state->dev->board->get_gain_range(state->dev, BLADERF_CHANNEL_TX(0), &range);
+
+        board_data->rfic->set_gain(state->dev, BLADERF_CHANNEL_TX(0), clamp_to_range(range, gain));        
+
+        tx_cmd_start(state);
+        usleep(1000*150);
+    }
+
+#endif
+#if BANDWIDHT
+    for (int i = 0; i < 1000000; i+=100000)
+    {
+        rxtx_cmd_stop(state,state->tx);
+        ad9361_set_tx_rf_bandwidth(phy,i); // 1.5Mhz -- reach to 56Mh
+        tx_cmd_start(state);
+        printf("%d\r\n",i);
+        usleep(1000*400);
+    }
+    
+#endif
+
+#endif
     //status = input_loop(state, true); // leave this when debu is needed
     // =========================================================================
     // Format to end C script
@@ -415,7 +459,6 @@ int main(int argc, char *argv[])
     // Free Resources
     // =========================================================================
 
-    
     rxtx_cmd_stop(state,state->tx);
     cli_state_destroy(state);
     deinit_rc_config(&rc);
