@@ -31,10 +31,9 @@
 #include "common.h"
 #include "board/board.h"
 #include "cmd/rxtx_impl.h"
-
 #include <unistd.h>
 
-
+#include "range.h"
 #include "board/bladerf2/common.h"
 
 #define TEST (0)
@@ -388,6 +387,26 @@ int main(int argc, char *argv[])
     // =========================================================================
     ad9361_set_tx_rf_bandwidth(phy,0); // 1.5Mhz -- reach to 56Mhz
     ad9361_set_rx_rf_bandwidth(phy, 56000000);
+    // =========================================================================
+    // RX AGC MODE OFF
+    // =========================================================================
+    enum rf_gain_ctrl_mode gc_mode;
+    gc_mode = RF_GAIN_MGC; // MANUAL GAIN CONTROL
+    ad9361_set_rx_gain_control_mode(phy, 0, RF_GAIN_MGC); // RX channel 0
+    ad9361_set_rx_gain_control_mode(phy, 1, RF_GAIN_MGC); // RX channel 1
+    // =========================================================================
+    // RX GAIN VALUES
+    // =========================================================================
+    int val;
+    int gain = 60;
+    float offset = -17.0f; // depends on frequency bladerf2_rx_gain_ranges, bladerf2_common.h
+    struct bladerf_range const *range      = NULL;
+
+    gain = gain - offset; 
+    val = __scale_int(range, gain);
+    ad9361_set_rx_rf_gain(phy, 0, val);
+    ad9361_set_rx_rf_gain(phy, 1, val);
+
     // =========================================================================
     // Read data
     // =========================================================================
