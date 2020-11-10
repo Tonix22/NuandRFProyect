@@ -35,11 +35,8 @@
 
 #include "range.h"
 #include "board/bladerf2/common.h"
+#include "test_config.h"
 
-#define TEST (0)
-#define FREQUENCY (0)
-#define GAIN      (0)
-#define BANDWIDHT (1)
 
 /* Runtime configuration items */
 struct rc_config {
@@ -336,21 +333,25 @@ int main(int argc, char *argv[])
     // Frequency
     // =========================================================================
     
-    bladerf_frequency frequency = 150000000; // 150MHZ
+    bladerf_frequency frequency = FREQ; // 150MHZ
 
     /* Set up band selection */
-    CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency*2));
+    CHECK_STATUS(board_data->rfic->select_band(state->dev, BLADERF_CHANNEL_TX(0), frequency));
 
-    ad9361_set_tx_lo_freq(phy, frequency*2);
-    ad9361_set_rx_lo_freq(phy, 950000000);//950MHZ
+    ad9361_set_tx_lo_freq(phy, frequency);
+    ad9361_set_rx_lo_freq(phy, FREQ);//950MHZ
+
+    board_data->rfic->set_gain(state->dev, BLADERF_CHANNEL_TX(0),60);
     // =========================================================================
     // Sample Rate
+    // 520,834 KHz - 61.440Mhz
     // =========================================================================
     bladerf_sample_rate current;
     bladerf_rfic_rxfir  rxfir;
     bladerf_rfic_txfir  txfir;
-    bladerf_sample_rate rate = 10000000; // 10Mhz
+    bladerf_sample_rate rate = SAMPLE_RATE; // 10Mhz
 
+    /*Range for interpolation required*/
     int max_range            = 2083334; //2MHZ
     int min_range            = 520834; // 520KHz
     bool old_rate, new_rate;
@@ -382,11 +383,13 @@ int main(int argc, char *argv[])
     }
     ad9361_set_tx_sampling_freq(phy, rate);        
     ad9361_set_rx_sampling_freq(phy, rate);
+
     // =========================================================================
     // bandwidth
+    // 200000 -- 56000000 bladerf2_bandwidth_range-bladerf2_common.h
     // =========================================================================
-    ad9361_set_tx_rf_bandwidth(phy,0); // 1.5Mhz -- reach to 56Mhz
-    ad9361_set_rx_rf_bandwidth(phy, 56000000);
+    ad9361_set_tx_rf_bandwidth(phy,BANDWIDTH_RX); 
+    ad9361_set_rx_rf_bandwidth(phy,BANDWIDHT_TX);
     // =========================================================================
     // RX AGC MODE OFF
     // =========================================================================
@@ -412,6 +415,7 @@ int main(int argc, char *argv[])
     // =========================================================================
     // Read data
     // =========================================================================
+    
     rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/raw.csv");
     rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
     rxtx_set_file_path(state->rx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/rx.csv");
@@ -454,15 +458,32 @@ int main(int argc, char *argv[])
 
 #endif
 #if BANDWIDHT
-    for (int i = 0; i < 1000000; i+=100000)
+    usleep(1000*2000);
+    rxtx_cmd_stop(state,state->tx);
+    usleep(1000*500);
+    ad9361_set_tx_rf_bandwidth(phy,1500000); // 1.5Mhz -- reach to 56Mh
+    usleep(1000*1000);
+    tx_cmd_start(state);
+    usleep(1000*2000);
+    rxtx_cmd_stop(state,state->tx);
+    usleep(1000*500);
+    ad9361_set_tx_rf_bandwidth(phy,56000000);
+    usleep(1000*1000);
+    tx_cmd_start(state);
+
+#endif
+
+#if SAMPLERATE
+
+    for(long i=5000000; i < 20000000; i+=1000000)
     {
         rxtx_cmd_stop(state,state->tx);
-        ad9361_set_tx_rf_bandwidth(phy,i); // 1.5Mhz -- reach to 56Mh
+        usleep(1000*300);
+        ad9361_set_tx_sampling_freq(phy, i);
+        usleep(1000*300);
         tx_cmd_start(state);
-        printf("%d\r\n",i);
-        usleep(1000*400);
+        usleep(1000*1000);
     }
-    
 #endif
 
 #endif
