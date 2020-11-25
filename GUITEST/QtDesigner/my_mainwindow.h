@@ -14,6 +14,7 @@ public:
     virtual ~MainWindow();
 private slots:
     void onButtonClicked();
+    void writetext(const QString &text);
 };
 
 #endif // MAINWINDOW_H
