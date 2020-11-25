@@ -50,6 +50,9 @@ public:
     QLabel *min_p1_val;
     QLabel *max_p2_val;
     QLabel *min_p2_val;
+    QComboBox *API_menu;
+    QLabel *API_label;
+    QLabel *myname;
     QMenuBar *menubar;
     QMenu *menuFile;
     QStatusBar *statusbar;
@@ -132,16 +135,16 @@ public:
         Param_1_val->setOrientation(Qt::Horizontal);
         set_get_menu = new QComboBox(centralwidget);
         set_get_menu->setObjectName(QStringLiteral("set_get_menu"));
-        set_get_menu->setGeometry(QRect(480, 130, 112, 38));
+        set_get_menu->setGeometry(QRect(590, 130, 110, 38));
         do_set_get_label = new QLabel(centralwidget);
         do_set_get_label->setObjectName(QStringLiteral("do_set_get_label"));
-        do_set_get_label->setGeometry(QRect(500, 100, 91, 22));
+        do_set_get_label->setGeometry(QRect(610, 100, 91, 22));
         tx_rx_menu = new QComboBox(centralwidget);
         tx_rx_menu->setObjectName(QStringLiteral("tx_rx_menu"));
-        tx_rx_menu->setGeometry(QRect(340, 130, 112, 38));
+        tx_rx_menu->setGeometry(QRect(460, 130, 110, 38));
         param_1_menu = new QComboBox(centralwidget);
         param_1_menu->setObjectName(QStringLiteral("param_1_menu"));
-        param_1_menu->setGeometry(QRect(200, 130, 112, 38));
+        param_1_menu->setGeometry(QRect(160, 130, 110, 38));
         Param_2_val = new QSlider(centralwidget);
         Param_2_val->setObjectName(QStringLiteral("Param_2_val"));
         Param_2_val->setGeometry(QRect(220, 330, 160, 24));
@@ -206,13 +209,13 @@ public:
         param2_up_label_2->setGeometry(QRect(270, 310, 68, 22));
         tx_rx_label = new QLabel(centralwidget);
         tx_rx_label->setObjectName(QStringLiteral("tx_rx_label"));
-        tx_rx_label->setGeometry(QRect(360, 100, 68, 22));
+        tx_rx_label->setGeometry(QRect(490, 100, 68, 22));
         param1_label = new QLabel(centralwidget);
         param1_label->setObjectName(QStringLiteral("param1_label"));
-        param1_label->setGeometry(QRect(220, 100, 68, 22));
+        param1_label->setGeometry(QRect(190, 100, 68, 22));
         param2_label = new QLabel(centralwidget);
         param2_label->setObjectName(QStringLiteral("param2_label"));
-        param2_label->setGeometry(QRect(80, 100, 68, 22));
+        param2_label->setGeometry(QRect(50, 100, 68, 22));
         SendData = new QPushButton(centralwidget);
         SendData->setObjectName(QStringLiteral("SendData"));
         SendData->setGeometry(QRect(500, 280, 99, 38));
@@ -277,7 +280,7 @@ public:
         SendData->setPalette(palette2);
         param_2_menu = new QComboBox(centralwidget);
         param_2_menu->setObjectName(QStringLiteral("param_2_menu"));
-        param_2_menu->setGeometry(QRect(60, 130, 112, 38));
+        param_2_menu->setGeometry(QRect(20, 130, 110, 38));
         logo = new QLabel(centralwidget);
         logo->setObjectName(QStringLiteral("logo"));
         logo->setGeometry(QRect(270, 10, 141, 81));
@@ -302,6 +305,15 @@ public:
         min_p2_val = new QLabel(centralwidget);
         min_p2_val->setObjectName(QStringLiteral("min_p2_val"));
         min_p2_val->setGeometry(QRect(130, 330, 68, 22));
+        API_menu = new QComboBox(centralwidget);
+        API_menu->setObjectName(QStringLiteral("API_menu"));
+        API_menu->setGeometry(QRect(290, 130, 150, 38));
+        API_label = new QLabel(centralwidget);
+        API_label->setObjectName(QStringLiteral("API_label"));
+        API_label->setGeometry(QRect(350, 100, 68, 22));
+        myname = new QLabel(centralwidget);
+        myname->setObjectName(QStringLiteral("myname"));
+        myname->setGeometry(QRect(560, 370, 131, 22));
         OpcodeGenerator->setCentralWidget(centralwidget);
         menubar = new QMenuBar(OpcodeGenerator);
         menubar->setObjectName(QStringLiteral("menubar"));
@@ -335,10 +347,10 @@ public:
         do_set_get_label->setText(QApplication::translate("OpcodeGenerator", "Do,Set,Get", Q_NULLPTR));
         tx_rx_menu->clear();
         tx_rx_menu->insertItems(0, QStringList()
-         << QApplication::translate("OpcodeGenerator", "other", Q_NULLPTR)
-         << QApplication::translate("OpcodeGenerator", "tx", Q_NULLPTR)
-         << QApplication::translate("OpcodeGenerator", "rx", Q_NULLPTR)
-         << QApplication::translate("OpcodeGenerator", "trx", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "TX", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "RX", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "TRX", Q_NULLPTR)
         );
         param_1_menu->clear();
         param_1_menu->insertItems(0, QStringList()
@@ -353,7 +365,7 @@ public:
         );
         param2_up_label->setText(QApplication::translate("OpcodeGenerator", "Param1", Q_NULLPTR));
         param2_up_label_2->setText(QApplication::translate("OpcodeGenerator", "Param2", Q_NULLPTR));
-        tx_rx_label->setText(QApplication::translate("OpcodeGenerator", "Tx,Rx,TRX", Q_NULLPTR));
+        tx_rx_label->setText(QApplication::translate("OpcodeGenerator", "Tx,Rx,Trx", Q_NULLPTR));
         param1_label->setText(QApplication::translate("OpcodeGenerator", "Param1", Q_NULLPTR));
         param2_label->setText(QApplication::translate("OpcodeGenerator", "Param2", Q_NULLPTR));
         SendData->setText(QApplication::translate("OpcodeGenerator", "Send", Q_NULLPTR));
@@ -375,6 +387,12 @@ public:
         min_p1_val->setText(QApplication::translate("OpcodeGenerator", "MinP1", Q_NULLPTR));
         max_p2_val->setText(QApplication::translate("OpcodeGenerator", "MaxP2", Q_NULLPTR));
         min_p2_val->setText(QApplication::translate("OpcodeGenerator", "MinP2", Q_NULLPTR));
+        API_menu->clear();
+        API_menu->insertItems(0, QStringList()
+         << QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR)
+        );
+        API_label->setText(QApplication::translate("OpcodeGenerator", "API", Q_NULLPTR));
+        myname->setText(QApplication::translate("OpcodeGenerator", "Designed by Tonix", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("OpcodeGenerator", "File", Q_NULLPTR));
     } // retranslateUi
 

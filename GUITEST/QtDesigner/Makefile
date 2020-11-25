@@ -50,9 +50,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp qrc_logo.cpp \
+SOURCES       = my_mainwindow.cpp \
+		main.cpp qrc_logo.cpp \
 		moc_my_mainwindow.cpp
-OBJECTS       = main.o \
+OBJECTS       = my_mainwindow.o \
+		main.o \
 		qrc_logo.o \
 		moc_my_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -144,7 +146,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		QtDesigner.pro sample.h \
-		my_mainwindow.h main.cpp
+		my_mainwindow.h my_mainwindow.cpp \
+		main.cpp
 QMAKE_TARGET  = QtDesigner
 DESTDIR       = 
 TARGET        = QtDesigner
@@ -360,7 +363,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents logo.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents sample.h my_mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents my_mainwindow.cpp main.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents Frameworkhelp.ui $(DISTDIR)/
 
 
@@ -425,6 +428,10 @@ compiler_lex_clean:
 compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
+
+my_mainwindow.o: my_mainwindow.cpp my_mainwindow.h \
+		sample.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o my_mainwindow.o my_mainwindow.cpp
 
 main.o: main.cpp sample.h \
 		my_mainwindow.h

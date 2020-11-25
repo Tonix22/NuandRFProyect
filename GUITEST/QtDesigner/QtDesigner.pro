@@ -22,5 +22,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += sample.h
 HEADERS += my_mainwindow.h
 FORMS += Frameworkhelp.ui
+SOURCES += my_mainwindow.cpp
 SOURCES += main.cpp
 RESOURCES += logo.qrc

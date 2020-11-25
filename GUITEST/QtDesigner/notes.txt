@@ -7,6 +7,10 @@
     from a command shell
     sample.h then contains the generated source code
     
+    ******
+    uic -o sample.h Frameworkhelp.ui
+    ******
+    
 https://stackoverflow.com/questions/16286166/qt-designer-generate-c-code#16287468
 
 2. Generate .pro file
@@ -49,4 +53,10 @@ SOLUTION 1
     https://stackoverflow.com/questions/2555816/qt-linker-error-undefined-reference-to-vtable
     
 
+***************
+Remove element from de QBOX 
+tx_rx_menu->removeItem(1);
+
+Update de Max and Min value 
+max_p1_val->setText(QApplication::translate("OpcodeGenerator", "30", Q_NULLPTR));
 
