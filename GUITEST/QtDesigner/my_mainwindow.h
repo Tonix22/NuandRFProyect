@@ -3,8 +3,13 @@
 
 #include <QMainWindow>
 #include "sample.h"
+/***************************************************
+******************* CODE COMPRESION*******************
+****************************************************/
 
-#define PUSH_TO_LIST(Param) <<QApplication::translate("OpcodeGenerator", Param, Q_NULLPTR)
+#define TRANSLATE(Param) QApplication::translate("OpcodeGenerator", Param, Q_NULLPTR)
+
+#define PUSH_TO_LIST(Param) <<TRANSLATE(Param)
 
 #define CLR(box) box->clear()
 
@@ -54,6 +59,7 @@ typedef enum
     set_cmd_size
 }seters_enum;
 
+#define MAX_SET_STRING_SIZE 22
 
 #define SET_STRING_COLLECTION() "en_state_machine_mode",\
                                 "rf_gain",\
@@ -139,8 +145,34 @@ typedef enum
 
 
 
+/**************************************************************
+ ***********************MENU LIMITS***************************
+ *************************************************************/
+
+#define DATA_RANGES() {seter_strings[en_state_machine_mode], {std::make_pair(0,7)}},\
+                    {seter_strings[rf_gain],               {std::make_pair(0,1),std::make_pair(-4,71)}},\
+                    {seter_strings[rf_bandwidth],          {std::make_pair(0,56000000)}},\
+                    {seter_strings[sampling_freq],         {std::make_pair(0,61440000)}},\
+                    {seter_strings[lo_freq],               {std::make_pair(70000000,2147483647)}},\
+                    {seter_strings[lo_int_ex],             {std::make_pair(0,1)}},\
+                    {seter_strings[gain_control_mode],     {std::make_pair(0,1),std::make_pair(0,3)}},\
+                    {seter_strings[fir_config],            {std::make_pair(0,0)}},\
+                    {seter_strings[path_clk],              {std::make_pair(0,0)}},\
+                    {seter_strings[fir_en_dis],            {std::make_pair(0,1)}},\
+                    {seter_strings[rfdc_track_en_dis],     {std::make_pair(0,1)}},\
+                    {seter_strings[bbdc_track_en_dis],     {std::make_pair(0,1)}},\
+                    {seter_strings[quad_track_en_dis],     {std::make_pair(0,1)}},\
+                    {seter_strings[rf_port_input],         {std::make_pair(0,11)}},\
+                    {seter_strings[rf_port_output],        {std::make_pair(0,1)}},\
+                    {seter_strings[attenuation],           {std::make_pair(0,1),std::make_pair(0,89750)}},\
+                    {seter_strings[set_no_ch_mod],         {std::make_pair(1,2)}},\
+                    {seter_strings[rate_gov],              {std::make_pair(0,1)}},\
+                    {seter_strings[auto_cal_en_dis],       {std::make_pair(0,1)}},\
 
 
+/**************************************************************
+ ***********************TYPEDEF*********************************
+ *************************************************************/
 typedef enum
 {
     NONE_param,
@@ -149,6 +181,9 @@ typedef enum
     Get_param,
 }set_get_enum;
 
+/**************************************************************
+ *********************CLASS DEFINITION************************
+ *************************************************************/
 
 
 class MainWindow : public QMainWindow, private Ui::OpcodeGenerator
@@ -159,13 +194,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void Slider_Calc(std::string& str);
+    int Text_Processing(std::string& msg);
 
 private slots:
     void onButtonClicked();
     void set_get_menu_changed(const QString &text);
     void tx_rx_menu_changed(const QString &text);
     void API_menu_trigger(const QString &text);
-
+    void Text_param1_changed();
 };
+
+
+
 
 #endif // MAINWINDOW_H

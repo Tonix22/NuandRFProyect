@@ -3,44 +3,31 @@
 #include <QMessageBox>
 #include <iostream>
 #include <string>
+#include "string.h"
 #include <unordered_map>
 #include <utility>
+#include<cmath>
 #include "my_mainwindow.h"
 
+/**************************************************************
+ *********************SETER STRING VARIABLES*******************
+ *************************************************************/
 
-char seter_strings[set_cmd_size][22] = 
+char seter_strings[set_cmd_size][MAX_SET_STRING_SIZE] = 
 {
     SET_STRING_COLLECTION()
 };
 
 std::unordered_map<std::string, std::vector<std::pair<int, int>>> bounds = 
 {
-    {seter_strings[en_state_machine_mode], {std::make_pair(0,7)}},
-    {seter_strings[rf_gain],               {std::make_pair(0,1),std::make_pair(-4,71)}},
-    {seter_strings[rf_bandwidth],          {std::make_pair(0,56000000)}},
-    {seter_strings[sampling_freq],         {std::make_pair(0,61440000)}},
-    {seter_strings[lo_freq],               {std::make_pair(70000000,2147483647)}},
-    {seter_strings[lo_int_ex],             {std::make_pair(0,1)}},
-    {seter_strings[gain_control_mode],     {std::make_pair(0,1),std::make_pair(0,3)}},
-    //the weird ones
-    {seter_strings[fir_config],            {std::make_pair(0,0)}},
-    {seter_strings[path_clk],              {std::make_pair(0,0)}},
-    
-    {seter_strings[fir_en_dis],            {std::make_pair(0,1)}},
-    {seter_strings[rfdc_track_en_dis],     {std::make_pair(0,1)}},
-    {seter_strings[bbdc_track_en_dis],     {std::make_pair(0,1)}},
-    {seter_strings[quad_track_en_dis],     {std::make_pair(0,1)}},
-    {seter_strings[rf_port_input],         {std::make_pair(0,11)}},
-    {seter_strings[rf_port_output],        {std::make_pair(0,1)}},
-    {seter_strings[attenuation],           {std::make_pair(0,1),std::make_pair(0,89750)}},
-    {seter_strings[set_no_ch_mod],         {std::make_pair(1,2)}},
-    {seter_strings[rate_gov],              {std::make_pair(0,1)}},
-    {seter_strings[auto_cal_en_dis],       {std::make_pair(0,1)}},
-
+    DATA_RANGES()
 };
 
+/**************************************************************
+ *********************SIGNALS DECLARATION**********************
+ *************************************************************/
 
-MainWindow::MainWindow(QWidget *parent) :   QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) :  QMainWindow(parent)
 {
     setupUi(this);
 
@@ -68,18 +55,28 @@ MainWindow::MainWindow(QWidget *parent) :   QMainWindow(parent)
         this,
         SLOT(API_menu_trigger(QString))
     );
+    connect(
+        Param1_input_text,
+        SIGNAL(textChanged()),
+        this,
+        SLOT(Text_param1_changed())
 
-
+    );
     this->show();
 }
 MainWindow::~MainWindow()
 {
     //delete ui;
 }
+
+/**************************************************************
+ ************************ACTIONS******************************
+ *************************************************************/
+
+
 void MainWindow :: onButtonClicked()
 {
     qDebug()<<" param1 "<< Param1_slider_val->text();
-    
 }
 void MainWindow :: set_get_menu_changed(const QString &text)
 {
@@ -115,9 +112,7 @@ void MainWindow :: set_get_menu_changed(const QString &text)
         }
 
     }
-    
-    //qDebug()<<text;
-    
+ 
 }
 
 void MainWindow :: Slider_Calc(std::string& str)
@@ -125,24 +120,22 @@ void MainWindow :: Slider_Calc(std::string& str)
     //printf("API-set menu trigger : %s\r\n",str.c_str());
 
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
-    min_p1_val->setText(QApplication::translate("OpcodeGenerator", std::to_string(bounds[str][0].first).c_str(), Q_NULLPTR));
-    max_p1_val->setText(QApplication::translate("OpcodeGenerator", std::to_string(bounds[str][0].second).c_str(), Q_NULLPTR));
+    
+    min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
+    max_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].second).c_str()));
 
     if(bounds[str].size() == 2)
     {
         Param_2_val->setRange(bounds[str][1].first,bounds[str][1].second);
-        min_p2_val->setText(QApplication::translate("OpcodeGenerator", std::to_string(bounds[str][1].first).c_str(), Q_NULLPTR));
-        max_p2_val->setText(QApplication::translate("OpcodeGenerator", std::to_string(bounds[str][1].second).c_str(), Q_NULLPTR));
+        min_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].first).c_str()));
+        max_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].second).c_str()));
     }
     else
     {
         Param_2_val->setRange(0,0);
-        min_p2_val->setText(QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR));
-        max_p2_val->setText(QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR));
+        min_p2_val->setText(TRANSLATE ("None"));
+        max_p2_val->setText(TRANSLATE ("None"));
     }
-
-    
-
 }
 
 void MainWindow :: tx_rx_menu_changed(const QString &text)
@@ -214,4 +207,104 @@ void MainWindow ::API_menu_trigger(const QString &text)
     {
         this->Slider_Calc(box_str);
     }
+}
+
+int MainWindow::Text_Processing(std::string& msg)
+{
+    int offset = 0;
+    std::size_t found;
+    int num = 0;
+    bool notation = false;
+    int multipliyer = 0;
+    std::string left = "0";
+    std::string right= "0";
+
+    if(msg.find("M")!=std::string::npos
+    || msg.find("K")!=std::string::npos)
+    {
+        notation = true;
+
+        found  = msg.find(".");
+        if (found != std::string::npos)
+        {
+            left   = msg.substr(0, found);
+            offset = found+1;
+            found  = msg.find("M");
+            multipliyer = 1000000;
+            if (found == std::string::npos)
+            {
+                found  = msg.find("K");
+                multipliyer = 1000;
+            }
+            right  = msg.substr(offset, found-offset);
+        }
+        else
+        {
+            found  = msg.find("M");
+            left   = msg.substr(0, found);
+            multipliyer = 1000000;
+            if (found == std::string::npos)
+            {
+                multipliyer = 1000;
+            }
+        }
+    }
+    try
+    {
+        if(notation)
+        {
+            num += std::stoi(left)*multipliyer;
+            num += std::stoi(right)*multipliyer/pow(10,right.size());
+        }
+        else
+        {
+            num = std::stoi(msg);
+        }
+    }
+    catch (const std::invalid_argument & e){
+        std::cout << e.what() << "\n";
+    }
+    catch (const std::out_of_range & e){
+        std::cout << e.what() << "\n";
+    }
+    return num;
+
+}
+
+void MainWindow :: Text_param1_changed()
+{
+    static std::string param1_str;
+    std::string temp    = Param1_input_text->toPlainText().toUtf8().constData();
+    int  set_get_state   = set_get_menu->currentIndex();
+    std::string API_str = API_menu->currentText().toUtf8().constData();
+    int value_proc = 0;
+    
+    if(temp.back() != '\n')
+    {
+        param1_str = temp;
+    }
+    else
+    {
+        std::cout<<param1_str<<std::endl;
+        value_proc = Text_Processing(param1_str);    
+
+        Param_1_val->setValue(value_proc);
+        Param_1_val->setSliderPosition(value_proc);
+        Param1_slider_val->setText(param1_str.c_str());
+        if(set_get_state == Set_param )
+        {
+            if((bounds[API_str][0].first <= value_proc) && 
+               (value_proc <= bounds[API_str][0].second))
+            {
+                Param1_slider_val->setText(param1_str.c_str());
+            }
+            else
+            {
+                Param1_slider_val->setText("Invalid");
+            }
+        }
+            
+        Param1_input_text->clear();
+    }
+    
 }
