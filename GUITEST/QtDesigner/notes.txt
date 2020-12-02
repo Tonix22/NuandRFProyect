@@ -17,6 +17,16 @@ https://stackoverflow.com/questions/16286166/qt-designer-generate-c-code#1628746
 
     qmake -project
     qmake
+    
+    QT+= widgets
+    # Input
+    HEADERS += sample.h
+    HEADERS += my_mainwindow.h
+    HEADERS += ui_Frameworkhelp.h
+    FORMS   += Frameworkhelp.ui
+    SOURCES += my_mainwindow.cpp
+    SOURCES += main.cpp
+    RESOURCES += logo.qrc
 
 3. In the .pro file add the following 
     QT+= widgets
@@ -60,3 +70,9 @@ tx_rx_menu->removeItem(1);
 Update de Max and Min value 
 max_p1_val->setText(QApplication::translate("OpcodeGenerator", "30", Q_NULLPTR));
 
+
+
+**********
+Get text from text box
+
+QString QPlainTextEdit::toPlainText() const
