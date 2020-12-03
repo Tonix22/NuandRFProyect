@@ -32,10 +32,6 @@ std::unordered_map<std::string,int> ID_LUT =
     LUT_VALUE_DEF()
 };
 
-/**************************************************************
- *********************TX_RX OPCODE MAP*************************
- *************************************************************/
-int tx_rx_map[tx_rx_size] = {NONE_param_tx_rx, Rx_parm, Tx_param, Trx_param};
 
 /**************************************************************
  *********************Types OPCODE MAP*************************
@@ -125,6 +121,13 @@ MainWindow::MainWindow(QWidget *parent) :  QMainWindow(parent)
         this,
         SLOT(Text_param2_changed())
     );
+    connect(
+        Opcode_input_text,
+        SIGNAL(textChanged()),
+        this,
+        SLOT(Opcode_to_GUI())
+    );
+
     this->show();
 }
 MainWindow::~MainWindow()
@@ -140,7 +143,7 @@ MainWindow::~MainWindow()
 void MainWindow :: onButtonClicked()
 {
     int set_get_state   = set_get_menu->currentIndex();
-    int tx_rx_stare     = tx_rx_map[tx_rx_menu->currentIndex()];
+    int tx_rx_stare     = tx_rx_menu->currentIndex();
     int API_state       = ID_LUT[API_menu->currentText().toUtf8().constData()];
     int Params          = ID_to_TYPE_OPCODE[API_state];
     int OPCODE          = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
@@ -395,4 +398,36 @@ void MainWindow :: Text_param2_changed()
 {
     static std::string param2_str;
     Text_input_register(param2_str,1);
+}
+void MainWindow :: Opcode_to_GUI()
+{
+    static std::string GUI_Opcode_str;
+    std::string temp = Opcode_input_text->toPlainText().toUtf8().constData();
+    if(temp.back() != '\n')
+    {
+        GUI_Opcode_str = temp;
+    }
+    else
+    {
+        char * pEnd;
+        long int dec_opcode = strtol (GUI_Opcode_str.c_str(),&pEnd,16);
+        int mask ;
+        mask = (dec_opcode & 3);
+        set_get_menu->setCurrentIndex(mask) ;// set get do
+        mask = (dec_opcode & (3<<2))>>2;
+        printf("%d, ",mask);
+        tx_rx_menu->setCurrentIndex(mask);// other, rx,tx, trx
+        mask =(dec_opcode & (63<<4))>>4;
+        printf("%d\r\n",mask);
+        API_menu->setCurrentIndex(mask);// ID
+        //param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
+        //param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
+//
+        //(dec_opcode & (7<<10))>>10; // p1
+        //(dec_opcode & (7<<13))>>13; // p2
+
+        //printf("%lu\r\n",dec_opcode);
+        
+        Opcode_input_text->clear();
+    }
 }

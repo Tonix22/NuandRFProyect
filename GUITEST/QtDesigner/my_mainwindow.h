@@ -227,10 +227,10 @@ typedef enum
 typedef enum
 {
     NONE_param_tx_rx = 0,
-    Rx_parm    = 0,
+    Rx_parm   ,
     Tx_param,
     Trx_param,
-    tx_rx_size = 4,
+    tx_rx_size ,
 }tx_rx_trx_enum;
 
 
@@ -287,6 +287,7 @@ private slots:
     void API_menu_trigger(const QString &text);
     void Text_param1_changed();
     void Text_param2_changed();
+    void Opcode_to_GUI();
 };
 
 
