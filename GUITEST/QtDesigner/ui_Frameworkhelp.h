@@ -53,7 +53,7 @@ public:
     QLabel *API_label;
     QLabel *myname;
     QPlainTextEdit *Param1_input_text;
-    QPlainTextEdit *plainTextEdit_2;
+    QPlainTextEdit *Param2_input_text;
     QLabel *Insert_Opcode_label;
     QPlainTextEdit *Opcode_input_text;
     QLabel *Get_result_label;
@@ -554,9 +554,9 @@ public:
         Param1_input_text = new QPlainTextEdit(centralwidget);
         Param1_input_text->setObjectName(QStringLiteral("Param1_input_text"));
         Param1_input_text->setGeometry(QRect(400, 240, 104, 31));
-        plainTextEdit_2 = new QPlainTextEdit(centralwidget);
-        plainTextEdit_2->setObjectName(QStringLiteral("plainTextEdit_2"));
-        plainTextEdit_2->setGeometry(QRect(400, 310, 104, 31));
+        Param2_input_text = new QPlainTextEdit(centralwidget);
+        Param2_input_text->setObjectName(QStringLiteral("Param2_input_text"));
+        Param2_input_text->setGeometry(QRect(400, 310, 104, 31));
         Insert_Opcode_label = new QLabel(centralwidget);
         Insert_Opcode_label->setObjectName(QStringLiteral("Insert_Opcode_label"));
         Insert_Opcode_label->setGeometry(QRect(550, 200, 121, 22));
@@ -604,21 +604,21 @@ public:
         set_get_menu->clear();
         set_get_menu->insertItems(0, QStringList()
          << QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR)
-         << QApplication::translate("OpcodeGenerator", "do", Q_NULLPTR)
          << QApplication::translate("OpcodeGenerator", "set", Q_NULLPTR)
          << QApplication::translate("OpcodeGenerator", "get", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "do", Q_NULLPTR)
         );
-        do_set_get_label->setText(QApplication::translate("OpcodeGenerator", "Do,Set,Get", Q_NULLPTR));
+        do_set_get_label->setText(QApplication::translate("OpcodeGenerator", "Set,Get,Do", Q_NULLPTR));
         tx_rx_menu->clear();
         tx_rx_menu->insertItems(0, QStringList()
          << QApplication::translate("OpcodeGenerator", "None", Q_NULLPTR)
-         << QApplication::translate("OpcodeGenerator", "TX", Q_NULLPTR)
          << QApplication::translate("OpcodeGenerator", "RX", Q_NULLPTR)
+         << QApplication::translate("OpcodeGenerator", "TX", Q_NULLPTR)
          << QApplication::translate("OpcodeGenerator", "TRX", Q_NULLPTR)
         );
         param2_up_label->setText(QApplication::translate("OpcodeGenerator", "Param1", Q_NULLPTR));
         param2_up_label_2->setText(QApplication::translate("OpcodeGenerator", "Param2", Q_NULLPTR));
-        tx_rx_label->setText(QApplication::translate("OpcodeGenerator", "Tx,Rx,Trx", Q_NULLPTR));
+        tx_rx_label->setText(QApplication::translate("OpcodeGenerator", "Rx,Tx,Trx", Q_NULLPTR));
         param1_label->setText(QApplication::translate("OpcodeGenerator", "Param1", Q_NULLPTR));
         param2_label->setText(QApplication::translate("OpcodeGenerator", "Param2", Q_NULLPTR));
         SendData->setText(QApplication::translate("OpcodeGenerator", "Send", Q_NULLPTR));
@@ -636,7 +636,7 @@ public:
         API_label->setText(QApplication::translate("OpcodeGenerator", "API", Q_NULLPTR));
         myname->setText(QApplication::translate("OpcodeGenerator", "Designed by Tonix", Q_NULLPTR));
         Param1_input_text->setPlaceholderText(QApplication::translate("OpcodeGenerator", "50", Q_NULLPTR));
-        plainTextEdit_2->setPlaceholderText(QApplication::translate("OpcodeGenerator", "50", Q_NULLPTR));
+        Param2_input_text->setPlaceholderText(QApplication::translate("OpcodeGenerator", "50", Q_NULLPTR));
         Insert_Opcode_label->setText(QApplication::translate("OpcodeGenerator", "Insert OpCode", Q_NULLPTR));
         Opcode_input_text->setPlaceholderText(QApplication::translate("OpcodeGenerator", "0x0000", Q_NULLPTR));
         Get_result_label->setText(QApplication::translate("OpcodeGenerator", "GET RESULT", Q_NULLPTR));

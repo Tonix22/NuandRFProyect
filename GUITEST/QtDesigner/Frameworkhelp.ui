@@ -1294,17 +1294,17 @@
     </item>
     <item>
      <property name="text">
-      <string>do</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>set</string>
      </property>
     </item>
     <item>
      <property name="text">
       <string>get</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>do</string>
      </property>
     </item>
    </widget>
@@ -1325,7 +1325,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Do,Set,Get</string>
+     <string>Set,Get,Do</string>
     </property>
    </widget>
    <widget class="QComboBox" name="tx_rx_menu">
@@ -1759,12 +1759,12 @@
     </item>
     <item>
      <property name="text">
-      <string>TX</string>
+      <string>RX</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>RX</string>
+      <string>TX</string>
      </property>
     </item>
     <item>
@@ -2261,7 +2261,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Tx,Rx,Trx</string>
+     <string>Rx,Tx,Trx</string>
     </property>
    </widget>
    <widget class="QLabel" name="param1_label">
@@ -3351,7 +3351,7 @@
      <string>50</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_2">
+   <widget class="QPlainTextEdit" name="Param2_input_text">
     <property name="geometry">
      <rect>
       <x>400</x>

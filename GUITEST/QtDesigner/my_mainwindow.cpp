@@ -24,6 +24,63 @@ std::unordered_map<std::string, std::vector<std::pair<int, int>>> bounds =
 };
 
 /**************************************************************
+ *********************API OPCODE MAP***************************
+ *************************************************************/
+
+std::unordered_map<std::string,int> ID_LUT =
+{
+    LUT_VALUE_DEF()
+};
+
+/**************************************************************
+ *********************TX_RX OPCODE MAP*************************
+ *************************************************************/
+int tx_rx_map[tx_rx_size] = {NONE_param_tx_rx, Rx_parm, Tx_param, Trx_param};
+
+/**************************************************************
+ *********************Types OPCODE MAP*************************
+ *************************************************************/
+
+char params_strings[Params_set_size][9] = 
+{
+    TYPES_STR_SEQ()
+};
+char ID_to_TYPE_OPCODE[31] = 
+{
+    No_param << 3 | u32int, // en_state_machine_mode
+    s32int   << 3 | u8int, // rf_gain
+    No_param << 3 | u32int, // rf_bandwidth
+    No_param << 3 | u32int, // sampling_freq
+    No_param << 3 | u64int, // lo_freq
+    No_param << 3 | u8int , //lo_int_ext
+    struct_param << 3 | u8int , //rssi
+    u8int    << 3 | u8int, // gain_control_mode
+    No_param << 3 | RXFIR, // set_fir_config
+    No_param << 3 | RXFIR, // get_fir_config
+    No_param << 3 | u8int, // fir_en_dis
+    No_param << 3 | u8int, // rfdc_track_en_dis
+    No_param << 3 | u8int, // bbdc_track_en_dis
+    No_param << 3 | u8int, // quad_track_en_dis
+    No_param << 3 | u32int,//rf_port_input
+    No_param << 3 | u32int,//fastlock_store
+    No_param << 3 | u32int,//fastlock_recall
+    u8int    << 3 | u32int,//fastlock_load
+    u8int    << 3 | u32int, //fastlock_save
+    u32int   << 3 | u8int, //attenuation
+    No_param << 3 | u32int,//rf_port_output
+    No_param << 3 | u8int, //auto_cal_en_dis
+    u32int   << 3 | u32int,//path_clk
+    No_param << 3 | u8int, //no_ch_mode
+    No_param << 3 |struct_param,//mcs
+    No_param << 3 | u8int, //fir_en_dis
+    No_param << 3 | u32int,//rate_gov
+    s32int   << 3 | u32int,//calib
+    TXFIR    << 3 | RXFIR, //load_enable_fir
+    No_param << 3 | u32int,//dcxo_tune_coarse
+    No_param << 3 | u32int,//dcxo_tune_fine
+};
+
+/**************************************************************
  *********************SIGNALS DECLARATION**********************
  *************************************************************/
 
@@ -62,6 +119,12 @@ MainWindow::MainWindow(QWidget *parent) :  QMainWindow(parent)
         SLOT(Text_param1_changed())
 
     );
+    connect(
+        Param2_input_text,
+        SIGNAL(textChanged()),
+        this,
+        SLOT(Text_param2_changed())
+    );
     this->show();
 }
 MainWindow::~MainWindow()
@@ -76,7 +139,17 @@ MainWindow::~MainWindow()
 
 void MainWindow :: onButtonClicked()
 {
-    qDebug()<<" param1 "<< Param1_slider_val->text();
+    int set_get_state   = set_get_menu->currentIndex();
+    int tx_rx_stare     = tx_rx_map[tx_rx_menu->currentIndex()];
+    int API_state       = ID_LUT[API_menu->currentText().toUtf8().constData()];
+    int Params          = ID_to_TYPE_OPCODE[API_state];
+    int OPCODE          = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
+    printf("set_get_state: %d\r\n",set_get_state);
+    printf("tx_rx_stare: %d\r\n",tx_rx_stare);
+    printf("API_state: %d\r\n",API_state);
+    printf("OPCODE: %X\r\n",OPCODE);
+    
+    //qDebug()<<" param1 "<< Param1_slider_val->text();
 }
 void MainWindow :: set_get_menu_changed(const QString &text)
 {
@@ -203,6 +276,11 @@ void MainWindow ::API_menu_trigger(const QString &text)
 {
     int set_get_state = set_get_menu->currentIndex();
     std::string box_str = text.toUtf8().constData();
+    int API_state       = ID_LUT[box_str];
+    //printf("P1: %s, ",params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])] );
+    //printf("P2: %s\r\n",params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])] );
+    param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
+    param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
     if(set_get_state == Set_param && !box_str.empty())
     {
         this->Slider_Calc(box_str);
@@ -271,40 +349,50 @@ int MainWindow::Text_Processing(std::string& msg)
 
 }
 
-void MainWindow :: Text_param1_changed()
+void MainWindow :: Text_input_register(std::string& msg,int index)
 {
-    static std::string param1_str;
-    std::string temp    = Param1_input_text->toPlainText().toUtf8().constData();
-    int  set_get_state   = set_get_menu->currentIndex();
+
+    std::string temp    = (*(ParamN_input_text[index]))->toPlainText().toUtf8().constData();
+    int  set_get_state  = set_get_menu->currentIndex();
     std::string API_str = API_menu->currentText().toUtf8().constData();
     int value_proc = 0;
     
     if(temp.back() != '\n')
     {
-        param1_str = temp;
+        msg = temp;
     }
     else
     {
-        std::cout<<param1_str<<std::endl;
-        value_proc = Text_Processing(param1_str);    
+        std::cout<<msg<<std::endl;
+        value_proc = Text_Processing(msg);    
 
-        Param_1_val->setValue(value_proc);
-        Param_1_val->setSliderPosition(value_proc);
-        Param1_slider_val->setText(param1_str.c_str());
+        (*(Param_N_val[index]))->setValue(value_proc);
+        (*(Param_N_val[index]))->setSliderPosition(value_proc);
+        (*(ParamN_slider_val[index]))->setText(msg.c_str());
         if(set_get_state == Set_param )
         {
-            if((bounds[API_str][0].first <= value_proc) && 
-               (value_proc <= bounds[API_str][0].second))
+            if((bounds[API_str][index].first <= value_proc) && 
+               (value_proc <= bounds[API_str][index].second))
             {
-                Param1_slider_val->setText(param1_str.c_str());
+               (*(ParamN_slider_val[index]))->setText(msg.c_str());
             }
             else
             {
-                Param1_slider_val->setText("Invalid");
+                (*(ParamN_slider_val[index]))->setText("Invalid");
             }
         }
-            
-        Param1_input_text->clear();
+        (*(ParamN_input_text[index]))->clear();
     }
+}
+
+void MainWindow :: Text_param1_changed()
+{
+    static std::string param1_str;
+    Text_input_register(param1_str,0);
     
+}
+void MainWindow :: Text_param2_changed()
+{
+    static std::string param2_str;
+    Text_input_register(param2_str,1);
 }

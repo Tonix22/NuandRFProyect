@@ -145,9 +145,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		QtDesigner.pro ui_Frameworkhelp.h \
-		sample.h \
-		my_mainwindow.h my_mainwindow.cpp \
+		QtDesigner.pro sample.h \
+		my_mainwindow.h \
+		ui_Frameworkhelp.h my_mainwindow.cpp \
 		main.cpp
 QMAKE_TARGET  = QtDesigner
 DESTDIR       = 
@@ -363,7 +363,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents logo.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ui_Frameworkhelp.h sample.h my_mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents sample.h my_mainwindow.h ui_Frameworkhelp.h $(DISTDIR)/
 	$(COPY_FILE) --parents my_mainwindow.cpp main.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents Frameworkhelp.ui $(DISTDIR)/
 
