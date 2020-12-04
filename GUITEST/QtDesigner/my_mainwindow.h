@@ -18,6 +18,55 @@
                             normal_state PUSH_TO_LIST(tx_rx_menu->itemText(i).toUtf8().constData());\
                         }\
 
+/**************************************************************
+ *********************SPECIAL CASE ***************************
+ *************************************************************/
+
+#define SPECIAL_CASE_FIR_BUTTON()   if(API_str == "get_fir_config")\
+                                    {\
+                                        if(tx_rx_stare == Rx_parm)\
+                                        {\
+                                            Params = RXFIR<<3 | u8int;\
+                                        }\
+                                        else if(tx_rx_stare == Tx_param)\
+                                        {\
+                                            Params = TXFIR<<3 | u8int;\
+                                        }\
+                                    }\
+                                    if(API_str == "set_fir_config")\
+                                    {\
+                                        if(tx_rx_stare == Rx_parm)\
+                                        {\
+                                            Params = RXFIR;\
+                                        }\
+                                        else if(tx_rx_stare == Tx_param)\
+                                        {\
+                                            Params = TXFIR;\
+                                        }\
+                                    }
+    
+#define SPECIAL_CASE_FIR_LABELS()   if(box_str == "get_fir_config")\
+                                    {\
+                                        if(rx_tx_val == Rx_parm)\
+                                        {\
+                                            param2_label->setText(TRANSLATE(params_strings[RXFIR]));\
+                                        }\
+                                        else if(rx_tx_val == Tx_param)\
+                                        {\
+                                            param2_label->setText(TRANSLATE(params_strings[TXFIR]));\
+                                        }\
+                                    }\
+                                    if(box_str == "set_fir_config")\
+                                    {\
+                                        if(rx_tx_val == Rx_parm)\
+                                        {\
+                                            param1_label->setText(TRANSLATE(params_strings[RXFIR]));\
+                                        }\
+                                        else if(rx_tx_val == Tx_param)\
+                                        {\
+                                            param1_label->setText(TRANSLATE(params_strings[TXFIR]));\
+                                        }\
+                                    }
 /***************************************************
 ******************* MENUS SCREENS*******************
 ****************************************************/
@@ -33,6 +82,11 @@
                     PUSH_TO_LIST( "dcxo_tune_fine")
 
 #define NONE_TX_LIST PUSH_TO_LIST("fastlock_store")\
+                     PUSH_TO_LIST("fastlock_recall")\
+                     PUSH_TO_LIST("fastlock_load")\
+                     PUSH_TO_LIST("fastlock_save")
+
+#define NONE_RX_LIST PUSH_TO_LIST("fastlock_store")\
                      PUSH_TO_LIST("fastlock_recall")\
                      PUSH_TO_LIST("fastlock_load")\
                      PUSH_TO_LIST("fastlock_save")
@@ -87,10 +141,11 @@ typedef enum
                                 "path_clk",\
                                 "rate_gov"
 
+#define SET_API_NONE_LIST PUSH_TO_LIST (seter_strings[en_state_machine_mode])\
+                          PUSH_TO_LIST (seter_strings[no_ch_mode])
 
 
-#define SET_API_RX_LIST PUSH_TO_LIST (seter_strings[en_state_machine_mode])\
-                        PUSH_TO_LIST (seter_strings[rf_gain])\
+#define SET_API_RX_LIST PUSH_TO_LIST (seter_strings[rf_gain])\
                         PUSH_TO_LIST (seter_strings[rf_bandwidth])\
                         PUSH_TO_LIST (seter_strings[sampling_freq])\
                         PUSH_TO_LIST (seter_strings[lo_freq])\
@@ -101,8 +156,8 @@ typedef enum
                         PUSH_TO_LIST (seter_strings[rfdc_track_en_dis])\
                         PUSH_TO_LIST (seter_strings[bbdc_track_en_dis])\
                         PUSH_TO_LIST (seter_strings[quad_track_en_dis])\
-                        PUSH_TO_LIST (seter_strings[rf_port_input])\
-                        PUSH_TO_LIST (seter_strings[no_ch_mode])
+                        PUSH_TO_LIST (seter_strings[rf_port_input])
+                       
 
 #define SET_API_TX_LIST PUSH_TO_LIST (seter_strings[attenuation])\
                         PUSH_TO_LIST (seter_strings[rf_bandwidth])\
@@ -122,14 +177,13 @@ typedef enum
  *********************GET SECTION******************************
  *************************************************************/
 
-#define GET_API_RX_LIST PUSH_TO_LIST("en_state_machine_mode")\
-                        PUSH_TO_LIST("rf_gain")\
+#define GET_API_RX_LIST PUSH_TO_LIST("rf_gain")\
                         PUSH_TO_LIST("rf_bandwidth")\
                         PUSH_TO_LIST("sampling_freq")\
                         PUSH_TO_LIST("lo_freq")\
                         PUSH_TO_LIST("rssi")\
                         PUSH_TO_LIST("gain_control_mode")\
-                        PUSH_TO_LIST("fir_confi")\
+                        PUSH_TO_LIST("get_fir_config")\
                         PUSH_TO_LIST("fir_en_dis")\
                         PUSH_TO_LIST("rfdc_track_en_dis")\
                         PUSH_TO_LIST("bbdc_track_en_dis")\
@@ -179,37 +233,39 @@ typedef enum
 /**************************************************************
  ***********************LUT VALUES*****************************
  *************************************************************/
-#define LUT_VALUE_DEF() {"en_state_machine_mode",0},\
-                        {"rf_gain",1,}, \
-                        {"rf_bandwidth",2,}, \
-                        {"sampling_freq",3}, \
-                        {"lo_freq",4}, \
-                        {"lo_int_ext",5},\
-                        {"rssi",6}, \
-                        {"gain_control_mode",7}, \
-                        {"set_fir_config",8}, \
-                        {"get_fir_config",9},\
-                        {"fir_en_dis",10}, \
-                        {"rfdc_track_en_dis",11}, \
-                        {"bbdc_track_en_dis",12}, \
-                        {"quad_track_en_dis",13}, \
-                        {"rf_port_input",14}, \
-                        {"fastlock_store",15},\
-                        {"fastlock_recall",16},\
-                        {"fastlock_load",17},\
-                        {"fastlock_save",18},\
-                        {"attenuation",19}, \
-                        {"rf_port_output",20}, \
-                        {"auto_cal_en_dis",21}, \
-                        {"path_clk",22},\
-                        {"no_ch_mode",23},\
-                        {"mcs",24},\
-                        {"fir_en_dis",25}, \
-                        {"rate_gov",26}, \
-                        {"calib",27},\
-                        {"load_enable_fir",28},\
-                        {"dcxo_tune_coarse",29},\
-                        {"dcxo_tune_fine",30},
+#define LUT_NUM_ITEMS 30
+#define LUT_MAX_STRING 22
+
+#define LUT_VALUE_DEF() {"en_state_machine_mode"}, \
+                        {"rf_gain"}, \
+                        {"rf_bandwidth"}, \
+                        {"sampling_freq"}, \
+                        {"lo_freq"}, \
+                        {"lo_int_ext"}, \
+                        {"rssi"}, \
+                        {"gain_control_mode"}, \
+                        {"set_fir_config"}, \
+                        {"get_fir_config"}, \
+                        {"fir_en_dis"}, \
+                        {"rfdc_track_en_dis"}, \
+                        {"bbdc_track_en_dis"}, \
+                        {"quad_track_en_dis"}, \
+                        {"rf_port_input"}, \
+                        {"fastlock_store"}, \
+                        {"fastlock_recall"}, \
+                        {"fastlock_load"}, \
+                        {"fastlock_save"}, \
+                        {"attenuation"}, \
+                        {"rf_port_output"}, \
+                        {"auto_cal_en_dis"}, \
+                        {"path_clks"}, \
+                        {"no_ch_mode"}, \
+                        {"mcs"}, \
+                        {"rate_gov"}, \
+                        {"calib"}, \
+                        {"load_enable_fir"}, \
+                        {"dcxo_tune_coarse"}, \
+                        {"dcxo_tune_fine"}, 
 
 
 

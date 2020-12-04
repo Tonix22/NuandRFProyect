@@ -27,7 +27,7 @@ std::unordered_map<std::string, std::vector<std::pair<int, int>>> bounds =
  *********************API OPCODE MAP***************************
  *************************************************************/
 
-std::unordered_map<std::string,int> ID_LUT =
+char ID_LUT[LUT_NUM_ITEMS][LUT_MAX_STRING] =
 {
     LUT_VALUE_DEF()
 };
@@ -41,7 +41,7 @@ char params_strings[Params_set_size][9] =
 {
     TYPES_STR_SEQ()
 };
-char ID_to_TYPE_OPCODE[31] = 
+char ID_to_TYPE_OPCODE[30] = 
 {
     No_param << 3 | u32int, // en_state_machine_mode
     s32int   << 3 | u8int, // rf_gain
@@ -51,8 +51,8 @@ char ID_to_TYPE_OPCODE[31] =
     No_param << 3 | u8int , //lo_int_ext
     struct_param << 3 | u8int , //rssi
     u8int    << 3 | u8int, // gain_control_mode
-    No_param << 3 | RXFIR, // set_fir_config
-    No_param << 3 | RXFIR, // get_fir_config
+    No_param << 3 | TXFIR, // set_fir_config
+    TXFIR << 3    | u8int, // get_fir_config
     No_param << 3 | u8int, // fir_en_dis
     No_param << 3 | u8int, // rfdc_track_en_dis
     No_param << 3 | u8int, // bbdc_track_en_dis
@@ -68,7 +68,6 @@ char ID_to_TYPE_OPCODE[31] =
     u32int   << 3 | u32int,//path_clk
     No_param << 3 | u8int, //no_ch_mode
     No_param << 3 |struct_param,//mcs
-    No_param << 3 | u8int, //fir_en_dis
     No_param << 3 | u32int,//rate_gov
     s32int   << 3 | u32int,//calib
     TXFIR    << 3 | RXFIR, //load_enable_fir
@@ -144,9 +143,23 @@ void MainWindow :: onButtonClicked()
 {
     int set_get_state   = set_get_menu->currentIndex();
     int tx_rx_stare     = tx_rx_menu->currentIndex();
-    int API_state       = ID_LUT[API_menu->currentText().toUtf8().constData()];
-    int Params          = ID_to_TYPE_OPCODE[API_state];
-    int OPCODE          = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
+    int API_state       = 0;
+    std::string API_str = API_menu->currentText().toUtf8().constData();
+    int Params          = 0;
+    int OPCODE          = 0;
+    
+    for(int i=0;i<30;i++)
+    {
+        if(ID_LUT[i] == API_str)
+        {
+            API_state = i;
+            break;
+        }
+    }
+    Params = ID_to_TYPE_OPCODE[API_state];
+    SPECIAL_CASE_FIR_BUTTON()
+    OPCODE = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
+
     printf("set_get_state: %d\r\n",set_get_state);
     printf("tx_rx_stare: %d\r\n",tx_rx_stare);
     printf("API_state: %d\r\n",API_state);
@@ -186,7 +199,8 @@ void MainWindow :: set_get_menu_changed(const QString &text)
             tx_rx_menu->insertItems(0,normal_state); // get SAVED STATE
             normal_state.clear();
         }
-
+        tx_rx_menu->setCurrentIndex(1);
+        tx_rx_menu->setCurrentIndex(0);
     }
  
 }
@@ -222,20 +236,16 @@ void MainWindow :: tx_rx_menu_changed(const QString &text)
 
     if(set_get_state == NONE_param)
     {
+        API_menu->clear();
         if(box_str == "TRX")
         {
-            API_menu->clear();
             API_menu->insertItems(0, QStringList() PUSH_TO_LIST("load_enable_fir") );
         }
-        else if(box_str == "None")
+        else if(box_str == "TX" || box_str == "RX")
         {
-            API_menu->clear();
-        }
-        else
-        {
-            API_menu->clear();
             API_menu->insertItems(0, QStringList() NONE_TX_LIST );
         }
+        
     }
     else if(set_get_state == Set_param)
     {
@@ -247,11 +257,15 @@ void MainWindow :: tx_rx_menu_changed(const QString &text)
         }
         else if(box_str == "RX")
         {
-             API_menu->insertItems(0, QStringList() SET_API_RX_LIST );
+            API_menu->insertItems(0, QStringList() SET_API_RX_LIST );
         }
         else if(box_str == "TRX")
         {
-             API_menu->insertItems(0, QStringList() SET_API_TRX_LIST );
+            API_menu->insertItems(0, QStringList() SET_API_TRX_LIST );
+        }
+        else
+        {
+            API_menu->insertItems(0, QStringList() SET_API_NONE_LIST );
         }
     }
     else if(set_get_state == Get_param)
@@ -271,7 +285,7 @@ void MainWindow :: tx_rx_menu_changed(const QString &text)
         }
         else
         {
-            printf("NONE\r\n");
+            API_menu->insertItems(0, QStringList() PUSH_TO_LIST("en_state_machine_mode"));
         }
     }
 }
@@ -279,17 +293,30 @@ void MainWindow ::API_menu_trigger(const QString &text)
 {
     int set_get_state = set_get_menu->currentIndex();
     std::string box_str = text.toUtf8().constData();
-    int API_state       = ID_LUT[box_str];
-    //printf("P1: %s, ",params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])] );
-    //printf("P2: %s\r\n",params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])] );
+    int API_state       = 0;
+    int rx_tx_val       = tx_rx_menu->currentIndex();
+
+
+    for(int i=0; i < 30;i++)
+    {
+        if(ID_LUT[i] == box_str)
+        {
+            API_state = i;
+            break;
+        }
+    }
     param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
     param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
+    SPECIAL_CASE_FIR_LABELS()
+    
     if(set_get_state == Set_param && !box_str.empty())
     {
         this->Slider_Calc(box_str);
     }
 }
-
+/**************************************************************
+ ************************TEXT RELATED *************************
+ *************************************************************/
 int MainWindow::Text_Processing(std::string& msg)
 {
     int offset = 0;
@@ -399,6 +426,8 @@ void MainWindow :: Text_param2_changed()
     static std::string param2_str;
     Text_input_register(param2_str,1);
 }
+
+
 void MainWindow :: Opcode_to_GUI()
 {
     static std::string GUI_Opcode_str;
@@ -415,11 +444,10 @@ void MainWindow :: Opcode_to_GUI()
         mask = (dec_opcode & 3);
         set_get_menu->setCurrentIndex(mask) ;// set get do
         mask = (dec_opcode & (3<<2))>>2;
-        printf("%d, ",mask);
         tx_rx_menu->setCurrentIndex(mask);// other, rx,tx, trx
         mask =(dec_opcode & (63<<4))>>4;
-        printf("%d\r\n",mask);
-        API_menu->setCurrentIndex(mask);// ID
+        API_menu->setCurrentText(ID_LUT[mask]);// ID
+        
         //param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
         //param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
 //
