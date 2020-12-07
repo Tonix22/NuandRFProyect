@@ -138,7 +138,7 @@ typedef enum
                                 "attenuation",\
                                 "rf_port_output",\
                                 "auto_cal_en_dis",\
-                                "path_clk",\
+                                "path_clks",\
                                 "rate_gov"
 
 #define SET_API_NONE_LIST PUSH_TO_LIST (seter_strings[en_state_machine_mode])\
@@ -268,6 +268,20 @@ typedef enum
                         {"dcxo_tune_fine"}, 
 
 
+/**************************************************************
+ ***********************Special Ones**************************
+ *************************************************************/
+ #define Special_ones_IDS()   0xA466,\
+                              0x1885,\
+                              0xC496,\
+                              0x2914,\
+                              0x1C89,\
+                              0xE49A,\
+                              0x2918,\
+                              0x496D,\
+                              0xF9BC
+
+
 
 /**************************************************************
  ***********************TYPEDEF*********************************
@@ -332,6 +346,7 @@ public:
     void Slider_Calc(std::string& str);
     int Text_Processing(std::string& msg);
     void Text_input_register(std::string& msg,int index);
+    void Special_ones(int id);
     QPlainTextEdit** ParamN_input_text[2] = {&Param1_input_text, &Param2_input_text};
     QSlider** Param_N_val[2]      = {&Param_1_val,&Param_2_val};
     QLabel**  ParamN_slider_val[2]= {&Param1_slider_val,&Param2_slider_val};

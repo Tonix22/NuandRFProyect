@@ -1,12 +1,16 @@
 #include <QApplication>
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
 #include <iostream>
 #include <string>
 #include "string.h"
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
-#include<cmath>
+#include <cmath>
+
 #include "my_mainwindow.h"
 
 /**************************************************************
@@ -75,6 +79,17 @@ char ID_to_TYPE_OPCODE[30] =
     No_param << 3 | u32int,//dcxo_tune_fine
 };
 
+
+/**************************************************************
+ ***********************Special Ones**************************
+ *************************************************************/
+
+std::unordered_set<int> Large_items_APIS_set = 
+{
+    Special_ones_IDS()
+};
+
+
 /**************************************************************
  *********************SIGNALS DECLARATION**********************
  *************************************************************/
@@ -137,7 +152,20 @@ MainWindow::~MainWindow()
 /**************************************************************
  ************************ACTIONS******************************
  *************************************************************/
-
+void MainWindow ::Special_ones(int id)
+{
+    QString filter = "Text File (*.txt*) ;; All File (*.*)";
+    QString file_name = QFileDialog::getOpenFileName(this,"List of Parameters",QDir::currentPath(),filter);
+    QMessageBox::information(this,"struct selected",file_name);
+    QFile file(file_name);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,"title", "file not open");
+    }
+    QTextStream in(&file);
+    QString text = in.readAll();
+    file.close();
+}
 
 void MainWindow :: onButtonClicked()
 {
@@ -147,7 +175,7 @@ void MainWindow :: onButtonClicked()
     std::string API_str = API_menu->currentText().toUtf8().constData();
     int Params          = 0;
     int OPCODE          = 0;
-    
+    char str_opcode[7]  = {0,0,0,0,0,0,0};
     for(int i=0;i<30;i++)
     {
         if(ID_LUT[i] == API_str)
@@ -159,12 +187,20 @@ void MainWindow :: onButtonClicked()
     Params = ID_to_TYPE_OPCODE[API_state];
     SPECIAL_CASE_FIR_BUTTON()
     OPCODE = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
-
+    sprintf(str_opcode,"0x%X",OPCODE);
+    Opcode_input_text->setPlainText(str_opcode);
+    
     printf("set_get_state: %d\r\n",set_get_state);
     printf("tx_rx_stare: %d\r\n",tx_rx_stare);
     printf("API_state: %d\r\n",API_state);
     printf("OPCODE: %X\r\n",OPCODE);
-    
+
+    if(Large_items_APIS_set.find(OPCODE) != Large_items_APIS_set.end())
+    {
+        Special_ones(API_state);
+    }
+
+
     //qDebug()<<" param1 "<< Param1_slider_val->text();
 }
 void MainWindow :: set_get_menu_changed(const QString &text)
