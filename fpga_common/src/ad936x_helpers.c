@@ -32,11 +32,33 @@
 
 #include "ad936x_helpers.h"
 #include "bladerf2_common.h"
+#include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static bool tx_mute_state[2] = { false };
+void print_trace (void)
+{
+  void *array[10];
+  char **strings;
+  int size, i;
 
+  size = backtrace (array, 10);
+  strings = backtrace_symbols (array, size);
+  if (strings != NULL)
+  {
+
+    printf ("Obtained %d stack frames.\n", size);
+    for (i = 0; i < size; i++)
+      printf ("%s\n", strings[i]);
+  }
+
+  free (strings);
+}
 uint32_t txmute_get_cached(struct ad9361_rf_phy *phy, bladerf_channel ch)
 {
+    printf("get_chached\r\n");
+    //print_trace();
     switch (ch) {
         case BLADERF_CHANNEL_TX(0):
             return phy->tx1_atten_cached;
@@ -97,6 +119,7 @@ int txmute_set(struct ad9361_rf_phy *phy, bladerf_channel ch, bool state)
         atten  = MUTED_ATTEN;
     } else {
         // unmute: restore the saved value
+        printf("restore the saved value\r\n");
         cached = txmute_get_cached(phy, ch);
         atten  = cached;
     }

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+set( CMAKE_BUILD_TYPE Debug)
 # Indicate that this is a top-level build
 set(BLADERF_TOP_LEVEL_BUILD ON)
 
