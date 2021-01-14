@@ -1,0 +1,12 @@
+Tx BladeRf_2
+Frequency:950 Mhz
+Bandwidth:20Mhz
+Testing
+Sample_rate: 5Mhz-20Mhz 
+with increment of 1Mhz per sec 
+
+RX HackRF
+Frequency:950 Mhz
+SampleRate: 8Mhhz
+Bandwidth:20Mhz
+
