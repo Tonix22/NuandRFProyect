@@ -1,0 +1,78 @@
+1. Compile ui file 
+
+    Save your form to a .ui file, e.g. sample.ui
+    
+    uic -o sample.h sample.ui
+    
+    from a command shell
+    sample.h then contains the generated source code
+    
+    ******
+    uic -o sample.h Frameworkhelp.ui
+    ******
+    
+https://stackoverflow.com/questions/16286166/qt-designer-generate-c-code#16287468
+
+2. Generate .pro file
+
+    qmake -project
+    qmake
+    
+    QT+= widgets
+    # Input
+    HEADERS += sample.h
+    HEADERS += my_mainwindow.h
+    HEADERS += ui_Frameworkhelp.h
+    FORMS   += Frameworkhelp.ui
+    SOURCES += my_mainwindow.cpp
+    SOURCES += main.cpp
+    RESOURCES += logo.qrc
+
+3. In the .pro file add the following 
+    QT+= widgets
+    HEADERS     = sample.h
+
+
+4. How to include in main 
+
+    int main(int argc, char *argv[])
+    {
+        QApplication theApp (argc, argv);
+        QMainWindow widget;
+        Ui::OpcodeGenerator ui;
+        ui.setupUi(&widget);
+
+        widget.show();
+        return theApp.exec();
+    }
+
+https://doc.qt.io/qt-5/designer-using-a-ui-file.html#compile-time-form-processing
+
+5. make
+
+
+ERRORS 1
+    undefined reference to 'vtable 
+SOLUTION 1
+    
+
+    Any time you add a new call to the Q_OBJECT macro, you need to run qmake again. 
+    The vtables issue you're referring to is directly related to that.
+    Just run qmake and you should be good to go assuming there are no other issues in your code.
+    Add Header file too. 
+    https://stackoverflow.com/questions/2555816/qt-linker-error-undefined-reference-to-vtable
+    
+
+***************
+Remove element from de QBOX 
+tx_rx_menu->removeItem(1);
+
+Update de Max and Min value 
+max_p1_val->setText(QApplication::translate("OpcodeGenerator", "30", Q_NULLPTR));
+
+
+
+**********
+Get text from text box
+
+QString QPlainTextEdit::toPlainText() const

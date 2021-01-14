@@ -1,0 +1,6 @@
+To make .qrc image work on upper folder there is neede to call this 
+seters, so the make file will fetch the QT_cmake/logo.qrc.
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+https://cmake.org/cmake/help/v3.0/manual/cmake-qt.7.html
