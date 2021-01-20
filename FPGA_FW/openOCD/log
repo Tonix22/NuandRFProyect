@@ -1,0 +1,402 @@
+checking for makeinfo... makeinfo
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking whether gcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of gcc... gcc3
+checking for gcc option to accept ISO C99... none needed
+checking for ranlib... ranlib
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.23... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by gcc... /usr/x86_64-pc-linux-gnu/bin/ld
+checking if the linker (/usr/x86_64-pc-linux-gnu/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/x86_64-pc-linux-gnu/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... (cached) ranlib
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking how to run the C preprocessor... gcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/x86_64-pc-linux-gnu/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for an ANSI C-conforming const... yes
+checking for unsigned long long int... yes
+checking for long long int... yes
+checking for library containing ioperm... none required
+checking for library containing dlopen... -ldl
+checking sys/socket.h usability... yes
+checking sys/socket.h presence... yes
+checking for sys/socket.h... yes
+checking elf.h usability... yes
+checking elf.h presence... yes
+checking for elf.h... yes
+checking dirent.h usability... yes
+checking dirent.h presence... yes
+checking for dirent.h... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking malloc.h usability... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking netdb.h usability... yes
+checking netdb.h presence... yes
+checking for netdb.h... yes
+checking poll.h usability... yes
+checking poll.h presence... yes
+checking for poll.h... yes
+checking pthread.h usability... yes
+checking pthread.h presence... yes
+checking for pthread.h... yes
+checking for strings.h... (cached) yes
+checking sys/ioctl.h usability... yes
+checking sys/ioctl.h presence... yes
+checking for sys/ioctl.h... yes
+checking sys/param.h usability... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+checking sys/select.h usability... yes
+checking sys/select.h presence... yes
+checking for sys/select.h... yes
+checking for sys/stat.h... (cached) yes
+checking sys/sysctl.h usability... yes
+checking sys/sysctl.h presence... yes
+checking for sys/sysctl.h... yes
+checking sys/time.h usability... yes
+checking sys/time.h presence... yes
+checking for sys/time.h... yes
+checking for sys/types.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for arpa/inet.h... yes
+checking for ifaddrs.h... yes
+checking for netinet/in.h... yes
+checking for netinet/tcp.h... yes
+checking for net/if.h... yes
+checking whether to enable assertions... yes
+checking for stdbool.h that conforms to C99... yes
+checking for _Bool... yes
+checking whether time.h and sys/time.h may both be included... yes
+checking whether byte ordering is bigendian... no
+checking for strndup... yes
+checking for strnlen... yes
+checking for gettimeofday... yes
+checking for usleep... yes
+checking for vasprintf... yes
+checking for realpath... yes
+checking whether to build a release... no
+checking whether to build Doxygen as HTML... yes
+checking whether to build Doxygen as PDF... no
+checking whether to enable verbose JTAG I/O messages... no
+checking whether to enable verbose USB I/O messages... no
+checking whether to enable verbose USB communication messages... no
+checking whether to enable malloc free space logging... no
+checking whether to enable ZY1000 minidriver... no
+checking whether to enable dummy minidriver... no
+checking whether standard drivers can be built... yes
+checking for libusb-1.0... yes
+configure: libusb-1.0 header bug workaround: LIBUSB1_CFLAGS changed to "-isystem /usr/include/libusb-1.0"
+checking for libusb... yes
+checking for hidapi... no
+checking for hidapi-hidraw... no
+checking for hidapi-libusb... no
+checking for libftdi1... yes
+checking for libjaylink >= 0.2... no
+checking for environ in unistd.h and stdlib.h... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+=== configuring in jimtcl (/opt/eda/FPGA/FOSS/openocd_riscv/jimtcl)
+configure: running /bin/sh ./configure.gnu --disable-option-checking '--prefix=/opt/eda/FPGA/FOSS/openocd_riscv/binaries'  '--enable-usb_blaster_libftdi' --cache-file=/dev/null --srcdir=.
+Host System...x86_64-unknown-linux-gnu
+Build System...x86_64-unknown-linux-gnu
+C compiler... cc -g -O2
+C++ compiler... c++ -g -O2
+Build C compiler...cc
+Checking for stdlib.h...ok
+Checking for long long...ok
+Checking for sys/time.h...ok
+Checking for sys/socket.h...ok
+Checking for netinet/in.h...ok
+Checking for arpa/inet.h...ok
+Checking for netdb.h...ok
+Checking for sys/un.h...ok
+Checking for dlfcn.h...ok
+Checking for unistd.h...ok
+Checking for dirent.h...ok
+Checking for crt_externs.h...not found
+Checking libs for inet_ntop...none needed
+Checking libs for socket...none needed
+Checking for ualarm...ok
+Checking for lstat...ok
+Checking for fork...ok
+Checking for vfork...ok
+Checking for system...ok
+Checking for select...ok
+Checking for execvpe...ok
+Checking for backtrace...ok
+Checking for geteuid...ok
+Checking for mkstemp...ok
+Checking for realpath...ok
+Checking for strptime...ok
+Checking for isatty...ok
+Checking for regcomp...ok
+Checking for waitpid...ok
+Checking for sigaction...ok
+Checking for sys_signame...not found
+Checking for sys_siglist...ok
+Checking for isascii...ok
+Checking for syslog...ok
+Checking for opendir...ok
+Checking for readlink...ok
+Checking for sleep...ok
+Checking for usleep...ok
+Checking for pipe...ok
+Checking for getaddrinfo...ok
+Checking for utimes...ok
+Checking for shutdown...ok
+Checking for socketpair...ok
+Checking for isinf...ok
+Checking for isnan...ok
+Checking for link...ok
+Checking for symlink...ok
+Checking for fsync...ok
+Checking for dup...ok
+Checking for sysinfo...ok
+Checking for struct sysinfo.uptime...ok
+Checking for struct flock...ok
+Checking for sys/types.h...(cached) ok
+Checking if -D_FILE_OFFSET_BITS=64 is needed...no
+Checking for fseeko...ok
+Checking for ftello...ok
+Checking for _NSGetEnviron...not found
+Checking environ declared in unistd.h...yes
+Checking for sys/types.h...(cached) ok
+Checking for sys/stat.h...ok
+Checking for mkdir with one arg...no
+Checking for termios.h...ok
+Enabling line editing
+Enabling references
+Building static library
+Extension aio...enabled
+Extension array...enabled
+Extension pack...enabled
+Extension binary...enabled
+Extension clock...enabled
+Extension eventloop...enabled
+Extension exec...enabled
+Extension file...enabled
+Extension readdir...enabled
+Extension glob...enabled
+Extension history...enabled
+Extension interp...enabled
+Checking libs for dlopen...-ldl
+Extension load...enabled
+Extension nshelper...enabled
+Extension namespace...enabled
+Extension oo...enabled
+Extension package...enabled
+Extension posix...enabled
+Extension regexp...enabled
+Extension signal...enabled
+Extension stdlib...enabled
+Extension syslog...enabled
+Extension tclcompat...enabled
+Extension tclprefix...enabled
+Extension tree...enabled
+Using built-in regexp
+Jim static extensions: aio array binary clock eventloop exec file glob history interp load namespace nshelper oo pack package posix readdir regexp signal stdlib syslog tclcompat tclprefix tree
+jim-config.h is unchanged
+jimautoconf.h is unchanged
+Created Makefile from Makefile.in
+Created build-jim-ext from build-jim-ext.in
+=== configuring in src/jtag/drivers/libjaylink (/opt/eda/FPGA/FOSS/openocd_riscv/src/jtag/drivers/libjaylink)
+configure: running /bin/sh ./configure.gnu --disable-option-checking '--prefix=/opt/eda/FPGA/FOSS/openocd_riscv/binaries'  '--enable-usb_blaster_libftdi' --cache-file=/dev/null --srcdir=.
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking whether gcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of gcc... gcc3
+checking for ar... ar
+checking the archiver (ar) interface... ar
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by gcc... /usr/x86_64-pc-linux-gnu/bin/ld
+checking if the linker (/usr/x86_64-pc-linux-gnu/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/x86_64-pc-linux-gnu/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking how to run the C preprocessor... gcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/x86_64-pc-linux-gnu/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for libusb-1.0 >= 1.0.9... yes
+checking whether byte ordering is bigendian... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating libjaylink/Makefile
+config.status: creating libjaylink/version.h
+config.status: creating libjaylink.pc
+config.status: creating Doxyfile
+config.status: creating config.h
+config.status: config.h is unchanged
+config.status: executing depfiles commands
+config.status: executing libtool commands
+
+libjaylink configuration summary:
+ - Package version ................ 0.2.0-git-8645845
+ - Library version ................ 0:0:0
+ - Installation prefix ............ /opt/eda/FPGA/FOSS/openocd_riscv/binaries
+ - Building on .................... x86_64-pc-linux-gnu
+ - Building for ................... x86_64-pc-linux-gnu
+
+Enabled transports:
+ - USB ............................ yes
+ - TCP ............................ yes
+
+
+
+OpenOCD configuration summary
+--------------------------------------------------
+MPSSE mode of FTDI based devices        yes (auto)
+ST-Link JTAG Programmer                 yes (auto)
+TI ICDI JTAG Programmer                 yes (auto)
+Keil ULINK JTAG Programmer              yes (auto)
+Altera USB-Blaster II Compatible        yes (auto)
+Bitbang mode of FT232R based devices    yes (auto)
+Versaloon-Link JTAG Programmer          yes (auto)
+TI XDS110 Debug Probe                   yes (auto)
+OSBDM (JTAG only) Programmer            yes (auto)
+eStick/opendous JTAG Programmer         yes (auto)
+Andes JTAG Programmer                   yes (auto)
+USBProg JTAG Programmer                 yes (auto)
+Raisonance RLink JTAG Programmer        yes (auto)
+Olimex ARM-JTAG-EW Programmer           yes (auto)
+CMSIS-DAP Compliant Debugger            no
+Cypress KitProg Programmer              no
+Altera USB-Blaster Compatible           yes (auto)
+ASIX Presto Adapter                     yes (auto)
+OpenJTAG Adapter                        yes (auto)
+SEGGER J-Link Programmer                yes (auto)
+

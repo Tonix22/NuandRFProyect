@@ -1,0 +1,40 @@
+DupinSoC_apbDecoder_input@10000000 {
+  compatible = "simple-bus";
+  #address-cells = <0x1>;
+  #size-cells = <0x1>;
+  ranges = <0x0 0x10000000 0x1000000>;
+
+  DupinSoC_uart0_apb: tty@10000 {
+    compatible = "titan-ip,uart-1.0";
+    reg = <0x10000 0x1000>;
+    interrupt-parent = <&DupinSoC_plic_apb>
+    interrupts = <1>;
+  }
+  DupinSoC_gpio0_apb: gpio@0 {
+    compatible = "titan-ip,gpio-1.0";
+    reg = <0x0 0x1000>;
+    interrupt-parent = <&DupinSoC_plic_apb>
+    interrupts = <2 3 4 5>;
+  }
+  DupinSoC_gpio1_apb: gpio@50000 {
+    compatible = "titan-ip,gpio-1.0";
+    reg = <0x50000 0x1000>;
+
+  }
+  DupinSoC_plic_apb: interrupt-controller@c00000 {
+    compatible = "sifive,plic-1.0.0", "sifive,fu540-c000-plic";
+    #interrupt-cells = <1>;
+    interrupt-controller;
+    interrupts-extended = <&L1 11 &L1 9>;
+    reg = <0xc00000 0x400000>;
+    riscv,ndev = <7>;
+  }
+  DupinSoC_spi0_apb: spi@70000 {
+    compatible = "titan-ip,spi-1.0";
+    #address-cells = <1>;
+    #size-cells = <0>;
+    reg = <0x70000 0x1000>;
+  }
+
+};
+

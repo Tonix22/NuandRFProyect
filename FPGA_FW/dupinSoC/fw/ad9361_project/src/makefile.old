@@ -1,0 +1,23 @@
+# Edit these parameters accordingly
+
+PROJ_NAME=ad9361_project
+DEBUG=yes
+BENCH=no
+MULDIV=no
+
+#AD9361 skeleton
+PLATFORM=platform_generic
+CFLAGS=-Wall -I$(PLATFORM) #-DCONSOLE_COMMANDS
+
+INCDIR := ../lib
+
+SRCS = main.c
+SRCS += $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
+  
+SRCS += crt.S
+
+INC += -I$(INCDIR)
+LDSCRIPT = $(INCDIR)/linker.ld
+
+include $(INCDIR)/resources/gcc.mk
+include $(INCDIR)/resources/subproject.mk
