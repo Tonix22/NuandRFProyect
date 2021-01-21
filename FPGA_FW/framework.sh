@@ -22,9 +22,10 @@ if [ $1 == "-ocd" ]; then #open port for debuger
 fi
 
 if [ $1 == "-all" ]; then #make generic folder project
+    cd dupinSoC/fw/
     cd $2
     make
-    cd ../
+    cd ../../../
 fi
 
 if [ $1 == "-clean" ]; then #clean generci folder projectbi
