@@ -1,10 +1,10 @@
 #! /bin/bash
 BASEDIR=${PWD}
 #Bitstream PATH
-SOFT_DIR=dupinSoC/hdl/dupin-cenzontle2.sof
+SOFT_DIR=/dupinSoC/hdl/dupin-cenzontle2.sof
 #OCD USB CFG
-USB_CFG=openOCD/tcl/interface/ftdi/openocd-usb.cfg
-DUPIN_CFG=openOCD/tcl/target/dupin_s.cfg
+USB_CFG=/openOCD/tcl/interface/ftdi/openocd-usb.cfg
+DUPIN_CFG=/openOCD/tcl/target/dupin_s.cfg
 
 
 
@@ -13,6 +13,11 @@ if [ $1 == "-bitstream" ]; then #download bitstream to FPGA
     echo "quartus_pgm -c 1 -m JTAG -o \"p;${BASEDIR}${SOFT_DIR}\""
     quartus_pgm -c 1 -m JTAG -o "p;${BASEDIR}${SOFT_DIR}"
 fi
+
+if [ $1 == "-dummy" ]; then 
+    echo "bistream: ipmIPDummy-CNZTL2.sof"
+    quartus_pgm -c 1 -m JTAG -o "p;SoftFiles/ipmIPDummy-CNZTL2.sof"
+fi 
 
 if [ $1 == "-ocd" ]; then #open port for debuger
     echo "Script executed from: ${BASEDIR}${USB_CFG}"
@@ -29,6 +34,7 @@ if [ $1 == "-all" ]; then #make generic folder project
 fi
 
 if [ $1 == "-clean" ]; then #clean generci folder projectbi
+    cd dupinSoC/fw/
     cd $2
     make clean
     cd ../
