@@ -3,7 +3,7 @@
 #include "ad9361.h"
 
 void opcode_preanalysis(struct ad9361_rf_phy *phy, long opcode);
-
+void push_param(uint64_t var,char idx);
 typedef enum{
     NA,
     SET,

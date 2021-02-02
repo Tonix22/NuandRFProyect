@@ -104,12 +104,15 @@ int spi_write_then_read(struct spi_device *spi,
 	
 	const unsigned char *tx = txbuf;
 	
+	
 	for(int i=0; i < n_tx; i++,tx++)
 	{
+		usleep(10);
 		spi_select(SPI0_BASE, 0);
 		spi_write(SPI0_BASE, *tx);
 		spi_deselect(SPI0_BASE, 0);
 	}
+	
 	spi_read_API(rxbuf,n_rx);
 
 	return 0;

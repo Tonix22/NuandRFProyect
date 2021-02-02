@@ -389,13 +389,15 @@ int main(void)
 
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
+	ISR_FLAG = 1;
 	for(;;)
 	{
 		if(ISR_FLAG)
 		{
+			ISR_FLAG = 0;
 			//TODO example
 			push_param(30,1);
-			opcode_preanalysis(ad9361_phy, 0x2475);
+			opcode_preanalysis(ad9361_phy, 0x825);
 		}
 	}
 	//printf("Done.\n");

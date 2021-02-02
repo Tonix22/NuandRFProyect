@@ -119,7 +119,7 @@ uint64_t FLIP_VALUES[2];
 
 void* opcode_callback(Caller* var,char size,uint32_t opcode)
 {
-    for (char i = 0; i < size; i++)
+    for (char i = 0; i < size; i++,var++)
     {
         if(var->ID == opcode)
         {

@@ -9,7 +9,8 @@
             "type": "gdb",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "target": "${workspaceRoot}/dupinSoC/fw/spi/build/SPI.elf",
+            //"target": "${workspaceRoot}/dupinSoC/fw/spi/build/SPI.elf",
+            "target": "${workspaceRoot}/dupinSoC/fw/${input:componentType}/build/${input:componentType}.elf",
             "gdbpath": "/opt/riscv/bin/riscv64-unknown-elf-gdb",
             "autorun": [
                 "target remote localhost:3333",
@@ -19,5 +20,18 @@
                 "load"
             ]
         }
+    ],
+    "inputs": [
+      {
+        "type": "pickString",
+        "id": "componentType",
+        "description": "Select Debug File",
+        "options": [
+          "ad9361_project",
+          "spi",
+          "blink"
+        ],
+        "default": "component"
+      }
     ]
 }
