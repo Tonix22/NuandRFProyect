@@ -17,6 +17,10 @@
  *********************SETER STRING VARIABLES*******************
  *************************************************************/
 
+uint64_t frequency_set = 0x0LL;
+uint64_t frequency_get = 0x0LL;
+
+
 char seter_strings[set_cmd_size][MAX_SET_STRING_SIZE] = 
 {
     SET_STRING_COLLECTION()
@@ -200,7 +204,10 @@ void MainWindow :: onButtonClicked()
     {
         Special_ones(API_state);
     }
-
+    if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
+    {
+        printf("set Frequency to %lu \r\n",frequency_set);
+    }
 
     //qDebug()<<" param1 "<< Param1_slider_val->text();
 }
@@ -246,8 +253,18 @@ void MainWindow :: Slider_Calc(std::string& str)
 {
     //printf("API-set menu trigger : %s\r\n",str.c_str());
 
+    if(strcmp(str.c_str(), seter_strings[lo_freq]) == 0)
+    {
+        Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
+        min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
+        max_p1_val->setText(TRANSLATE ("5 GHz"));
+        Param_2_val->setRange(0,2147483647);
+        min_p2_val->setText(TRANSLATE ("None"));
+        max_p2_val->setText(TRANSLATE ("None"));
+        return;  
+    }
+
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
-    
     min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
     max_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].second).c_str()));
 
@@ -354,13 +371,13 @@ void MainWindow ::API_menu_trigger(const QString &text)
 /**************************************************************
  ************************TEXT RELATED *************************
  *************************************************************/
-int MainWindow::Text_Processing(std::string& msg)
+uint64_t MainWindow::Text_Processing(std::string& msg)
 {
     int offset = 0;
     std::size_t found;
-    int num = 0;
+    uint64_t num = 0;
     bool notation = false;
-    int multipliyer = 0;
+    uint64_t multipliyer = 0;
     std::string left = "0";
     std::string right= "0";
 
@@ -422,7 +439,7 @@ void MainWindow :: Text_input_register(std::string& msg,int index)
     std::string temp    = (*(ParamN_input_text[index]))->toPlainText().toUtf8().constData();
     int  set_get_state  = set_get_menu->currentIndex();
     std::string API_str = API_menu->currentText().toUtf8().constData();
-    int value_proc = 0;
+    uint64_t value_proc = 0;
     
     if(temp.back() != '\n')
     {
@@ -430,12 +447,13 @@ void MainWindow :: Text_input_register(std::string& msg,int index)
     }
     else
     {
-        std::cout<<msg<<std::endl;
+        
         value_proc = Text_Processing(msg);    
-
+        
         (*(Param_N_val[index]))->setValue(value_proc);
         (*(Param_N_val[index]))->setSliderPosition(value_proc);
         (*(ParamN_slider_val[index]))->setText(msg.c_str());
+
         if(set_get_state == Set_param )
         {
             if((bounds[API_str][index].first <= value_proc) && 
@@ -445,7 +463,14 @@ void MainWindow :: Text_input_register(std::string& msg,int index)
             }
             else
             {
-                (*(ParamN_slider_val[index]))->setText("Invalid");
+                if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
+                {
+                    frequency_set = value_proc;
+                    (*(ParamN_slider_val[index]))->setText(msg.c_str());
+                }else
+                {
+                    (*(ParamN_slider_val[index]))->setText("Invalid");
+                }
             }
         }
         (*(ParamN_input_text[index]))->clear();

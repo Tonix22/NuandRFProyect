@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <stdint.h>
 #include "sample.h"
+
 /***************************************************
 ******************* CODE COMPRESION*******************
 ****************************************************/
@@ -344,7 +346,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void Slider_Calc(std::string& str);
-    int Text_Processing(std::string& msg);
+    uint64_t Text_Processing(std::string& msg);
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int id);
     QPlainTextEdit** ParamN_input_text[2] = {&Param1_input_text, &Param2_input_text};
