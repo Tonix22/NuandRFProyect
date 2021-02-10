@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>external-content.duckduckgo.com.png</file>
+  </qresource>
+</RCC>

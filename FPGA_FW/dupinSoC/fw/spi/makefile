@@ -1,4 +1,4 @@
-PROJ_NAME=blink
+PROJ_NAME=spi
 
 BAREMETAL = ../bsp/CinvestavDupin/libraries
 

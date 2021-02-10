@@ -1,5 +1,5 @@
 
-build/blink.elf:     file format elf32-littleriscv
+build/SPI.elf:     file format elf32-littleriscv
 
 
 Disassembly of section .init:

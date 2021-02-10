@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/Tolteca.dir/main.cpp.o CMakeFiles/Tolteca.dir/Tolteca_autogen/mocs_compilation.cpp.o CMakeFiles/Tolteca.dir/Tolteca_autogen/4IYL7V2WWR/qrc_logo.cpp.o  -o Tolteca QT_cmake/libTolteca_GUI.a /usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.9.5 /usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.9.5 /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.9.5 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTolteca_GUI.a  CMakeFiles/Tolteca_GUI.dir/my_mainwindow.cpp.o CMakeFiles/Tolteca_GUI.dir/app.cpp.o CMakeFiles/Tolteca_GUI.dir/Tolteca_GUI_autogen/mocs_compilation.cpp.o CMakeFiles/Tolteca_GUI.dir/Tolteca_GUI_autogen/EWIEGA46WW/qrc_logo.cpp.o
+/usr/bin/ranlib libTolteca_GUI.a

@@ -78,8 +78,8 @@ _init:
 Disassembly of section .text:
 
 80000058 <delay>:
+#include <stdlib.h>
 
-//#include "../../bsp/CinvestavDupin/libraries/driver/dupin.h"
 #include "dupin.h"
 void delay()
 {
