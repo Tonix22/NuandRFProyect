@@ -330,6 +330,7 @@ typedef enum
                         "RXFIR",\
                         "TXFIR",\
 
+bool isNumeric(std::string& str);
 
 /**************************************************************
  *********************CLASS DEFINITION************************
@@ -345,6 +346,7 @@ public:
     virtual ~MainWindow();
     void Slider_Calc(std::string& str);
     int Text_Processing(std::string& msg);
+    void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int id);
     QPlainTextEdit** ParamN_input_text[2] = {&Param1_input_text, &Param2_input_text};

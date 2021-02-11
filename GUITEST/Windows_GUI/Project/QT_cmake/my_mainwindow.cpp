@@ -5,6 +5,7 @@
 #include <QDir>
 #include <iostream>
 #include <string>
+#include <stdint.h>
 #include "string.h"
 #include <unordered_map>
 #include <unordered_set>
@@ -152,7 +153,7 @@ MainWindow::~MainWindow()
 }
 
 /**************************************************************
- ************************ACTIONS******************************
+ ************************FILE EXPLORER*************************
  *************************************************************/
 void MainWindow ::Special_ones(int id)
 {
@@ -168,6 +169,10 @@ void MainWindow ::Special_ones(int id)
     QString text = in.readAll();
     file.close();
 }
+
+/**************************************************************
+ ************************SEND DATA******************************
+ *************************************************************/
 
 void MainWindow :: onButtonClicked()
 {
@@ -193,19 +198,40 @@ void MainWindow :: onButtonClicked()
     Opcode_input_text->setPlainText(str_opcode);
     
 
-    printf("set_get_state: %d\r\n",set_get_state);
-    printf("tx_rx_stare: %d\r\n",tx_rx_stare);
-    printf("API_state: %d\r\n",API_state);
-    printf("OPCODE: %X\r\n",OPCODE);
+    std::cout<<"set_get_state: " << set_get_state << std::endl;
+    std::cout<<"tx_rx_stare: " << tx_rx_stare << std::endl;
+    std::cout<<"API_state: " << API_state << std::endl;
+    std::cout<<"OPCODE: " << OPCODE << std::endl;
+
+
+    bridge->data_in.op =  OPCODE;
+    
 
     if(Large_items_APIS_set.find(OPCODE) != Large_items_APIS_set.end())
     {
+        //bridge->data_in.large_data
+        //bridge->data_in.ld_size
         Special_ones(API_state);
     }
 
-
+    if(set_get_state == Set_param || set_get_state == Do_param)
+    {
+        Load_Sliders_Val_to_bridge();
+        bridge->WriteData();
+    }
+    else if(set_get_state == Get_param)
+    {
+        bridge->ReadData();
+    }
+    
     //qDebug()<<" param1 "<< Param1_slider_val->text();
 }
+
+/**************************************************************
+ ************************UPDATE MENU *************************
+ *************************************************************/
+
+
 void MainWindow :: set_get_menu_changed(const QString &text)
 {
     std::string box_str = text.toUtf8().constData();
@@ -498,3 +524,34 @@ void MainWindow :: Opcode_to_GUI()
         Opcode_input_text->clear();
     }
 }
+
+void MainWindow ::Load_Sliders_Val_to_bridge()
+{
+    std::string slider_text = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
+    if(isNumeric(slider_text))
+    {
+        bridge->data_in.p1 = (uint32_t)strtol (slider_text.c_str(),NULL,10);
+    }
+    else
+    {
+        bridge->data_in.p1 = UINT32_MAX;
+    }
+    //param2
+    slider_text = (*(ParamN_slider_val[1]))->text().toUtf8().constData();
+    if(isNumeric(slider_text))
+    {
+        bridge->data_in.p2 = (uint32_t)strtol (slider_text.c_str(),NULL,10);
+    }
+    else
+    {
+        bridge->data_in.p2 = UINT32_MAX;
+    }
+}
+
+
+bool isNumeric(std::string& str) {
+   for (int i = 0; i < str.length(); i++)
+      if (isdigit(str[i]) == false)
+         return false; //when one non numeric value is found, return false
+      return true;
+}  
