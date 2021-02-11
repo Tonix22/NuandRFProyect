@@ -14,8 +14,10 @@
 #include "bridge.h"
 #include "my_mainwindow.h"
 
-IPDI_Bridge* bridge;
 
+IPDI_Bridge* bridge;
+uint64_t frequency_set = 0x0LL;
+uint64_t frequency_get = 0x0LL;
 /**************************************************************
  *********************SETER STRING VARIABLES*******************
  *************************************************************/
@@ -144,6 +146,7 @@ MainWindow::MainWindow(QWidget *parent) :  QMainWindow(parent)
         this,
         SLOT(Opcode_to_GUI())
     );
+
     bridge = new IPDI_Bridge();
     this->show();
 }
@@ -213,7 +216,10 @@ void MainWindow :: onButtonClicked()
         //bridge->data_in.ld_size
         Special_ones(API_state);
     }
-
+    if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
+    {
+        printf("set Frequency to %lu \r\n",frequency_set);
+    }
     if(set_get_state == Set_param || set_get_state == Do_param)
     {
         Load_Sliders_Val_to_bridge();
@@ -270,9 +276,79 @@ void MainWindow :: set_get_menu_changed(const QString &text)
  
 }
 
+
+void MainWindow :: Frequency_display()
+{
+    uint64_t extend  = ((uint64_t)Param_1_val->value())+Param_2_val->value();
+    uint64_t temp = extend;
+    char power = 0;
+    int integers = 0;
+    std::string ouput_string;
+    std::string merge;
+    char scientific = 0;
+    while(temp!=0)
+    {
+        power++;
+        temp/=10;
+    }
+    scientific = power/3;
+    integers   = power%3;
+
+    if(integers == 0)
+    {
+        integers = 3;
+        scientific--;
+    }
+    
+    merge = std::to_string(extend).substr(0, integers) +"."+ std::to_string(extend).substr(integers);
+    merge.erase ( merge.find_last_not_of('0') + 1, std::string::npos );
+    merge = merge.substr(0,std::min(5,(int)merge.size()));
+
+
+    switch (scientific)  {
+    case 1:
+        merge+="K";
+        break;
+
+    case 2:
+        merge+="M";
+        break;
+
+    case 3:
+        merge+="G";
+        break;
+
+    }
+
+    (*(ParamN_slider_val[0]))->setText(merge.c_str());
+}
+
 void MainWindow :: Slider_Calc(std::string& str)
 {
     //printf("API-set menu trigger : %s\r\n",str.c_str());
+    static bool frecuency_displayer = false;
+    if(strcmp(str.c_str(), seter_strings[lo_freq]) == 0)
+    {
+        Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
+        min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
+        max_p1_val->setText(TRANSLATE ("5 GHz"));
+        Param_2_val->setRange(0,2147483647);
+        min_p2_val->setText(TRANSLATE ("Offset +"));
+        max_p2_val->setText(TRANSLATE ("Offset +"));
+        
+        Param_2_val->disconnect();
+        Param_1_val->disconnect();
+        QObject::connect(Param_1_val, &QSlider::sliderMoved, this, Frequency_display);
+        QObject::connect(Param_2_val, &QSlider::sliderMoved, this, Frequency_display);
+        frecuency_displayer = true;
+        return;  
+    }
+    if(frecuency_displayer)
+    {
+        frecuency_displayer = false;
+        QObject::connect(Param_1_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[0])), SLOT(setNum(int)));
+        QObject::connect(Param_2_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[1])), SLOT(setNum(int)));
+    }
 
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
     
@@ -382,13 +458,13 @@ void MainWindow ::API_menu_trigger(const QString &text)
 /**************************************************************
  ************************TEXT RELATED *************************
  *************************************************************/
-int MainWindow::Text_Processing(std::string& msg)
+uint64_t MainWindow::Text_Processing(std::string& msg)
 {
     int offset = 0;
     std::size_t found;
-    int num = 0;
+    uint64_t num = 0;
     bool notation = false;
-    int multipliyer = 0;
+    uint64_t multipliyer = 0;
     std::string left = "0";
     std::string right= "0";
 
@@ -450,7 +526,7 @@ void MainWindow :: Text_input_register(std::string& msg,int index)
     std::string temp    = (*(ParamN_input_text[index]))->toPlainText().toUtf8().constData();
     int  set_get_state  = set_get_menu->currentIndex();
     std::string API_str = API_menu->currentText().toUtf8().constData();
-    int value_proc = 0;
+    uint64_t value_proc = 0;
     
     if(temp.back() != '\n')
     {
@@ -473,7 +549,14 @@ void MainWindow :: Text_input_register(std::string& msg,int index)
             }
             else
             {
-                (*(ParamN_slider_val[index]))->setText("Invalid");
+                if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
+                {
+                    frequency_set = value_proc;
+                    (*(ParamN_slider_val[index]))->setText(msg.c_str());
+                }else
+                {
+                    (*(ParamN_slider_val[index]))->setText("Invalid");
+                }
             }
         }
         (*(ParamN_input_text[index]))->clear();
@@ -525,6 +608,10 @@ void MainWindow :: Opcode_to_GUI()
     }
 }
 
+/**************************************************************
+ ************************BRIDGE HELPERS *************************
+ *************************************************************/
+
 void MainWindow ::Load_Sliders_Val_to_bridge()
 {
     std::string slider_text = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
@@ -547,7 +634,9 @@ void MainWindow ::Load_Sliders_Val_to_bridge()
         bridge->data_in.p2 = UINT32_MAX;
     }
 }
-
+/**************************************************************
+ ************************Validation *************************
+ *************************************************************/
 
 bool isNumeric(std::string& str) {
    for (int i = 0; i < str.length(); i++)

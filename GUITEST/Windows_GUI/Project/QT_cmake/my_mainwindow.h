@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <stdint.h>
 #include "sample.h"
 /***************************************************
 ******************* CODE COMPRESION*******************
@@ -345,7 +346,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void Slider_Calc(std::string& str);
-    int Text_Processing(std::string& msg);
+    uint64_t Text_Processing(std::string& msg);
     void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int id);
@@ -361,6 +362,7 @@ private slots:
     void Text_param1_changed();
     void Text_param2_changed();
     void Opcode_to_GUI();
+    void Frequency_display();
 };
 
 
