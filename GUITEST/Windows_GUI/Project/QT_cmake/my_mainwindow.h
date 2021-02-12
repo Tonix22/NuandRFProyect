@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <stdint.h>
+#include <string>
 #include "sample.h"
 /***************************************************
 ******************* CODE COMPRESION*******************
@@ -350,9 +351,15 @@ public:
     void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int id);
+    std::string Scientific_Units(uint64_t val);
+    void Scientific_display();
+    void Write_64();
+
     QPlainTextEdit** ParamN_input_text[2] = {&Param1_input_text, &Param2_input_text};
     QSlider** Param_N_val[2]      = {&Param_1_val,&Param_2_val};
     QLabel**  ParamN_slider_val[2]= {&Param1_slider_val,&Param2_slider_val};
+    std::string Sci_units[3] = {"K","M","G"};
+
 
 private slots:
     void onButtonClicked();

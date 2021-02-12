@@ -218,19 +218,19 @@ void MainWindow :: onButtonClicked()
     }
     if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
     {
-        printf("set Frequency to %lu \r\n",frequency_set);
+        Write_64();
     }
     if(set_get_state == Set_param || set_get_state == Do_param)
     {
         Load_Sliders_Val_to_bridge();
-        bridge->WriteData();
     }
-    else if(set_get_state == Get_param)
+
+    bridge->WriteData();
+    
+    if(set_get_state == Get_param)
     {
         bridge->ReadData();
     }
-    
-    //qDebug()<<" param1 "<< Param1_slider_val->text();
 }
 
 /**************************************************************
@@ -280,53 +280,25 @@ void MainWindow :: set_get_menu_changed(const QString &text)
 void MainWindow :: Frequency_display()
 {
     uint64_t extend  = ((uint64_t)Param_1_val->value())+Param_2_val->value();
-    uint64_t temp = extend;
-    char power = 0;
-    int integers = 0;
-    std::string ouput_string;
-    std::string merge;
-    char scientific = 0;
-    while(temp!=0)
-    {
-        power++;
-        temp/=10;
-    }
-    scientific = power/3;
-    integers   = power%3;
-
-    if(integers == 0)
-    {
-        integers = 3;
-        scientific--;
-    }
-    
-    merge = std::to_string(extend).substr(0, integers) +"."+ std::to_string(extend).substr(integers);
-    merge.erase ( merge.find_last_not_of('0') + 1, std::string::npos );
-    merge = merge.substr(0,std::min(5,(int)merge.size()));
-
-
-    switch (scientific)  {
-    case 1:
-        merge+="K";
-        break;
-
-    case 2:
-        merge+="M";
-        break;
-
-    case 3:
-        merge+="G";
-        break;
-
-    }
-
-    (*(ParamN_slider_val[0]))->setText(merge.c_str());
+   
+    (*(ParamN_slider_val[0]))->setText(Scientific_Units(extend).c_str());
+}
+void MainWindow :: Scientific_display()
+{
+    (*(ParamN_slider_val[0]))->setText(Scientific_Units(Param_1_val->value()).c_str());
 }
 
 void MainWindow :: Slider_Calc(std::string& str)
 {
-    //printf("API-set menu trigger : %s\r\n",str.c_str());
-    static bool frecuency_displayer = false;
+    static bool sci_displayer = false;
+    auto slider_update = [&](int i)
+    {
+        (*(ParamN_slider_val[i]))->setText((std::to_string(bounds[str][i].first).c_str()));
+        (*(Param_N_val[i]))->setValue(bounds[str][i].first);
+        (*(Param_N_val[i]))->setSliderPosition(bounds[str][i].first);
+    };
+
+    // lo frequency, is 64 bit long so it will be difirent
     if(strcmp(str.c_str(), seter_strings[lo_freq]) == 0)
     {
         Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
@@ -340,33 +312,50 @@ void MainWindow :: Slider_Calc(std::string& str)
         Param_1_val->disconnect();
         QObject::connect(Param_1_val, &QSlider::sliderMoved, this, Frequency_display);
         QObject::connect(Param_2_val, &QSlider::sliderMoved, this, Frequency_display);
-        frecuency_displayer = true;
+        sci_displayer = true;
+        slider_update(0);
         return;  
     }
-    if(frecuency_displayer)
+
+    if(sci_displayer)
     {
-        frecuency_displayer = false;
+        sci_displayer = false;
         QObject::connect(Param_1_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[0])), SLOT(setNum(int)));
         QObject::connect(Param_2_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[1])), SLOT(setNum(int)));
     }
 
+    if(strcmp(str.c_str(), seter_strings[rf_bandwidth])  == 0
+    || strcmp(str.c_str(), seter_strings[sampling_freq]) == 0
+    )
+    {
+        Param_1_val->disconnect();
+        QObject::connect(Param_1_val, &QSlider::sliderMoved, this, Scientific_display);
+        sci_displayer = true;
+    }
+
+    // Others diferent from Frequency
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
-    
     min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
     max_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].second).c_str()));
+
+    slider_update(0);
 
     if(bounds[str].size() == 2)
     {
         Param_2_val->setRange(bounds[str][1].first,bounds[str][1].second);
         min_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].first).c_str()));
         max_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].second).c_str()));
+        slider_update(1);
     }
     else
     {
         Param_2_val->setRange(0,0);
         min_p2_val->setText(TRANSLATE ("None"));
         max_p2_val->setText(TRANSLATE ("None"));
+        (*(ParamN_slider_val[1]))->setText("None");
     }
+
+
 }
 
 void MainWindow :: tx_rx_menu_changed(const QString &text)
@@ -446,17 +435,18 @@ void MainWindow ::API_menu_trigger(const QString &text)
             break;
         }
     }
-    param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
-    param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
-    SPECIAL_CASE_FIR_LABELS()
-    
     if(set_get_state == Set_param && !box_str.empty())
     {
         this->Slider_Calc(box_str);
     }
+    param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
+    param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
+    SPECIAL_CASE_FIR_LABELS()
+    
+
 }
 /**************************************************************
- ************************TEXT RELATED *************************
+ ************************TEXT INPUT RELATED *******************
  *************************************************************/
 uint64_t MainWindow::Text_Processing(std::string& msg)
 {
@@ -468,34 +458,37 @@ uint64_t MainWindow::Text_Processing(std::string& msg)
     std::string left = "0";
     std::string right= "0";
 
+    auto unit_selector = [&]()
+    {
+        for(int i=0;i < 3;i++)
+        {
+            found = msg.find(Sci_units[i]);
+            if (found != std::string::npos)
+            {
+                multipliyer = (uint64_t)pow(10,(i+1)*3);
+                break;
+            }
+        }
+    };
+
     if(msg.find("M")!=std::string::npos
-    || msg.find("K")!=std::string::npos)
+    || msg.find("K")!=std::string::npos
+    || msg.find("G")!=std::string::npos)
     {
         notation = true;
 
         found  = msg.find(".");
-        if (found != std::string::npos)
+        if (found != std::string::npos) // with dot
         {
             left   = msg.substr(0, found);
-            offset = found+1;
-            found  = msg.find("M");
-            multipliyer = 1000000;
-            if (found == std::string::npos)
-            {
-                found  = msg.find("K");
-                multipliyer = 1000;
-            }
+            offset = found+1; // dot
+            unit_selector();
             right  = msg.substr(offset, found-offset);
         }
-        else
+        else // not dot
         {
-            found  = msg.find("M");
+            unit_selector();
             left   = msg.substr(0, found);
-            multipliyer = 1000000;
-            if (found == std::string::npos)
-            {
-                multipliyer = 1000;
-            }
         }
     }
     try
@@ -644,3 +637,46 @@ bool isNumeric(std::string& str) {
          return false; //when one non numeric value is found, return false
       return true;
 }  
+
+/**************************************************************
+ ************************Sci Units ***************************
+ *************************************************************/
+
+std::string MainWindow :: Scientific_Units(uint64_t temp)
+{
+    char power = 0;
+    int integers = 0;
+    std::string merge;
+    char scientific = 0;
+    uint64_t original_value = temp;
+    if(temp < 1000)
+        return std::to_string(temp);
+    while(temp!=0)
+    {
+        power++;
+        temp/=10;
+    }
+    scientific = power/3;
+    integers   = power%3;
+
+    if(integers == 0)
+    {
+        integers = 3;
+        scientific--;
+    }
+    
+    merge = std::to_string(original_value).substr(0, integers) +"."+ std::to_string(original_value).substr(integers);
+    merge.erase ( merge.find_last_not_of('0') + 1, std::string::npos );
+    merge = merge.substr(0,std::min(5,(int)merge.size()));
+    merge+=Sci_units[scientific-1];
+
+    return merge;
+}
+
+void MainWindow :: Write_64()
+{
+    std::string label_val = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
+    uint64_t frequency    = Text_Processing(label_val);
+    bridge->data_in.p1    = (uint32_t) frequency;
+    bridge->data_in.p2    = (uint32_t) (frequency>>32);
+}
