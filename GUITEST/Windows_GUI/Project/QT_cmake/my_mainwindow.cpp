@@ -191,7 +191,7 @@ void MainWindow :: onButtonClicked()
         Load_Sliders_Val_to_bridge();
     }
 
-    //bridge->WriteData();
+    bridge->WriteData();
     
     if(set_get_state == Get_param)
     {
