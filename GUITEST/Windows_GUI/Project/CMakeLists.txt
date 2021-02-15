@@ -9,6 +9,7 @@ set (CMAKE_PREFIX_PATH "E:\\5.15.2\\mingw81_64")
 
 add_subdirectory(QT_cmake)
 add_subdirectory(Bridge)
+add_subdirectory(Menu_Backend)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 set(CMAKE_AUTOMOC ON)
@@ -17,4 +18,4 @@ set(CMAKE_AUTOUIC ON)
 
 add_executable (Tolteca main.cpp QT_cmake/logo.qrc)
 
-target_link_libraries (Tolteca PRIVATE Tolteca_GUI Bridge)
+target_link_libraries (Tolteca PRIVATE Tolteca_GUI Bridge Backend)

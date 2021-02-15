@@ -1,23 +1,6 @@
-#include <QApplication>
-#include <QDebug>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QDir>
-#include <iostream>
-#include <string>
-#include <stdint.h>
-#include "string.h"
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <cmath>
-#include "bridge.h"
 #include "my_mainwindow.h"
 
 
-IPDI_Bridge* bridge;
-uint64_t frequency_set = 0x0LL;
-uint64_t frequency_get = 0x0LL;
 /**************************************************************
  *********************SETER STRING VARIABLES*******************
  *************************************************************/
@@ -155,23 +138,6 @@ MainWindow::~MainWindow()
     delete bridge;
 }
 
-/**************************************************************
- ************************FILE EXPLORER*************************
- *************************************************************/
-void MainWindow ::Special_ones(int id)
-{
-    QString filter = "Text File (*.txt*) ;; All File (*.*)";
-    QString file_name = QFileDialog::getOpenFileName(this,"List of Parameters",QDir::currentPath(),filter);
-    QMessageBox::information(this,"struct selected",file_name);
-    QFile file(file_name);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        QMessageBox::warning(this,"title", "file not open");
-    }
-    QTextStream in(&file);
-    QString text = in.readAll();
-    file.close();
-}
 
 /**************************************************************
  ************************SEND DATA******************************
@@ -204,7 +170,7 @@ void MainWindow :: onButtonClicked()
     std::cout<<"set_get_state: " << set_get_state << std::endl;
     std::cout<<"tx_rx_stare: " << tx_rx_stare << std::endl;
     std::cout<<"API_state: " << API_state << std::endl;
-    std::cout<<"OPCODE: " << OPCODE << std::endl;
+    std::cout<<"OPCODE: " << std::hex << OPCODE << std::endl;
 
 
     bridge->data_in.op =  OPCODE;
@@ -216,11 +182,11 @@ void MainWindow :: onButtonClicked()
         //bridge->data_in.ld_size
         Special_ones(API_state);
     }
-    if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
+    else if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
     {
         Write_64();
     }
-    if(set_get_state == Set_param || set_get_state == Do_param)
+    else if(set_get_state == Set_param || set_get_state == Do_param)
     {
         Load_Sliders_Val_to_bridge();
     }
@@ -281,11 +247,11 @@ void MainWindow :: Frequency_display()
 {
     uint64_t extend  = ((uint64_t)Param_1_val->value())+Param_2_val->value();
    
-    (*(ParamN_slider_val[0]))->setText(Scientific_Units(extend).c_str());
+    (*(ParamN_slider_val[0]))->setText(int_to_Sci(extend).c_str());
 }
 void MainWindow :: Scientific_display()
 {
-    (*(ParamN_slider_val[0]))->setText(Scientific_Units(Param_1_val->value()).c_str());
+    (*(ParamN_slider_val[0]))->setText(int_to_Sci(Param_1_val->value()).c_str());
 }
 
 void MainWindow :: Slider_Calc(std::string& str)
@@ -314,6 +280,7 @@ void MainWindow :: Slider_Calc(std::string& str)
         QObject::connect(Param_2_val, &QSlider::sliderMoved, this, Frequency_display);
         sci_displayer = true;
         slider_update(0);
+         (*(ParamN_slider_val[1]))->clear();
         return;  
     }
 
@@ -445,116 +412,10 @@ void MainWindow ::API_menu_trigger(const QString &text)
     
 
 }
+
 /**************************************************************
  ************************TEXT INPUT RELATED *******************
  *************************************************************/
-uint64_t MainWindow::Text_Processing(std::string& msg)
-{
-    int offset = 0;
-    std::size_t found;
-    uint64_t num = 0;
-    bool notation = false;
-    uint64_t multipliyer = 0;
-    std::string left = "0";
-    std::string right= "0";
-
-    auto unit_selector = [&]()
-    {
-        for(int i=0;i < 3;i++)
-        {
-            found = msg.find(Sci_units[i]);
-            if (found != std::string::npos)
-            {
-                multipliyer = (uint64_t)pow(10,(i+1)*3);
-                break;
-            }
-        }
-    };
-
-    if(msg.find("M")!=std::string::npos
-    || msg.find("K")!=std::string::npos
-    || msg.find("G")!=std::string::npos)
-    {
-        notation = true;
-
-        found  = msg.find(".");
-        if (found != std::string::npos) // with dot
-        {
-            left   = msg.substr(0, found);
-            offset = found+1; // dot
-            unit_selector();
-            right  = msg.substr(offset, found-offset);
-        }
-        else // not dot
-        {
-            unit_selector();
-            left   = msg.substr(0, found);
-        }
-    }
-    try
-    {
-        if(notation)
-        {
-            num += std::stoi(left)*multipliyer;
-            num += std::stoi(right)*multipliyer/pow(10,right.size());
-        }
-        else
-        {
-            num = std::stoi(msg);
-        }
-    }
-    catch (const std::invalid_argument & e){
-        std::cout << e.what() << "\n";
-    }
-    catch (const std::out_of_range & e){
-        std::cout << e.what() << "\n";
-    }
-    return num;
-
-}
-
-void MainWindow :: Text_input_register(std::string& msg,int index)
-{
-
-    std::string temp    = (*(ParamN_input_text[index]))->toPlainText().toUtf8().constData();
-    int  set_get_state  = set_get_menu->currentIndex();
-    std::string API_str = API_menu->currentText().toUtf8().constData();
-    uint64_t value_proc = 0;
-    
-    if(temp.back() != '\n')
-    {
-        msg = temp;
-    }
-    else
-    {
-        std::cout<<msg<<std::endl;
-        value_proc = Text_Processing(msg);    
-
-        (*(Param_N_val[index]))->setValue(value_proc);
-        (*(Param_N_val[index]))->setSliderPosition(value_proc);
-        (*(ParamN_slider_val[index]))->setText(msg.c_str());
-        if(set_get_state == Set_param )
-        {
-            if((bounds[API_str][index].first <= value_proc) && 
-               (value_proc <= bounds[API_str][index].second))
-            {
-               (*(ParamN_slider_val[index]))->setText(msg.c_str());
-            }
-            else
-            {
-                if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
-                {
-                    frequency_set = value_proc;
-                    (*(ParamN_slider_val[index]))->setText(msg.c_str());
-                }else
-                {
-                    (*(ParamN_slider_val[index]))->setText("Invalid");
-                }
-            }
-        }
-        (*(ParamN_input_text[index]))->clear();
-    }
-}
 
 void MainWindow :: Text_param1_changed()
 {
@@ -569,114 +430,4 @@ void MainWindow :: Text_param2_changed()
 }
 
 
-void MainWindow :: Opcode_to_GUI()
-{
-    static std::string GUI_Opcode_str;
-    std::string temp = Opcode_input_text->toPlainText().toUtf8().constData();
-    if(temp.back() != '\n')
-    {
-        GUI_Opcode_str = temp;
-    }
-    else
-    {
-        char * pEnd;
-        long int dec_opcode = strtol (GUI_Opcode_str.c_str(),&pEnd,16);
-        int mask ;
-        mask = (dec_opcode & 3);
-        set_get_menu->setCurrentIndex(mask) ;// set get do
-        mask = (dec_opcode & (3<<2))>>2;
-        tx_rx_menu->setCurrentIndex(mask);// other, rx,tx, trx
-        mask =(dec_opcode & (63<<4))>>4;
-        API_menu->setCurrentText(ID_LUT[mask]);// ID
-        
-        //param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
-        //param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
-//
-        //(dec_opcode & (7<<10))>>10; // p1
-        //(dec_opcode & (7<<13))>>13; // p2
 
-        //printf("%lu\r\n",dec_opcode);
-        
-        Opcode_input_text->clear();
-    }
-}
-
-/**************************************************************
- ************************BRIDGE HELPERS *************************
- *************************************************************/
-
-void MainWindow ::Load_Sliders_Val_to_bridge()
-{
-    std::string slider_text = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
-    if(isNumeric(slider_text))
-    {
-        bridge->data_in.p1 = (uint32_t)strtol (slider_text.c_str(),NULL,10);
-    }
-    else
-    {
-        bridge->data_in.p1 = UINT32_MAX;
-    }
-    //param2
-    slider_text = (*(ParamN_slider_val[1]))->text().toUtf8().constData();
-    if(isNumeric(slider_text))
-    {
-        bridge->data_in.p2 = (uint32_t)strtol (slider_text.c_str(),NULL,10);
-    }
-    else
-    {
-        bridge->data_in.p2 = UINT32_MAX;
-    }
-}
-/**************************************************************
- ************************Validation *************************
- *************************************************************/
-
-bool isNumeric(std::string& str) {
-   for (int i = 0; i < str.length(); i++)
-      if (isdigit(str[i]) == false)
-         return false; //when one non numeric value is found, return false
-      return true;
-}  
-
-/**************************************************************
- ************************Sci Units ***************************
- *************************************************************/
-
-std::string MainWindow :: Scientific_Units(uint64_t temp)
-{
-    char power = 0;
-    int integers = 0;
-    std::string merge;
-    char scientific = 0;
-    uint64_t original_value = temp;
-    if(temp < 1000)
-        return std::to_string(temp);
-    while(temp!=0)
-    {
-        power++;
-        temp/=10;
-    }
-    scientific = power/3;
-    integers   = power%3;
-
-    if(integers == 0)
-    {
-        integers = 3;
-        scientific--;
-    }
-    
-    merge = std::to_string(original_value).substr(0, integers) +"."+ std::to_string(original_value).substr(integers);
-    merge.erase ( merge.find_last_not_of('0') + 1, std::string::npos );
-    merge = merge.substr(0,std::min(5,(int)merge.size()));
-    merge+=Sci_units[scientific-1];
-
-    return merge;
-}
-
-void MainWindow :: Write_64()
-{
-    std::string label_val = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
-    uint64_t frequency    = Text_Processing(label_val);
-    bridge->data_in.p1    = (uint32_t) frequency;
-    bridge->data_in.p2    = (uint32_t) (frequency>>32);
-}

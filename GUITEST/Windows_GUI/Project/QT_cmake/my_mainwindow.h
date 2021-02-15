@@ -2,9 +2,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QApplication>
+#include <QDebug>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
 #include <stdint.h>
 #include <string>
 #include "sample.h"
+#include "bridge.h"
+#include <iostream>
+#include "string.h"
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <cmath>
 /***************************************************
 ******************* CODE COMPRESION*******************
 ****************************************************/
@@ -273,15 +285,31 @@ typedef enum
 /**************************************************************
  ***********************Special Ones**************************
  *************************************************************/
- #define Special_ones_IDS()   0xA466,\
-                              0x1885,\
-                              0xC496,\
-                              0x2914,\
-                              0x1C89,\
-                              0xE49A,\
-                              0x2918,\
-                              0x496D,\
-                              0xF9BC
+typedef enum
+{
+    get_rx_rssi_num         = 0xA466,
+    set_rx_fir_config_num   = 0x1885,
+    get_rx_fir_config_num   = 0xC496,
+    rx_fastlock_load_num    = 0x2914,
+    set_tx_fir_config_num   = 0x1C89,
+    get_tx_fir_config_num   = 0xE49A,
+    tx_fastlock_load_num    = 0x2918,
+    set_trx_path_clks_num   = 0x496D,
+    trx_load_enable_fir_num = 0xF9BC,
+}SPECIAL_IDs;
+
+
+
+
+ #define Special_ones_IDS()   get_rx_rssi_num,\
+                              set_rx_fir_config_num,\
+                              get_rx_fir_config_num,\
+                              rx_fastlock_load_num,\
+                              set_tx_fir_config_num,\
+                              get_tx_fir_config_num,\
+                              tx_fastlock_load_num,\
+                              set_trx_path_clks_num,\
+                              trx_load_enable_fir_num
 
 
 
@@ -347,14 +375,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void Slider_Calc(std::string& str);
-    uint64_t Text_Processing(std::string& msg);
+    uint64_t Sci_to_int(std::string& msg);
     void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int id);
-    std::string Scientific_Units(uint64_t val);
+    std::string int_to_Sci(uint64_t val);
     void Scientific_display();
     void Write_64();
 
+    IPDI_Bridge* bridge;
+    uint64_t frequency_get = 0x0LL;
     QPlainTextEdit** ParamN_input_text[2] = {&Param1_input_text, &Param2_input_text};
     QSlider** Param_N_val[2]      = {&Param_1_val,&Param_2_val};
     QLabel**  ParamN_slider_val[2]= {&Param1_slider_val,&Param2_slider_val};
