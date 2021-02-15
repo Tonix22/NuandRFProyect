@@ -191,11 +191,47 @@ void MainWindow :: onButtonClicked()
         Load_Sliders_Val_to_bridge();
     }
 
-    bridge->WriteData();
+    //bridge->WriteData();
     
     if(set_get_state == Get_param)
     {
+        uint32_t* p;
         bridge->ReadData();
+        p = &(bridge->data_out.p1);
+        this->Slider_Calc(API_str);
+        
+        for(int i=0;i < 2;i++,p++)
+        {
+            std::cout<<"read data: "<< *p << std::endl;
+            (*(Param_N_val[i]))->setValue(*p);
+            (*(Param_N_val[i]))->setSliderPosition(*p);
+            (*(Param_N_val[i]))->setEnabled(false);
+        }
+        if(strcmp(API_str.c_str(), seter_strings[rf_bandwidth])  == 0
+        || strcmp(API_str.c_str(), seter_strings[sampling_freq]) == 0
+        )
+        {
+            (*(ParamN_slider_val[0]))->setText(int_to_Sci(Param_1_val->value()).c_str());
+            Show_get_result->setText(int_to_Sci(Param_1_val->value()).c_str());
+        }
+        else if(strcmp(API_str.c_str(), seter_strings[lo_freq]) == 0)
+        {
+            std::cout<<"get freq"<<std::endl;
+            uint64_t p1_plus_p2 = (uint64_t)(bridge->data_out.p1)+(uint64_t)(bridge->data_out.p2);
+            std::cout<<"data = "<<  p1_plus_p2 << std::endl;
+            (*(ParamN_slider_val[0]))->setText(int_to_Sci(p1_plus_p2).c_str());
+            Show_get_result->setText(int_to_Sci(p1_plus_p2).c_str());
+        }
+        else
+        {
+            (*(ParamN_slider_val[0]))->setText(std::to_string(Param_1_val->value()).c_str());
+            Show_get_result->setText(std::to_string(Param_1_val->value()).c_str());
+        }
+
+        (*(ParamN_slider_val[1]))->setText(std::to_string(Param_2_val->value()).c_str());
+        (*(ParamN_slider_val[0]))->setStyleSheet("QLabel { color : #00FFFF; font: bold 14px; }");
+        (*(ParamN_slider_val[1]))->setStyleSheet("QLabel { color : #00FFFF; font: bold 14px; }");
+        
     }
 }
 
@@ -209,6 +245,15 @@ void MainWindow :: set_get_menu_changed(const QString &text)
     std::string box_str = text.toUtf8().constData();
     static QStringList normal_state;
     static bool need_refresh = false;
+
+    if( (*(Param_N_val[0]))->isEnabled() == false && box_str!="get")
+    {
+        (*(Param_N_val[0]))->setEnabled(true);
+        (*(Param_N_val[1]))->setEnabled(true);
+        (*(ParamN_slider_val[0]))->setStyleSheet("QLabel { color : #FFFFFF; font: 12px; }");
+        (*(ParamN_slider_val[1]))->setStyleSheet("QLabel { color : #FFFFFF; font: 12px; }");
+    }
+
     if(box_str == "do")
     {
         if(!need_refresh)
@@ -257,6 +302,7 @@ void MainWindow :: Scientific_display()
 void MainWindow :: Slider_Calc(std::string& str)
 {
     static bool sci_displayer = false;
+
     auto slider_update = [&](int i)
     {
         (*(ParamN_slider_val[i]))->setText((std::to_string(bounds[str][i].first).c_str()));
