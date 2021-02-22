@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(RF_APP)
 set (CMAKE_PREFIX_PATH "E:\\5.15.2\\mingw81_64")
+set(CMAKE_BUILD_TYPE Debug)
 #To make .qrc image work on upper folder there is neede to call this 
 #seters, so the make file will fetch the QT_cmake/logo.qrc.
 #set(CMAKE_AUTOMOC ON) set(CMAKE_AUTORCC ON) set(CMAKE_AUTOUIC ON)

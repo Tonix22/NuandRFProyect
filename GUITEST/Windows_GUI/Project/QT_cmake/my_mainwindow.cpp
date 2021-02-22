@@ -178,9 +178,8 @@ void MainWindow :: onButtonClicked()
 
     if(Large_items_APIS_set.find(OPCODE) != Large_items_APIS_set.end())
     {
-        //bridge->data_in.large_data
-        //bridge->data_in.ld_size
-        Special_ones(API_state);
+        Special_ones(set_get_state);
+        return;// special ones, all is done here
     }
     else if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
     {

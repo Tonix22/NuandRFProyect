@@ -17,6 +17,9 @@
 #include <unordered_set>
 #include <utility>
 #include <cmath>
+#include <vector>
+#include <algorithm>
+#include <stdlib.h>
 /***************************************************
 ******************* CODE COMPRESION*******************
 ****************************************************/
@@ -378,7 +381,9 @@ public:
     uint64_t Sci_to_int(std::string& msg);
     void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
-    void Special_ones(int id);
+    void Special_ones(int set_get);
+    void Write_Special(std::vector<int>& data);
+
     std::string int_to_Sci(uint64_t val);
     void Scientific_display();
     void Write_64();

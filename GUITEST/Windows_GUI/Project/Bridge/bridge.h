@@ -14,11 +14,12 @@ typedef struct
 
 class IPDI_Bridge
 {
+    public:
     Qmw *mw;
     qaip *aip;
-    public:
     Param_chunk data_in;
     Param_chunk data_out;
+    char block_size = 10;
     IPDI_Bridge();
     void ReadData();
     void WriteData();
