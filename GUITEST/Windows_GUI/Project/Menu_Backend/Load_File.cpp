@@ -29,7 +29,6 @@ class Parser
     std::string input_string;
     std::string delimiter = ",";
     void comma_parser();
-    void Write_to_mem();
 };
 Parser file_procesor;
 
@@ -49,16 +48,13 @@ void Parser::comma_parser()
     std::generate (args.begin(), args.end(), get_value); // fill data parser
     std::for_each (args.begin(), args.end(), [](int i){std::cout << i << std::endl;});//print
 }
-void Parser::Write_to_mem()
-{
-
-}
 
 void MainWindow ::Special_ones(int set_get)
 {
+    QString filter = "Text File (*.txt*) ;; All File (*.*)";
+
     if(Set_param == set_get)
     {
-        QString filter = "Text File (*.txt*) ;; All File (*.*)";
         QString file_name = QFileDialog::getOpenFileName(this,"List of Parameters",QDir::currentPath(),filter);
         QMessageBox::information(this,"struct selected",file_name);
         QFile file(file_name);
@@ -74,9 +70,30 @@ void MainWindow ::Special_ones(int set_get)
         file_procesor.comma_parser();
         Write_Special(file_procesor.args);
         file_procesor.args.clear();
-    }
+    }else
+    {
+        QString fileName = QFileDialog::getSaveFileName(this,"List of Parameters",QDir::currentPath(),filter);
+        if (fileName.isEmpty())
+        {
+            return;
+        }
+        else 
+        {
+            QFile file(fileName);
+            if (!file.open(QIODevice::WriteOnly)) 
+            {
+                QMessageBox::information(this, tr("Unable to open file"),
+                    file.errorString());
+                return;
+            }
 
-    
+            QTextStream out(&file);
+            Read_special(out);
+                        
+            file.flush();
+            file.close();
+        }   
+    }
 }
 
 /*

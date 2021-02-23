@@ -43,6 +43,44 @@ void MainWindow :: Write_64()
     bridge->data_in.p2    = (uint32_t) (frequency>>32);
 }
 
+
+
+void MainWindow :: Read_special(QTextStream& out)
+{
+    //QString text =;
+    uint32_t* p = new uint32_t[bridge->block_size];
+    int data_size = 0;
+    std::string output_data;
+    bool first_time =true;
+
+    output_data.resize(bridge->block_size);
+
+    do
+    {
+        output_data.clear();
+        bridge->aip->readMem("MDATAOUT", p, bridge->block_size, 0, addr);
+        /*decrement size*/
+        if(first_time)
+        {
+            data_size  = p[1]-bridge->block_size;
+            first_time = false;
+        }
+        else{
+            data_size-=bridge->block_size;
+        }
+
+        /*parser format*/
+        for(int i=0;i<bridge->block_size;i++){
+           output_data+= std::to_string(p[i]);
+           output_data+=", ";
+        }
+        output_data+="\n";
+
+        out<<output_data.c_str();
+    }while(data_size > 0);
+    
+}   
+
 void MainWindow :: Write_Special(std::vector<int>& data)
 {
     int* p ;

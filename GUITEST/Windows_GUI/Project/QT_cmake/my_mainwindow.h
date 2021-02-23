@@ -382,6 +382,7 @@ public:
     void Load_Sliders_Val_to_bridge();
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int set_get);
+    void Read_special(QTextStream& out);
     void Write_Special(std::vector<int>& data);
 
     std::string int_to_Sci(uint64_t val);
