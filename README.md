@@ -5,6 +5,6 @@ This repository contains all the source code required to program and interact wi
 | ----------------- |:--------------------------------------------------------------------------------------------------|
 | [FPGA_FW](FPGA_FW) | Custom softcore firmware to migrate ad9361 library                                |
 | [GUITEST](GUITEST) | Interactive GUI to control the ad3261 drivers                           |
-| [host](host)  | PC host, to control de bladeRF project                     |
+| [host](Nuand_Blade_Base/host/)  | PC host, to control de bladeRF project                     |
 
 ![Alt text](General_spec.jpg?raw=true "General Spec")
