@@ -1,0 +1,252 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a(lib_a-init.o)
+                              build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o (__libc_init_array)
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .group         0x0000000000000000        0x8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000080000000 0x0000000000040000 axwl !r
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+LOAD build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/rv32i/ilp32/libgcc.a
+                0x0000000000000400                __stack_size = DEFINED (__stack_size)?__stack_size:0x400
+
+.init           0x0000000080000000       0x58
+ *(SORT(.init))
+ .init          0x0000000080000000       0x58 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+                0x0000000080000000                _start
+                0x0000000080000054                _init
+
+.text           0x0000000080000058      0x2a4
+ *(.text.unlikely .text.unlikely.*)
+ *(.text.startup .text.startup.*)
+ *(.text .text.*)
+ .text          0x0000000080000058      0x21c build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+                0x000000008000017c                delay
+                0x0000000080000198                main
+ .text          0x0000000080000274        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+ .text          0x0000000080000274       0x88 /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a(lib_a-init.o)
+                0x0000000080000274                __libc_init_array
+ *(.gnu.linkonce.t.*)
+ *(.note.gnu.build-id)
+
+.rela.dyn       0x00000000800002fc        0x0
+ .rela.init     0x00000000800002fc        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .rela.text     0x00000000800002fc        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+
+.fini
+ *(SORT(.fini))
+                [!provide]                        PROVIDE (__etext, .)
+                [!provide]                        PROVIDE (_etext, .)
+                [!provide]                        PROVIDE (etext, .)
+                0x00000000800002fc                . = ALIGN (0x4)
+
+.preinit_array  0x00000000800002fc        0x0
+                0x00000000800002fc                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x00000000800002fc                PROVIDE (__preinit_array_end, .)
+
+.init_array     0x00000000800002fc        0x0
+                0x00000000800002fc                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*) SORT(.ctors.*))
+ *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
+                0x00000000800002fc                PROVIDE (__init_array_end, .)
+
+.fini_array     0x00000000800002fc        0x0
+                [!provide]                        PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*) SORT(.dtors.*))
+ *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
+                [!provide]                        PROVIDE (__fini_array_end, .)
+
+.ctors
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+
+.dtors
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+
+.lalign         0x00000000800002fc        0x0
+                0x00000000800002fc                . = ALIGN (0x4)
+                0x00000000800002fc                PROVIDE (_data_lma, .)
+
+.dalign         0x00000000800002fc        0x0
+                0x00000000800002fc                . = ALIGN (0x4)
+                0x00000000800002fc                PROVIDE (_data, .)
+
+.data           0x00000000800002fc        0x4
+ *(.rdata)
+ *(.rodata .rodata.*)
+ *(.gnu.linkonce.r.*)
+ *(.data .data.*)
+ .data          0x00000000800002fc        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .data          0x00000000800002fc        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+ .data          0x00000000800002fc        0x0 /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a(lib_a-init.o)
+ *(.gnu.linkonce.d.*)
+                0x0000000080000300                . = ALIGN (0x8)
+ *fill*         0x00000000800002fc        0x4 
+                0x0000000080000af0                PROVIDE (__global_pointer$, (. + 0x7f0))
+ *(.sdata .sdata.*)
+ *(.gnu.linkonce.s.*)
+                0x0000000080000300                . = ALIGN (0x8)
+ *(.srodata.cst16)
+ *(.srodata.cst8)
+ *(.srodata.cst4)
+ *(.srodata.cst2)
+ *(.srodata .srodata.*)
+                0x0000000080000300                . = ALIGN (0x4)
+                0x0000000080000300                PROVIDE (_edata, .)
+                [!provide]                        PROVIDE (edata, .)
+                [!provide]                        PROVIDE (_fbss, .)
+                0x0000000080000300                PROVIDE (__bss_start, .)
+
+.bss            0x0000000080000300        0x0
+ *(.sbss*)
+ *(.gnu.linkonce.sb.*)
+ *(.bss .bss.*)
+ .bss           0x0000000080000300        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .bss           0x0000000080000300        0x0 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+ .bss           0x0000000080000300        0x0 /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a(lib_a-init.o)
+ *(.gnu.linkonce.b.*)
+ *(COMMON)
+                0x0000000080000300                . = ALIGN (0x4)
+                0x0000000080000300                . = ALIGN (0x8)
+                0x0000000080000300                PROVIDE (_end, .)
+                [!provide]                        PROVIDE (end, .)
+                0x0000000080000300                . = ALIGN (0x10)
+
+.stack          0x0000000080000300      0x400
+                [!provide]                        PROVIDE (_heap_end, .)
+                0x0000000000000400                . = __stack_size
+ *fill*         0x0000000080000300      0x400 
+                0x0000000080000700                PROVIDE (_sp, .)
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/rv32i/ilp32/libgcc.a
+START GROUP
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libgloss.a
+END GROUP
+LOAD /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/rv32i/ilp32/libgcc.a
+OUTPUT(build/SPI.elf elf32-littleriscv)
+
+.debug_info     0x0000000000000000      0xd3e
+ .debug_info    0x0000000000000000      0xd18 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_info    0x0000000000000d18       0x26 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+
+.debug_abbrev   0x0000000000000000      0x2ae
+ .debug_abbrev  0x0000000000000000      0x29a build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_abbrev  0x000000000000029a       0x14 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+
+.debug_loc      0x0000000000000000      0x181
+ .debug_loc     0x0000000000000000      0x181 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+
+.debug_aranges  0x0000000000000000       0x40
+ .debug_aranges
+                0x0000000000000000       0x20 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_aranges
+                0x0000000000000020       0x20 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+
+.debug_macro    0x0000000000000000     0x1cc9
+ .debug_macro   0x0000000000000000      0x216 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000216      0x73c build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000952       0x22 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000974       0x46 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000009ba       0x8d build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000a47       0x34 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000a7b       0x9c build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000b17       0x16 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000b2d       0x57 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000b84       0x97 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000c1b      0x30d build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000000f28       0xfd build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001025       0x10 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001035       0x52 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001087       0x1f build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000010a6       0x43 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000010e9       0x20 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001109      0x187 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001290       0x10 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000012a0       0x6a build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x000000000000130a       0x1c build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001326       0x52 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001378       0x40 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000013b8       0x10 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000013c8       0x40 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001408       0xd7 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000014df       0x1c build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000014fb       0x3d build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001538       0x16 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x000000000000154e      0x18b build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000016d9       0xe8 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x00000000000017c1      0x1b4 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001975       0xef build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001a64      0x1df build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001c43       0x46 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_macro   0x0000000000001c89       0x40 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+
+.debug_line     0x0000000000000000      0x5dc
+ .debug_line    0x0000000000000000      0x507 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+ .debug_line    0x0000000000000507       0xd5 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+
+.debug_str      0x0000000000000000     0x8618
+ .debug_str     0x0000000000000000     0x85dd build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+                                       0x881d (size before relaxing)
+ .debug_str     0x00000000000085dd       0x3b build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/bsp/CinvestavDupin/libraries/common/start.o
+                                         0xa2 (size before relaxing)
+
+.comment        0x0000000000000000       0x11
+ .comment       0x0000000000000000       0x11 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
+                                         0x12 (size before relaxing)
+ .comment       0x0000000000000011       0x12 /opt/riscv/bin/../lib/gcc/riscv64-unknown-elf/7.2.0/../../../../riscv64-unknown-elf/lib/rv32i/ilp32/libc.a(lib_a-init.o)
+
+.debug_frame    0x0000000000000000       0xc4
+ .debug_frame   0x0000000000000000       0xc4 build//home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/FPGA_FW/dupinSoC/fw/spi/src/main.o
