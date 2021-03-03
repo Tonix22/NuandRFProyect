@@ -10,6 +10,8 @@ sudo apt-get install libtool automake libusb-1.0.0-dev texinfo libusb-dev libyam
 make
 #sudo make install
 ```
+If build fails intall a gcc version lower than 8
+https://github.com/intel/gvt-linux/issues/167#issuecomment-676082889
 
 ## Example of RISC-V GDB usage :
 ```bash
