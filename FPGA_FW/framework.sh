@@ -23,7 +23,15 @@ if [ $1 == "-ocd" ]; then #open port for debuger
     echo "Script executed from: ${BASEDIR}${USB_CFG}"
     echo "${BASEDIR}/cpu0.yaml"
     echo "${BASEDIR}${DUPIN_CFG}"
-    sudo openocd -f ${BASEDIR}${USB_CFG} -c "set DUPIN_S_CFG ${BASEDIR}/cpu0.yaml" -f ${BASEDIR}${DUPIN_CFG}
+    
+    if [ "$EUID" -ne 0 ] 
+    then 
+        sudo openocd -f ${BASEDIR}${USB_CFG} -c "set DUPIN_S_CFG ${BASEDIR}/cpu0.yaml" -f ${BASEDIR}${DUPIN_CFG}
+    else
+        openocd -f ${BASEDIR}${USB_CFG} -c "set DUPIN_S_CFG ${BASEDIR}/cpu0.yaml" -f ${BASEDIR}${DUPIN_CFG}
+    fi
+
+    
 fi
 
 if [ $1 == "-all" ]; then #make generic folder project
