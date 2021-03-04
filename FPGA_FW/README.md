@@ -1,6 +1,6 @@
 #TOLTECA FPGA FIRMWARE
 ## DEPENDENCIES 
-* Quartus Prime Programmer Version 20.1.1(linux)
+* [Quartus Prime Programmer Version 20.1.1](https://fpgasoftware.intel.com/?edition=lite)(linux)
     * Download bistream
 * RISCV GCC
     * Compiler of softcore
