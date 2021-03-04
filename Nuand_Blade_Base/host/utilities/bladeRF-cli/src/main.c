@@ -38,6 +38,7 @@
 #include "test_config.h"
 
 
+
 /* Runtime configuration items */
 struct rc_config {
     bool interactive_mode;
@@ -443,6 +444,20 @@ int main(int argc, char *argv[])
         usleep(1000*150);
     }
 #endif
+
+#if AUTOGAIN
+    gc_mode = RF_GAIN_FASTATTACK_AGC; // MANUAL GAIN CONTROL
+    ad9361_set_rx_gain_control_mode(phy, 0, RF_GAIN_MGC); // RX channel 0
+    ad9361_set_rx_gain_control_mode(phy, 1, RF_GAIN_MGC); // RX channel 1
+    usleep(1000*1000);
+
+    gc_mode = RF_GAIN_MGC; // MANUAL GAIN CONTROL
+    ad9361_set_rx_gain_control_mode(phy, 0, RF_GAIN_MGC); // RX channel 0
+    ad9361_set_rx_gain_control_mode(phy, 1, RF_GAIN_MGC); // RX channel 1
+
+#endif
+
+
 #if GAIN
     struct bladerf_range const *range      = NULL;
     for(long i=0; i < 1000;i++)

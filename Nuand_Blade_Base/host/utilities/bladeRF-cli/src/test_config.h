@@ -6,6 +6,7 @@
 #define GAIN       (0)
 #define BANDWIDHT  (0)
 #define SAMPLERATE (0)  
+#define AUTOGAIN   (1)
 
 #define ms_us(T) T*1000
 #define MEGA(T)  T*1000000 
