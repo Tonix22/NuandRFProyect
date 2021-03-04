@@ -1,6 +1,6 @@
 #TOLTECA FPGA FIRMWARE
 ## DEPENDENCIES 
-* Quartus Prime Programmer Version 20.1.1(linux)
+* [Quartus Prime Programmer Version 20.1.1](https://fpgasoftware.intel.com/?edition=lite)(linux)
     * Download bistream
 * RISCV GCC
     * Compiler of softcore
@@ -10,6 +10,7 @@
 ## Obtain RISCV GCC
 ```bash
 #!/bin/bash
+sudo apt-get install wget
 wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-20171231-x86_64-linux-centos6.tar.gz
 tar -xzvf riscv64-unknown-elf-gcc-20171231-x86_64-linux-centos6.tar.gz
 sudo mv riscv64-unknown-elf-gcc-20171231-x86_64-linux-centos6 /opt/riscv64-unknown-elf-gcc-20171231-x86_64-linux-centos6

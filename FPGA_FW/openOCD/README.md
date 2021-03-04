@@ -10,6 +10,14 @@ sudo apt-get install libtool automake libusb-1.0.0-dev texinfo libusb-dev libyam
 make
 #sudo make install
 ```
+If build fails intall a gcc version lower than 8
+https://github.com/intel/gvt-linux/issues/167#issuecomment-676082889
+
+How to manage with multiple gcc versions
+https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa
+
+
+Delete -werror flag in the compiler for an easier solution
 
 ## Example of RISC-V GDB usage :
 ```bash
