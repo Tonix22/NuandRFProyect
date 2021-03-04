@@ -13,6 +13,8 @@ make
 If build fails intall a gcc version lower than 8
 https://github.com/intel/gvt-linux/issues/167#issuecomment-676082889
 
+Delete -werror flag in the compiler for an easier solution
+
 ## Example of RISC-V GDB usage :
 ```bash
 riscv32-unknown-elf-gdb myExecutable.elf
