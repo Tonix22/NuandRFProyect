@@ -419,15 +419,15 @@ int main(int argc, char *argv[])
     
     rxtx_set_file_path(state->tx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/raw.csv");
     rxtx_set_file_format(state->tx,RXTX_FMT_CSV_SC16Q11);
-    rxtx_set_file_path(state->rx, "/home/tonix/Documents/CINVESTAV/Sept2020/Proyecto_Tolteca/Nuand_modified/NuandRFProyect/rx.csv");
+    rxtx_set_file_path(state->rx, "/home/tonix/Documents/CINVESTAV/Proyecto_Tolteca/samples/rxAGgain.csv");
     rxtx_set_file_format(state->rx,RXTX_FMT_CSV_SC16Q11);
     struct tx_params *tx_params = state->tx->params;
     tx_params->repeat = 0;
     //tx_params->repeat_delay = 1000;
     //tx_cmd_start(state);
     rx_cmd_start(state);
-    usleep(1000*2000);
-    rxtx_cmd_stop(state,state->rx);
+    //usleep(1000*2000);
+    //rxtx_cmd_stop(state,state->rx);
 #if TEST
 
 #if FREQUENCY
@@ -446,14 +446,17 @@ int main(int argc, char *argv[])
 #endif
 
 #if AUTOGAIN
-    gc_mode = RF_GAIN_FASTATTACK_AGC; // MANUAL GAIN CONTROL
-    ad9361_set_rx_gain_control_mode(phy, 0, RF_GAIN_MGC); // RX channel 0
-    ad9361_set_rx_gain_control_mode(phy, 1, RF_GAIN_MGC); // RX channel 1
-    usleep(1000*1000);
+    printf("AUTOGAIN TEST\r\n");
+
+    usleep(2000*1000);
+    gc_mode = RF_GAIN_FASTATTACK_AGC; // auto mode
+    ad9361_set_rx_gain_control_mode(phy, 0, gc_mode); // RX channel 0
+    ad9361_set_rx_gain_control_mode(phy, 1, gc_mode); // RX channel 1
+    usleep(2000*1000);
 
     gc_mode = RF_GAIN_MGC; // MANUAL GAIN CONTROL
-    ad9361_set_rx_gain_control_mode(phy, 0, RF_GAIN_MGC); // RX channel 0
-    ad9361_set_rx_gain_control_mode(phy, 1, RF_GAIN_MGC); // RX channel 1
+    ad9361_set_rx_gain_control_mode(phy, 0, gc_mode); // RX channel 0
+    ad9361_set_rx_gain_control_mode(phy, 1, gc_mode); // RX channel 1
 
 #endif
 

@@ -23,7 +23,7 @@
 #define BUILD_BUSPIRATE 0
 
 /* 0 if you do not want the CMSIS-DAP Compliant Debugger. */
-#define BUILD_CMSIS_DAP 1
+/* #undef BUILD_CMSIS_DAP */
 
 /* 0 if you don't want dummy driver. */
 #define BUILD_DUMMY 1
@@ -59,7 +59,7 @@
 #define BUILD_JTAG_VPI 0
 
 /* 0 if you do not want the Cypress KitProg Programmer. */
-#define BUILD_KITPROG 1
+/* #undef BUILD_KITPROG */
 
 /* Use the dummy minidriver. */
 /* #undef BUILD_MINIDRIVER_DUMMY */
@@ -71,7 +71,7 @@
 #define BUILD_OPENDOUS 1
 
 /* 0 if you do not want the OpenJTAG Adapter. */
-#define BUILD_OPENJTAG 1
+/* #undef BUILD_OPENJTAG */
 
 /* 0 if you do not want the OSBDM (JTAG only) Programmer. */
 #define BUILD_OSBDM 1
@@ -80,7 +80,7 @@
 #define BUILD_PARPORT 0
 
 /* 0 if you do not want the ASIX Presto Adapter. */
-#define BUILD_PRESTO 1
+/* #undef BUILD_PRESTO */
 
 /* 0 if you don't want the Remote Bitbang JTAG driver. */
 #define BUILD_REMOTE_BITBANG 0
@@ -101,7 +101,7 @@
 #define BUILD_USBPROG 1
 
 /* 0 if you do not want the Altera USB-Blaster Compatible. */
-#define BUILD_USB_BLASTER 1
+/* #undef BUILD_USB_BLASTER */
 
 /* 0 if you do not want the Altera USB-Blaster II Compatible. */
 #define BUILD_USB_BLASTER_2 1
