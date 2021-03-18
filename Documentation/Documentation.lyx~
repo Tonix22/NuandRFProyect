@@ -9,6 +9,7 @@
 \usepackage{helvet}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{forest}
 \renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\baselinestretch}{1.5} 
 \hypersetup{
@@ -46,6 +47,18 @@
 }
 
 \lstset{style=mystyle}
+\definecolor{folderbg}{RGB}{124,166,198}
+\definecolor{folderborder}{RGB}{110,144,169}
+
+\def\Size{4pt}
+\tikzset{
+  folder/.pic={
+    \filldraw[draw=folderborder,top color=folderbg!50,bottom color=folderbg]
+      (-1.05*\Size,0.2\Size+5pt) rectangle ++(.75*\Size,-0.2\Size-5pt);  
+    \filldraw[draw=folderborder,top color=folderbg!50,bottom color=folderbg]
+      (-1.15*\Size,-\Size) rectangle (1.15*\Size,\Size);
+  }
+}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -3335,7 +3348,7 @@ status open
 \begin_inset Graphics
 	filename debug working.png
 	lyxscale 50
-	scale 70
+	scale 50
 
 \end_inset
 
@@ -3365,7 +3378,185 @@ Firmware structure
 \end_layout
 
 \begin_layout Standard
+This overview helps to visualize how to deploy firmware.
+ 
+\end_layout
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{forest}   
+\end_layout
+
+\begin_layout Plain Layout
+
+for tree={     
+\end_layout
+
+\begin_layout Plain Layout
+
+	font=
+\backslash
+ttfamily,     
+\end_layout
+
+\begin_layout Plain Layout
+
+	grow'=0,
+\end_layout
+
+\begin_layout Plain Layout
+
+	child anchor=west,
+\end_layout
+
+\begin_layout Plain Layout
+
+	parent anchor=south,
+\end_layout
+
+\begin_layout Plain Layout
+
+	anchor=west,
+\end_layout
+
+\begin_layout Plain Layout
+
+	calign=first,
+\end_layout
+
+\begin_layout Plain Layout
+
+	inner xsep=7pt,
+\end_layout
+
+\begin_layout Plain Layout
+
+	edge path={
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+noexpand
+\backslash
+path [draw, 
+\backslash
+forestoption{edge}]
+\end_layout
+
+\begin_layout Plain Layout
+
+	(!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} 
+\backslash
+forestoption{edge label};
+\end_layout
+
+\begin_layout Plain Layout
+
+	},
+\end_layout
+
+\begin_layout Plain Layout
+
+file/.style={edge path={
+\backslash
+noexpand
+\backslash
+path [draw, 
+\backslash
+forestoption{edge}]           (!u.south west) +(7.5pt,0) |- (.child anchor)
+ 
+\backslash
+forestoption{edge label};},           inner xsep=2pt,font=
+\backslash
+small
+\backslash
+ttfamily},
+\end_layout
+
+\begin_layout Plain Layout
+
+	before typesetting nodes={
+\end_layout
+
+\begin_layout Plain Layout
+
+	      if n=1         
+\end_layout
+
+\begin_layout Plain Layout
+
+		  {insert before={[,phantom]}}
+\end_layout
+
+\begin_layout Plain Layout
+
+	      {}     
+\end_layout
+
+\begin_layout Plain Layout
+
+		 },
+\end_layout
+
+\begin_layout Plain Layout
+
+	     fit=band,     
+\end_layout
+
+\begin_layout Plain Layout
+
+	    before computing xy={l=15pt},   
+\end_layout
+
+\begin_layout Plain Layout
+
+	}   
+\end_layout
+
+\begin_layout Plain Layout
+
+	[FPGA FW   
+\end_layout
+
+\begin_layout Plain Layout
+
+	[config ]   
+\end_layout
+
+\begin_layout Plain Layout
+
+	[dupinSoC [fw [ad9361 project [src[plataform generic[platform.c -> Hardware
+ abstraction layer,file]][main.c,file]] [makefile,file]][bsp[libraries[driver
+ -> softcore drivers [gpio,file][spi,file][riscv,file][uart,file]]]]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+	[hdl]] [openOCD] [SoftFiles] [framework.sh, file]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{forest}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+GUI
 \end_layout
 
 \end_body

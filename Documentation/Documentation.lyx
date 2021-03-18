@@ -3348,7 +3348,7 @@ status open
 \begin_inset Graphics
 	filename debug working.png
 	lyxscale 50
-	scale 70
+	scale 50
 
 \end_inset
 
@@ -3375,6 +3375,12 @@ Debug working
 
 \begin_layout Subsection
 Firmware structure
+\end_layout
+
+\begin_layout Standard
+This overview helps to visualize how to deploy firmware.
+ Platform.c, has SPI, GPIO drivers layers used by the ad9361 driver.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3528,9 +3534,9 @@ ttfamily},
 
 \begin_layout Plain Layout
 
-	[dupinSoC [fw [ad9361 project [src[plataform generic][main.c,file]] [makefile,fi
-le]][bsp[libraries[driver[gpio,file][spi,file][riscv,file][uart,file]]]]]
- 
+	[dupinSoC [fw [ad9361 project [src[plataform generic[platform.c -> Hardware
+ abstraction layer,file]][main.c,file]] [makefile,file]][bsp[libraries[driver
+ -> softcore drivers [gpio,file][spi,file][riscv,file][uart,file]]]]] 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3548,6 +3554,10 @@ end{forest}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+GUI
 \end_layout
 
 \end_body
