@@ -1,7 +1,8 @@
 #! /bin/bash
 BASEDIR=${PWD}
 #Bitstream PATH
-SOFT_DIR=/dupinSoC/hdl/dupin-cenzontle2.sof
+#SOFT_DIR=/dupinSoC/hdl/dupin-cenzontle2.sof
+SOFT_DIR=/dupinSoC/hdl/dupinCoprocessor-CNZTL2.sof
 #OCD USB CFG
 USB_CFG=/openOCD/tcl/interface/ftdi/openocd-usb.cfg
 DUPIN_CFG=/openOCD/tcl/target/dupin_s.cfg
