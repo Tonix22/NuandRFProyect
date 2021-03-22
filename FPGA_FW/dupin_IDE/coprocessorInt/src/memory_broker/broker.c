@@ -5,15 +5,6 @@
 #include "isr_handler.h"
 #include "aip.h"
 
-#define STANDAR_READ_SIZE 3
-#define MAX_READ_SIZE 16
-// AIP indexes 
-#define OPCODE_IDX 0
-#define P1_IDX 1
-#define P2_IDX 2
-// This index are for the array in the parser
-#define P1_NUM 0 
-#define P2_NUM 1
 
 extern volatile DataStat ISR_FLAG;
 extern Special_ids_t Special_Opcodes[SPECIAL_SIZE];
@@ -84,6 +75,7 @@ void load_memory()
     {
         while(Current_state == SPECIAL_SET)
         {
+            push_special(data);//update state internally
             read_memory();
         }
     }

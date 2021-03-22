@@ -2,7 +2,16 @@
 #include "parser.h"
 #include <stdint.h>
 #include <limits.h>
+#include <stdio.h>
+#include <string.h>
+#include "broker.h"
 
+/*
+========================================================
+   EXTERN
+========================================================
+*/
+extern InternatlStates Current_state;
 /*
 ========================================================
     GLOBALS
@@ -33,14 +42,19 @@ struct rf_rssi       rssi;
 Special_ids_t Special_Opcodes[SPECIAL_SIZE] = 
 {
     GET_RX_RSSI_ID,
+    
     SET_RX_FIR_CONFIG_ID,
     GET_RX_FIR_CONFIG_ID,
-    RX_FASTLOCK_LOAD_ID,
     SET_TX_FIR_CONFIG_ID,
     GET_TX_FIR_CONFIG_ID,
+    TRX_LOAD_ENABLE_FIR_ID,
+
+    RX_FASTLOCK_LOAD_ID,
     TX_FASTLOCK_LOAD_ID,
-    SET_TRX_PATH_CLKS_ID,
-    TRX_LOAD_ENABLE_FIR_ID
+    RX_FASTLOCK_SAVE_ID,
+    TX_FASTLOCK_SAVE_ID,
+
+    SET_TRX_PATH_CLKS_ID
 };
 
 
@@ -184,7 +198,6 @@ void* callback_id(Caller* var,char size,uint32_t opcode)
     return NULL;
 }
 
-
 void push_param(uint32_t var,unsigned char flip_n)
 {
     if(flip_n < 2)
@@ -192,7 +205,87 @@ void push_param(uint32_t var,unsigned char flip_n)
         FLIP_VALUES[flip_n]=var;
     }
 }
+void assign_memory_ch(uint8_t* Destination, uint32_t* Source, int begin, int end )
+{
+    for(int i=begin; i < end;i++)
+    {
+        Destination[i] = Source[i];
+    }
+}
 
+void push_special (uint32_t* mem)
+{
+    uint32_t set_get = foo_params.opcode & 3;
+    static uint32_t step = 0;
+    
+    switch (foo_params.opcode )
+    {
+    case RX_FASTLOCK_LOAD_ID:
+    case TX_FASTLOCK_LOAD_ID:
+        //fastLock
+        if(step >= 16)
+        {
+            step = 0;
+            Current_state = NORMAL;
+        }
+        else if(step == 0)
+        {
+            assign_memory_ch(fastLock,mem,1,MAX_READ_SIZE);
+        }
+        else
+        {
+            int end = min((step+MAX_READ_SIZE),16);
+            assign_memory_ch(fastLock,mem,step,end);
+        }
+        step+=MAX_READ_SIZE;
+
+        break;
+    case RX_FASTLOCK_SAVE_ID:
+    case TX_FASTLOCK_SAVE_ID:
+        memset(fastLock,0,sizeof(fastLock));
+        Current_state = NORMAL;
+        break;
+    case SET_TRX_PATH_CLKS_ID:
+        if(set_get == SET)
+        {
+            //rx_path_clk
+            //tx_path_clk
+        }
+        else
+        {
+            memset(rx_path_clk,0,sizeof(rx_path_clk));
+            memset(tx_path_clk,0,sizeof(tx_path_clk));
+            Current_state = NORMAL;
+        }
+
+        break;
+    case GET_RX_RSSI_ID:
+        memset(tx_path_clk,0,sizeof(rssi));
+        Current_state = NORMAL;
+        break;
+
+    case GET_RX_FIR_CONFIG_ID:
+        memset(&RX_FIR,0,sizeof(AD9361_RXFIRConfig));
+        Current_state = NORMAL;
+        break;
+
+    case GET_TX_FIR_CONFIG_ID:
+        memset(&TX_FIR,0,sizeof(AD9361_RXFIRConfig));
+        Current_state = NORMAL;
+        break;
+
+    case SET_TX_FIR_CONFIG_ID:
+    case SET_RX_FIR_CONFIG_ID:
+        
+        break;
+    case TRX_LOAD_ENABLE_FIR_ID:
+
+        break;
+
+    default:
+        break;
+    }
+}
 
 
 
