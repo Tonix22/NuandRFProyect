@@ -21,19 +21,33 @@ InternatlStates Current_state = NORMAL;
 
 void read_memory()
 {
+
+    Mem_stat status   =  Busy;
+    aip_write(0x1e, &status, 1, 0);
+
+    /*clear buffer*/
     memset(data,0,MAX_READ_SIZE*sizeof(uint32_t));
 
-    //TODO check if this is necesary aip_write(0x1e, &data, 1, 0);
     if(Current_state == NORMAL)
     {
-        aip_read(0x0, data, STANDAR_READ_SIZE, 0);
+        for (uint32_t i = 0; i < STANDAR_READ_SIZE; i++)
+        {
+            aip_read(0x0, &data[i], 1, i);
+            aip_write(0x2, &data[i], 1, i);
+        }
     }
     else if(Current_state == SPECIAL_SET)
     {
-        aip_read(0x0, data, MAX_READ_SIZE, 0);
+        for (uint32_t i = 0; i < MAX_READ_SIZE; i++)
+        {
+            aip_read(0x0, &data[i], 1, i);
+        }
     }
 
-    //TODO check if this is necesary aip_write(0x1e, &data, 1, 0);
+    /* done */
+	status = Done;
+	aip_write(0x1e, &status, 1, 0);
+
 }
 
 void load_memory()
@@ -84,10 +98,12 @@ void load_memory()
 
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
 {
+    int_isr();
 	for(;;)
 	{
 		if(ISR_FLAG == READ) // when an start is sent
 		{
+            //dummy();
             read_memory();
             load_memory();
 			opcode_callback(ad9361_phy);

@@ -82,6 +82,10 @@ void dummy (void)
 	data = 0x01;
 	aip_write(0x1e, &data, 1, 0);
 }
+void int_isr()
+{
+	configure_interrupts();
+}
 /*
 int main ()
 {

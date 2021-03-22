@@ -4,7 +4,7 @@
 #include "ad9361.h"
 
 #define STANDAR_READ_SIZE 3
-#define MAX_READ_SIZE 16
+#define MAX_READ_SIZE 32
 // AIP indexes 
 #define OPCODE_IDX 0
 #define P1_IDX 1
@@ -29,6 +29,12 @@ typedef enum
     SPECIAL_SET,
     SPECIAL_GET
 }InternatlStates;
+
+typedef enum
+{
+    Busy = 0x100,
+    Done = 0x01,
+}Mem_stat;
 
 
 
