@@ -7,8 +7,6 @@ SOFT_DIR=/dupinSoC/hdl/dupinCoprocessor-CNZTL2.sof
 USB_CFG=/openOCD/tcl/interface/ftdi/openocd-usb.cfg
 DUPIN_CFG=/openOCD/tcl/target/dupin_s.cfg
 
-
-
 if [ $1 == "-bitstream" ]; then #download bitstream to FPGA
     echo "bistream: ${BASEDIR}${SOFT_DIR}"
     echo "quartus_pgm -c 1 -m JTAG -o \"p;${BASEDIR}${SOFT_DIR}\""

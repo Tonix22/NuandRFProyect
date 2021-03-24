@@ -205,7 +205,7 @@ void push_param(uint32_t var,unsigned char flip_n)
         FLIP_VALUES[flip_n]=var;
     }
 }
-void assign_memory_ch(uint8_t* Destination, uint32_t* Source, int begin, int end )
+void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin, int end )
 {
     for(int i=begin; i < end;i++)
     {
@@ -220,31 +220,20 @@ void push_special (uint32_t* mem)
     
     switch (foo_params.opcode )
     {
-    case RX_FASTLOCK_LOAD_ID:
-    case TX_FASTLOCK_LOAD_ID:
-        //fastLock
-        if(step >= 16)
-        {
-            step = 0;
-            Current_state = NORMAL;
-        }
-        else if(step == 0)
-        {
-            assign_memory_ch(fastLock,mem,1,MAX_READ_SIZE);
-        }
-        else
-        {
-            int end = min((step+MAX_READ_SIZE),16);
-            assign_memory_ch(fastLock,mem,step,end);
-        }
-        step+=MAX_READ_SIZE;
-
-        break;
-    case RX_FASTLOCK_SAVE_ID:
-    case TX_FASTLOCK_SAVE_ID:
+        /*LOAD*/
+    case RX_FASTLOCK_LOAD_ID: // ad9361_rx_fastlock_load
+    case TX_FASTLOCK_LOAD_ID: // ad9361_tx_fastlock_load
         memset(fastLock,0,sizeof(fastLock));
         Current_state = NORMAL;
         break;
+        
+        /*SAVE*/
+    case RX_FASTLOCK_SAVE_ID:// ad9361_rx_fastlock_save
+    case TX_FASTLOCK_SAVE_ID:// ad9361_tx_fastlock_save 
+        assign_memory_ch_u32_u08(fastLock,mem,1,16);
+        Current_state = NORMAL;
+        break;
+
     case SET_TRX_PATH_CLKS_ID:
         if(set_get == SET)
         {
@@ -341,8 +330,8 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                 size = 4;
                 if(set_get == SET )
                 {   
-                    uint64_t var  = ((uint64_t)FLIP_VALUES[0]) << 32;
-                    var |= FLIP_VALUES[1];
+                    uint64_t var  = ((uint64_t)FLIP_VALUES[1]) << 32;
+                    var |= FLIP_VALUES[0];
                     ((u64_t_callback*) callback_id(lens,size,foo_params.opcode))(phy,var);  
                 }
                 else
@@ -418,7 +407,7 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                     size = 2;
                     if (set_get == SET)
                     {
-                        ((u08_i32_callback*) callback_id(lens,size,foo_params.opcode))(phy,(uint8_t)FLIP_VALUES[0],(int32_t)(&FLIP_VALUES[1]));
+                        ((u08_i32_callback*) callback_id(lens,size,foo_params.opcode))(phy,(uint8_t)FLIP_VALUES[0],(int32_t)(FLIP_VALUES[1]));
                     }
                     else
                     {

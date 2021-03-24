@@ -30,18 +30,12 @@ void read_memory()
 
     if(Current_state == NORMAL)
     {
-        for (uint32_t i = 0; i < STANDAR_READ_SIZE; i++)
-        {
-            aip_read(0x0, &data[i], 1, i);
-            aip_write(0x2, &data[i], 1, i);
-        }
+        aip_read(0x0, data, STANDAR_READ_SIZE, 0);
+        //aip_write(0x2, data, 10, 0);
     }
     else if(Current_state == SPECIAL_SET)
     {
-        for (uint32_t i = 0; i < MAX_READ_SIZE; i++)
-        {
-            aip_read(0x0, &data[i], 1, i);
-        }
+        aip_read(0x0, data, MAX_READ_SIZE, 0);
     }
 
     /* done */
@@ -75,7 +69,7 @@ void load_memory()
     /*Almost 87% of cases*/
     if(Current_state == NORMAL)
     {
-        if(ptypes_ref->P2 == EMPTY_PARAM)
+        if(ptypes_ref->P2 == EMPTY_PARAM && ptypes_ref->opcode != 0x1045)
         {   
             push_param(data[P1_IDX] ,P1_NUM);
         }

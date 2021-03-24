@@ -33,12 +33,13 @@ void IPDI_Bridge :: WriteData()
     //uint32_t wr[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     uint32_t* p = &data_in.op;
     aip->writeMem("MDATAIN", p, 3, 0, addr);
+    aip->start(addr);
 }
 void IPDI_Bridge :: ReadData()
 {
     uint32_t* p = &data_out.op;
     //data_out.p1;
-    //aip->start(addr);// pass data from input memory to output one
+    //// pass data from input memory to output one
     aip->readMem("MDATAOUT", p, 3, 0, addr);
 }
 
