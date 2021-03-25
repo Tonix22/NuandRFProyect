@@ -3809,24 +3809,8 @@
  </resources>
  <connections>
   <connection>
-   <sender>Param_1_val</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>Param1_slider_val</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>290</x>
-     <y>289</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>225</x>
-     <y>301</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>Param_2_val</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>Param2_slider_val</receiver>
    <slot>setNum(int)</slot>
    <hints>
@@ -3837,6 +3821,22 @@
     <hint type="destinationlabel">
      <x>248</x>
      <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Param_1_val</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Param1_slider_val</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>323</y>
     </hint>
    </hints>
   </connection>

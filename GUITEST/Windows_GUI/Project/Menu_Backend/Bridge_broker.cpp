@@ -13,13 +13,18 @@ bool isNumeric(std::string& str) {
 void MainWindow ::Load_Sliders_Val_to_bridge()
 {
     std::string slider_text = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
+    
+    //TODO FIX BUG HERE String type 23.5M must be converted to numeric one
+    uint64_t var = 0;
+    
     if(isNumeric(slider_text))
     {
         bridge->data_in.p1 = (uint32_t)strtol (slider_text.c_str(),NULL,10);
     }
     else
     {
-        bridge->data_in.p1 = UINT32_MAX;
+        var = Sci_to_int(slider_text);
+        bridge->data_in.p1 = (uint32_t)var;
     }
     //param2
     slider_text = (*(ParamN_slider_val[1]))->text().toUtf8().constData();
@@ -29,7 +34,8 @@ void MainWindow ::Load_Sliders_Val_to_bridge()
     }
     else
     {
-        bridge->data_in.p2 = UINT32_MAX;
+        var = Sci_to_int(slider_text);
+        bridge->data_in.p2 = (uint32_t)var;
     }
 }
 

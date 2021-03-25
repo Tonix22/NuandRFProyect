@@ -704,8 +704,8 @@ public:
         menubar->addAction(menuFile->menuAction());
 
         retranslateUi(OpcodeGenerator);
-        QObject::connect(Param_1_val, SIGNAL(sliderMoved(int)), Param1_slider_val, SLOT(setNum(int)));
-        QObject::connect(Param_2_val, SIGNAL(sliderMoved(int)), Param2_slider_val, SLOT(setNum(int)));
+        QObject::connect(Param_2_val, SIGNAL(valueChanged(int)), Param2_slider_val, SLOT(setNum(int)));
+        QObject::connect(Param_1_val, SIGNAL(valueChanged(int)), Param1_slider_val, SLOT(setNum(int)));
 
         QMetaObject::connectSlotsByName(OpcodeGenerator);
     } // setupUi

@@ -2,11 +2,12 @@
 #include "my_mainwindow.h"
 #include <QString>
 #include <iostream>
+#include<windows.h>
 
 /*config Data*/
 QString port  = "COM8";
 QString addr  = "1:0";
-QString csvfile = "Z:\\GUI_WINDOWS\\Project\\Bridge\\id00001001.csv";
+QString csvfile = "Z:\\GUI_WINDOWS\\Project\\Bridge\\id00004001.csv";
 
 IPDI_Bridge :: IPDI_Bridge()
 {
@@ -32,15 +33,23 @@ void IPDI_Bridge :: WriteData()
 {
     //uint32_t wr[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     uint32_t* p = &data_in.op;
-    aip->writeMem("MDATAIN", p, 3, 0, addr);
+    aip->writeMem("MDATAIN", p, 10, 0, addr);
     aip->start(addr);
 }
+
+
+
 void IPDI_Bridge :: ReadData()
 {
-    uint32_t* p = &data_out.op;
-    //data_out.p1;
-    //// pass data from input memory to output one
-    aip->readMem("MDATAOUT", p, 3, 0, addr);
+    uint32_t* p   = &data_out.p1;
+    uint8_t tries = 0;
+
+    while(tries != 10)
+    {
+        tries ++;
+        Sleep(500);
+    }
+        aip->readMem("MDATAOUT", p, 2, 0, addr);
 }
 
 

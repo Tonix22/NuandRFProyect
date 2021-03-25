@@ -119,7 +119,7 @@ typedef enum
     rf_bandwidth,
     sampling_freq,
     lo_freq,
-    lo_int_ex,
+    lo_int_ext,
     gain_control_mode,
     set_fir_config,
     fir_en_dis,
@@ -143,7 +143,7 @@ typedef enum
                                 "rf_bandwidth",\
                                 "sampling_freq",\
                                 "lo_freq",\
-                                "lo_int_ex",\
+                                "lo_int_ext",\
                                 "gain_control_mode",\
                                 "set_fir_config",\
                                 "fir_en_dis",\
@@ -166,7 +166,7 @@ typedef enum
                         PUSH_TO_LIST (seter_strings[rf_bandwidth])\
                         PUSH_TO_LIST (seter_strings[sampling_freq])\
                         PUSH_TO_LIST (seter_strings[lo_freq])\
-                        PUSH_TO_LIST (seter_strings[lo_int_ex])\
+                        PUSH_TO_LIST (seter_strings[lo_int_ext])\
                         PUSH_TO_LIST (seter_strings[gain_control_mode])\
                         PUSH_TO_LIST (seter_strings[set_fir_config])\
                         PUSH_TO_LIST (seter_strings[fir_en_dis])\
@@ -180,7 +180,7 @@ typedef enum
                         PUSH_TO_LIST (seter_strings[rf_bandwidth])\
                         PUSH_TO_LIST (seter_strings[sampling_freq])\
                         PUSH_TO_LIST (seter_strings[lo_freq])\
-                        PUSH_TO_LIST (seter_strings[lo_int_ex])\
+                        PUSH_TO_LIST (seter_strings[lo_int_ext])\
                         PUSH_TO_LIST (seter_strings[set_fir_config])\
                         PUSH_TO_LIST (seter_strings[fir_en_dis])\
                         PUSH_TO_LIST (seter_strings[rf_port_output])\
@@ -231,7 +231,7 @@ typedef enum
                     {seter_strings[rf_bandwidth],          {std::make_pair(0,56000000)}},\
                     {seter_strings[sampling_freq],         {std::make_pair(0,61440000)}},\
                     {seter_strings[lo_freq],               {std::make_pair(70000000,2147483647)}},\
-                    {seter_strings[lo_int_ex],             {std::make_pair(0,1)}},\
+                    {seter_strings[lo_int_ext],             {std::make_pair(0,1)}},\
                     {seter_strings[gain_control_mode],     {std::make_pair(0,1),std::make_pair(0,3)}},\
                     {seter_strings[set_fir_config],            {std::make_pair(0,0)}},\
                     {seter_strings[path_clk],              {std::make_pair(0,0)}},\
@@ -395,6 +395,9 @@ public:
     QSlider** Param_N_val[2]      = {&Param_1_val,&Param_2_val};
     QLabel**  ParamN_slider_val[2]= {&Param1_slider_val,&Param2_slider_val};
     std::string Sci_units[3] = {"K","M","G"};
+    int API_state       = 0;
+    int Params          = 0;
+    int OPCODE          = 0;
 
 
 private slots:

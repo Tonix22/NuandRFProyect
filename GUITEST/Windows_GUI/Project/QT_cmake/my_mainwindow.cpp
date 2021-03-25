@@ -16,7 +16,7 @@ std::unordered_map<std::string, std::vector<std::pair<int, int>>> bounds =
 };
 
 /**************************************************************
- *********************API OPCODE MAP***************************
+ *********************API this->OPCODE MAP***************************
  *************************************************************/
 
 char ID_LUT[LUT_NUM_ITEMS][LUT_MAX_STRING] =
@@ -26,7 +26,7 @@ char ID_LUT[LUT_NUM_ITEMS][LUT_MAX_STRING] =
 
 
 /**************************************************************
- *********************Types OPCODE MAP*************************
+ *********************Types this->OPCODE MAP*************************
  *************************************************************/
 
 char params_strings[Params_set_size][9] = 
@@ -147,36 +147,35 @@ void MainWindow :: onButtonClicked()
 {
     int set_get_state   = set_get_menu->currentIndex();
     int tx_rx_stare     = tx_rx_menu->currentIndex();
-    int API_state       = 0;
     std::string API_str = API_menu->currentText().toUtf8().constData();
-    int Params          = 0;
-    int OPCODE          = 0;
+    this->API_state       = 0;
+    this->Params          = 0;
+    this->OPCODE          = 0;
     char str_opcode[7]  = {0,0,0,0,0,0,0};
     for(int i=0;i<30;i++)
     {
         if(ID_LUT[i] == API_str)
         {
-            API_state = i;
+            this->API_state = i;
             break;
         }
     }
-    Params = ID_to_TYPE_OPCODE[API_state];
+    this->Params = ID_to_TYPE_OPCODE[this->API_state];
     SPECIAL_CASE_FIR_BUTTON()
-    OPCODE = set_get_state | (tx_rx_stare<<2) | (API_state<<4) | (Params<<10);
-    sprintf(str_opcode,"0x%X",OPCODE);
+    this->OPCODE = set_get_state | (tx_rx_stare<<2) | (this->API_state<<4) | (Params<<10);
+    sprintf(str_opcode,"0x%X",this->OPCODE);
     Opcode_input_text->setPlainText(str_opcode);
     
 
     std::cout<<"set_get_state: " << set_get_state << std::endl;
     std::cout<<"tx_rx_stare: " << tx_rx_stare << std::endl;
-    std::cout<<"API_state: " << API_state << std::endl;
-    std::cout<<"OPCODE: " << std::hex << OPCODE << std::endl;
+    std::cout<<"this->API_state: " << this->API_state << std::endl;
+    std::cout<<"this->OPCODE: " << std::hex << this->OPCODE << std::endl;
 
 
-    bridge->data_in.op =  OPCODE;
-    
+    bridge->data_in.op =  this->OPCODE;
 
-    if(Large_items_APIS_set.find(OPCODE) != Large_items_APIS_set.end())
+    if(Large_items_APIS_set.find(this->OPCODE) != Large_items_APIS_set.end())
     {
         Special_ones(set_get_state);
         return;// special ones, all is done here
@@ -199,7 +198,7 @@ void MainWindow :: onButtonClicked()
         p = &(bridge->data_out.p1);
         this->Slider_Calc(API_str);
         
-        for(int i=0;i < 2;i++,p++)
+        for(int i=0;i < 1;i++,p++)
         {
             std::cout<<"read data: "<< *p << std::endl;
             (*(Param_N_val[i]))->setValue(*p);
@@ -321,8 +320,8 @@ void MainWindow :: Slider_Calc(std::string& str)
         
         Param_2_val->disconnect();
         Param_1_val->disconnect();
-        QObject::connect(Param_1_val, &QSlider::sliderMoved, this, Frequency_display);
-        QObject::connect(Param_2_val, &QSlider::sliderMoved, this, Frequency_display);
+        QObject::connect(Param_1_val, &QSlider::valueChanged, this, Frequency_display);
+        QObject::connect(Param_2_val, &QSlider::valueChanged, this, Frequency_display);
         sci_displayer = true;
         slider_update(0);
          (*(ParamN_slider_val[1]))->clear();
@@ -332,8 +331,8 @@ void MainWindow :: Slider_Calc(std::string& str)
     if(sci_displayer)
     {
         sci_displayer = false;
-        QObject::connect(Param_1_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[0])), SLOT(setNum(int)));
-        QObject::connect(Param_2_val, SIGNAL(sliderMoved(int)), (*(ParamN_slider_val[1])), SLOT(setNum(int)));
+        QObject::connect(Param_1_val, SIGNAL(valueChanged(int)), (*(ParamN_slider_val[0])), SLOT(setNum(int)));
+        QObject::connect(Param_2_val, SIGNAL(valueChanged(int)), (*(ParamN_slider_val[1])), SLOT(setNum(int)));
     }
 
     if(strcmp(str.c_str(), seter_strings[rf_bandwidth])  == 0
@@ -341,10 +340,10 @@ void MainWindow :: Slider_Calc(std::string& str)
     )
     {
         Param_1_val->disconnect();
-        QObject::connect(Param_1_val, &QSlider::sliderMoved, this, Scientific_display);
+        QObject::connect(Param_1_val, &QSlider::valueChanged, this, Scientific_display);
         sci_displayer = true;
     }
-
+    //TODO FIX THIS PARAMETER FOR GETTERS
     // Others diferent from Frequency
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
     min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
@@ -435,7 +434,7 @@ void MainWindow ::API_menu_trigger(const QString &text)
 {
     int set_get_state = set_get_menu->currentIndex();
     std::string box_str = text.toUtf8().constData();
-    int API_state       = 0;
+    this->API_state       = 0;
     int rx_tx_val       = tx_rx_menu->currentIndex();
 
 
@@ -443,7 +442,7 @@ void MainWindow ::API_menu_trigger(const QString &text)
     {
         if(ID_LUT[i] == box_str)
         {
-            API_state = i;
+            this->API_state = i;
             break;
         }
     }
@@ -451,8 +450,8 @@ void MainWindow ::API_menu_trigger(const QString &text)
     {
         this->Slider_Calc(box_str);
     }
-    param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[API_state])]));
-    param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[API_state])]));
+    param1_label->setText(TRANSLATE(params_strings[Param_mask_1(ID_to_TYPE_OPCODE[this->API_state])]));
+    param2_label->setText(TRANSLATE(params_strings[Param_mask_2(ID_to_TYPE_OPCODE[this->API_state])]));
     SPECIAL_CASE_FIR_LABELS()
     
 
