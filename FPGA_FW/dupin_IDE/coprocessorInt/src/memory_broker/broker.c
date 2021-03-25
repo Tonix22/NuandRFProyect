@@ -93,12 +93,17 @@ void load_memory()
 }
 void send_response()
 {
-    uint32_t set_get; 
+    uint32_t set_get;
+
     ptypes_ref    = get_opcode_types();
     set_get = ptypes_ref->opcode & 3;
-    if(set_get == GET )
+    if(set_get == GET && ptypes_ref->P2 == EMPTY_PARAM)
     {
         aip_write(0x2, &FLIP_VALUES[0], 1, 0);
+    }
+    else
+    {
+        aip_write(0x2, &FLIP_VALUES[1], 1, 0);
     }
     
 }
