@@ -203,7 +203,7 @@ void MainWindow :: onButtonClicked()
             std::cout<<"read data: "<< *p << std::endl;
             (*(Param_N_val[i]))->setValue(*p);
             (*(Param_N_val[i]))->setSliderPosition(*p);
-            (*(Param_N_val[i]))->setEnabled(false);
+            //(*(Param_N_val[i]))->setEnabled(false);
         }
         if(strcmp(API_str.c_str(), seter_strings[rf_bandwidth])  == 0
         || strcmp(API_str.c_str(), seter_strings[sampling_freq]) == 0
@@ -300,6 +300,7 @@ void MainWindow :: Scientific_display()
 void MainWindow :: Slider_Calc(std::string& str)
 {
     static bool sci_displayer = false;
+    int set_get_state = set_get_menu->currentIndex();
 
     auto slider_update = [&](int i)
     {
@@ -324,7 +325,7 @@ void MainWindow :: Slider_Calc(std::string& str)
         QObject::connect(Param_2_val, &QSlider::valueChanged, this, Frequency_display);
         sci_displayer = true;
         slider_update(0);
-         (*(ParamN_slider_val[1]))->clear();
+        (*(ParamN_slider_val[1]))->clear();
         return;  
     }
 
@@ -343,30 +344,63 @@ void MainWindow :: Slider_Calc(std::string& str)
         QObject::connect(Param_1_val, &QSlider::valueChanged, this, Scientific_display);
         sci_displayer = true;
     }
-    //TODO FIX THIS PARAMETER FOR GETTERS
-    // Others diferent from Frequency
-    Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
-    min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
-    max_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].second).c_str()));
-
-    slider_update(0);
-
-    if(bounds[str].size() == 2)
+    if (set_get_state == NONE_param)
     {
-        Param_2_val->setRange(bounds[str][1].first,bounds[str][1].second);
-        min_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].first).c_str()));
-        max_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].second).c_str()));
-        slider_update(1);
-    }
-    else
-    {
+        Param_1_val->setRange(0,7);
+        min_p1_val->setText(TRANSLATE ("0"));
+        max_p1_val->setText(TRANSLATE ("7"));
+        (*(Param_N_val[0]))->setSliderPosition(0);
+
         Param_2_val->setRange(0,0);
         min_p2_val->setText(TRANSLATE ("None"));
         max_p2_val->setText(TRANSLATE ("None"));
         (*(ParamN_slider_val[1]))->setText("None");
+        return;
     }
 
+    // These are the functions that left
+    Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
+    min_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].first).c_str()));
+    max_p1_val->setText(TRANSLATE (std::to_string(bounds[str][0].second).c_str()));
+    slider_update(0);
+    
+    if (set_get_state == Get_param)
+    {
+        if(bounds[str].size() == 2)
+        {
+            (*(Param_N_val[0]))->setEnabled(true);
+            Param_2_val->setRange(bounds[str][1].first,bounds[str][1].second);
+            min_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].first).c_str()));
+            max_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].second).c_str()));
+            (*(Param_N_val[1]))->setEnabled(false);
+        }
+        else
+        {
+            (*(Param_N_val[0]))->setEnabled(false);
 
+            Param_2_val->setRange(0,0);
+            min_p2_val->setText(TRANSLATE ("None"));
+            max_p2_val->setText(TRANSLATE ("None"));
+            (*(ParamN_slider_val[1]))->setText("None");
+            (*(Param_N_val[1]))->setEnabled(false);
+        }
+    }
+    else
+    {
+        if(bounds[str].size() == 2)
+        {
+            Param_2_val->setRange(bounds[str][1].first,bounds[str][1].second);
+            min_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].first).c_str()));
+            max_p2_val->setText(TRANSLATE (std::to_string(bounds[str][1].second).c_str()));
+        }
+        else
+        {
+            Param_2_val->setRange(0,0);
+            min_p2_val->setText(TRANSLATE ("None"));
+            max_p2_val->setText(TRANSLATE ("None"));
+            (*(ParamN_slider_val[1]))->setText("None");
+        }
+    }
 }
 
 void MainWindow :: tx_rx_menu_changed(const QString &text)
@@ -432,7 +466,6 @@ void MainWindow :: tx_rx_menu_changed(const QString &text)
 }
 void MainWindow ::API_menu_trigger(const QString &text)
 {
-    int set_get_state = set_get_menu->currentIndex();
     std::string box_str = text.toUtf8().constData();
     this->API_state       = 0;
     int rx_tx_val       = tx_rx_menu->currentIndex();
@@ -446,7 +479,7 @@ void MainWindow ::API_menu_trigger(const QString &text)
             break;
         }
     }
-    if(set_get_state == Set_param && !box_str.empty())
+    if(!box_str.empty())
     {
         this->Slider_Calc(box_str);
     }
