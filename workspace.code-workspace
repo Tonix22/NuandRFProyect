@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../../../dupinanalogdevices"
+		},
+		{
+			"name": "coprocessorInt",
+			"path": "../../../dupinanalogdevices/dupinIDE/coprocessorInt"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"ad9361.h": "c",
+			"platform.h": "c",
+			"parameters.h": "c",
+			"parser.h": "c",
+			"ad9361_api.h": "c"
+		}
+	}
+}
