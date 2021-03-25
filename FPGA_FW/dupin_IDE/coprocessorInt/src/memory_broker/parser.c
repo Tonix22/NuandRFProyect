@@ -310,7 +310,9 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                 }
                 else if(set_get == GET)
                 {
-                    ((u08_t_callback_get*)callback_id(lens,size,foo_params.opcode))(phy,(uint8_t*)(&FLIP_VALUES[0]));
+                    uint8_t get_var = 0;
+                    ((u08_t_callback_get*)callback_id(lens,size,foo_params.opcode))(phy,&get_var);
+                    FLIP_VALUES[0] = get_var;
                 }
                 break;
             case NOT_SIGNED_32_BIT:

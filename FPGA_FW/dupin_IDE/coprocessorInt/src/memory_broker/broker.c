@@ -7,7 +7,9 @@
 
 
 extern volatile DataStat ISR_FLAG;
-extern Special_ids_t Special_Opcodes[SPECIAL_SIZE];
+
+extern Special_ids_t     Special_Opcodes[SPECIAL_SIZE];
+extern uint32_t          FLIP_VALUES[2];
 
 /*read_memory globals*/
 uint32_t data[MAX_READ_SIZE];
@@ -89,7 +91,17 @@ void load_memory()
     }
 
 }
-
+void send_response()
+{
+    uint32_t set_get; 
+    ptypes_ref    = get_opcode_types();
+    set_get = ptypes_ref->opcode & 3;
+    if(set_get == GET )
+    {
+        aip_write(0x2, &FLIP_VALUES[0], 1, 0);
+    }
+    
+}
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
 {
     int_isr();
@@ -101,6 +113,7 @@ void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
             read_memory();
             load_memory();
 			opcode_callback(ad9361_phy);
+            send_response();
             ISR_FLAG = IDLE;
 		}
 	}
