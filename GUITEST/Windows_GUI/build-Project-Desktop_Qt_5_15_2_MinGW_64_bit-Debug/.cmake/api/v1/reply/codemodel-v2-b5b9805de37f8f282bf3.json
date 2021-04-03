@@ -1,0 +1,206 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						7
+					]
+				},
+				{
+					"build" : "QT_cmake",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "QT_cmake",
+					"targetIndexes" : 
+					[
+						3,
+						4,
+						5
+					]
+				},
+				{
+					"build" : "Bridge",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "Bridge",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "Menu_Backend",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "Menu_Backend",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "RF_APP",
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "Tolteca_GUI",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3,
+						4,
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "Bridge",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "Backend",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 3,
+					"id" : "Backend::@cd413520d4e0307f78e0",
+					"jsonFile" : "target-Backend-Debug-af2703c51cacaa0156a1.json",
+					"name" : "Backend",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Bridge::@f9ec6b68a9cfaaa866ce",
+					"jsonFile" : "target-Bridge-Debug-2d1d2229c2be2afdaacd.json",
+					"name" : "Bridge",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Tolteca::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Tolteca-Debug-a101d3e12efa8685d016.json",
+					"name" : "Tolteca",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Tolteca_GUI::@e8aa367ece3f8710aed7",
+					"jsonFile" : "target-Tolteca_GUI-Debug-217f8e0d7315f8a4c317.json",
+					"name" : "Tolteca_GUI",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Tolteca_GUI_autogen::@e8aa367ece3f8710aed7",
+					"jsonFile" : "target-Tolteca_GUI_autogen-Debug-d7c1d41f109f4079df76.json",
+					"name" : "Tolteca_GUI_autogen",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Tolteca_GUI_autogen_timestamp_deps::@e8aa367ece3f8710aed7",
+					"jsonFile" : "target-Tolteca_GUI_autogen_timestamp_deps-Debug-f7ae31c1eb43dd8a093b.json",
+					"name" : "Tolteca_GUI_autogen_timestamp_deps",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Tolteca_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Tolteca_autogen-Debug-cd90c0620273f18b4a0b.json",
+					"name" : "Tolteca_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Tolteca_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Tolteca_autogen_timestamp_deps-Debug-0e32b8ed94fc0839b2e6.json",
+					"name" : "Tolteca_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug",
+		"source" : "Z:/Project"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

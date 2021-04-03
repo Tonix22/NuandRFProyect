@@ -25,6 +25,13 @@ typedef enum
     SPECIAL_SIZE = 11
 }Special_ids_t;
 
+typedef enum
+{
+    GAIN_DEC,
+    COEFCIENTS,
+    LAST,
+
+}FIR_STAGE;
 typedef enum{
     NA,
     SET,
@@ -58,6 +65,7 @@ typedef struct Action
 }Caller;
 
 void opcode_callback(struct ad9361_rf_phy *phy);
+void push_special (uint32_t* mem);
 void push_param(uint32_t var,unsigned char idx);
 void set_opcode_to_ptypes(long opcode);
 paramaters_pair* get_opcode_types();

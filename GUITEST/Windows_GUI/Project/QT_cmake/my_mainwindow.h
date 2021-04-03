@@ -383,7 +383,7 @@ public:
     void Text_input_register(std::string& msg,int index);
     void Special_ones(int set_get);
     void Read_special(QTextStream& out);
-    void Write_Special(std::vector<int>& data);
+    void Write_Special(std::vector<uint32_t>& data);
 
     std::string int_to_Sci(uint64_t val);
     void Scientific_display();

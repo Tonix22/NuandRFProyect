@@ -37,6 +37,7 @@ void read_memory()
     }
     else if(Current_state == SPECIAL_SET)
     {
+
         aip_read(0x0, data, MAX_READ_SIZE, 0);
     }
 
@@ -85,12 +86,25 @@ void load_memory()
     {
         while(Current_state == SPECIAL_SET)
         {
-            push_special(data);//update state internally
             read_memory();
+            push_special(data);//update state internally
         }
     }
 
 }
+
+void request_special_fir()
+{
+    uint32_t code[6];
+    code[0]='P';
+    code[1]='A';
+    code[2]='D';
+    code[3]='I';
+    code[4]='N';
+    code[5]='G';
+    aip_write(0x2, &code[0], 6, 0);
+}
+
 void send_response()
 {
     uint32_t set_get;

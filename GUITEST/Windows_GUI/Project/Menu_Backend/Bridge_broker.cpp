@@ -87,33 +87,35 @@ void MainWindow :: Read_special(QTextStream& out)
     
 }   
 
-void MainWindow :: Write_Special(std::vector<int>& data)
+void MainWindow :: Write_Special(std::vector<uint32_t>& data)
 {
-    int* p ;
-    std::vector<int>::iterator it;
+    uint32_t* p ;
+    std::vector<uint32_t>::iterator it;
     int curr_pos = 0;
     int estimate = 0;
     int data_size = data.size();
-
     data.insert(data.begin(),bridge->data_in.op);
     it = data.begin();
     while(curr_pos <= data_size)
     {
-        p = (int*)&(*it);
+        p = &(*it);
         curr_pos = it - data.begin();
         estimate = (data.end()-1)-it;
 
         if(estimate < bridge->block_size)
         {
-            bridge->aip->writeMem("MDATAIN", (uint32_t*)p, estimate, 0, addr);
+            bridge->aip->writeMem("MDATAIN", (uint32_t*)p, estimate+1, 0, addr);
+            bridge->aip->start(addr);
             for (int i=curr_pos;i<=(curr_pos+estimate);i++)
                 std::cout << data[i] << " ,";
             std::cout<<std::endl;
+            
             break;
         }
         else
         {
             bridge->aip->writeMem("MDATAIN", (uint32_t*)p, bridge->block_size - 1, 0, addr);
+            bridge->aip->start(addr);
             for (int i=curr_pos;i<=curr_pos+(bridge->block_size - 1);i++)
                 std::cout << data[i] << " ,";
             std::cout<<std::endl;

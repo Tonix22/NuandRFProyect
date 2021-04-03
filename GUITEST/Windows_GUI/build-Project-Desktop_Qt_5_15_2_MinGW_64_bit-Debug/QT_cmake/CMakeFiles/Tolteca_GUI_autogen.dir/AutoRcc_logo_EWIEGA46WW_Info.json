@@ -1,0 +1,19 @@
+{
+	"BUILD_DIR" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/Tolteca_GUI_autogen",
+	"CMAKE_BINARY_DIR" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake",
+	"CMAKE_CURRENT_SOURCE_DIR" : "Z:/Project/QT_cmake",
+	"CMAKE_SOURCE_DIR" : "Z:/Project",
+	"INCLUDE_DIR" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/Tolteca_GUI_autogen/include",
+	"INPUTS" : [ "Z:/Project/QT_cmake/external-content.duckduckgo.com.png" ],
+	"LOCK_FILE" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/Tolteca_GUI_autogen.dir/AutoRcc_logo_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "logo" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_logo.cpp",
+	"RCC_EXECUTABLE" : "E:/5.15.2/mingw81_64/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/Tolteca_GUI_autogen.dir/AutoRcc_logo_EWIEGA46WW_Used.txt",
+	"SOURCE" : "Z:/Project/QT_cmake/logo.qrc",
+	"VERBOSITY" : 0
+}

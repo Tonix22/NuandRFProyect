@@ -213,6 +213,138 @@ void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin,
     }
 }
 
+void assign_memory_to_FIR_RX(uint32_t* Source, AD9361_RXFIRConfig* Destinaion)
+{
+    static FIR_STAGE State = GAIN_DEC;
+    static unsigned char index = 0;
+    unsigned char N   = 0;
+    uint32_t* begin    = Source;
+    uint32_t  Free     = MAX_READ_SIZE-1;
+
+    if(GAIN_DEC == State)
+    {   
+        Destinaion->rx      = *Source;
+        Source++;
+        Destinaion->rx_gain = *Source;
+        Source++;
+        Destinaion->rx_dec  = *Source;
+        State = COEFCIENTS;
+        index = 0;
+        N = 3; // there are almost 3 elements read
+    }
+    
+    if(COEFCIENTS == State)
+    {
+        // index is saved by a static variable, it will increment until
+        // reach 128 bytes, or if there is a MAX_INT in memory, wich mean 
+        // END OF FILE
+        if(index <= 128)
+        {
+            for(; N < MAX_READ_SIZE; N++,Source++,index++)
+            {
+                if(UINT32_MAX != *Source)
+                {
+                    Destinaion->rx_coef[index] = (int16_t)(*Source);
+                }
+                else{ goto endstate; }
+            }
+        }
+        else
+        {
+            endstate:
+            State = LAST;
+        }
+    }
+    if (LAST == State)
+    {
+        Free -= (Source-begin);
+        if(Free >= 8)
+        {
+            //rx_coef_size shall be the same as index
+            Destinaion->rx_coef_size = (uint8_t)(*Source);
+            Source++;
+            for(int i = 0;i < 6;i++,Source++)
+            {
+                Destinaion->rx_path_clks[i] = *Source; 
+            }
+            Destinaion->rx_bandwidth = *Source;
+            Current_state = END_PUSH;
+        }
+        else // request 8 flips to procesor
+        {
+            request_special_fir();
+        }
+    }
+}
+void assign_memory_to_FIR_TX(uint32_t* Source, AD9361_TXFIRConfig* Destinaion)
+{
+    static FIR_STAGE State = GAIN_DEC;
+    static unsigned char index = 0;
+    static unsigned char Last_index = 0;
+    unsigned char N   = 0;
+    uint32_t* begin    = Source;
+    uint32_t  Free     = MAX_READ_SIZE-1;
+
+    if(GAIN_DEC == State)
+    {   
+        Source++; // avoid opcode
+        Destinaion->tx      = *Source;
+        Source++;
+        Destinaion->tx_gain = *Source;
+        Source++;
+        Destinaion->tx_int  = *Source;
+        State = COEFCIENTS;
+        index = 0;
+        N = 3; // there are almost 3 elements read
+    }
+    
+    if(COEFCIENTS == State)
+    {
+        // index is saved by a static variable, it will increment until
+        // reach 128 bytes, or if there is a MAX_INT in memory, wich mean 
+        // END OF FILE
+        if(index <= 128)
+        {
+            for(; N < MAX_READ_SIZE; N++,Source++,index++)
+            {
+                if(UINT32_MAX != *Source)
+                {
+                    Destinaion->tx_coef[index] = (int16_t)(*Source);
+                }
+                else{ goto endstate; }
+            }
+        }
+        else
+        {
+            endstate:
+            State = LAST;
+            Source++;
+        }
+    }
+    if (LAST == State)
+    {
+        Free -= (Source-begin);
+        for(int j=0;j<Free;j++,Last_index++, Source++)
+        {
+            if(Last_index == 0)
+            {
+                Destinaion->tx_coef_size = (uint8_t)(*Source);
+            }
+            else if(Last_index >=1 && Last_index <=6)
+            {
+                Destinaion->tx_path_clks[Last_index-1] = *Source; 
+            }
+            else if(Last_index == 7)
+            {
+                Destinaion->tx_bandwidth = *Source;
+                Current_state = END_PUSH;
+                Last_index = 0;
+                break;
+            }
+        }
+    }
+}
+
 void push_special (uint32_t* mem)
 {
     uint32_t set_get = foo_params.opcode & 3;
@@ -224,51 +356,55 @@ void push_special (uint32_t* mem)
     case RX_FASTLOCK_LOAD_ID: // ad9361_rx_fastlock_load
     case TX_FASTLOCK_LOAD_ID: // ad9361_tx_fastlock_load
         memset(fastLock,0,sizeof(fastLock));
-        Current_state = NORMAL;
+        Current_state = END_PUSH;
         break;
         
         /*SAVE*/
     case RX_FASTLOCK_SAVE_ID:// ad9361_rx_fastlock_save
-    case TX_FASTLOCK_SAVE_ID:// ad9361_tx_fastlock_save 
+    case TX_FASTLOCK_SAVE_ID:// ad9361_tx_fastlock_save
+        
+        mem++; // avoid ocpode
         assign_memory_ch_u32_u08(fastLock,mem,1,16);
-        Current_state = NORMAL;
+        Current_state = END_PUSH;
         break;
 
     case SET_TRX_PATH_CLKS_ID:
         if(set_get == SET)
         {
-            //rx_path_clk
-            //tx_path_clk
+            mem++;
+            memcpy(rx_path_clk,mem,6*sizeof(uint32_t));
+            memcpy(tx_path_clk,mem+6,6*sizeof(uint32_t));
         }
         else
         {
             memset(rx_path_clk,0,sizeof(rx_path_clk));
             memset(tx_path_clk,0,sizeof(tx_path_clk));
-            Current_state = NORMAL;
         }
-
+        Current_state = END_PUSH;
         break;
     case GET_RX_RSSI_ID:
         memset(tx_path_clk,0,sizeof(rssi));
-        Current_state = NORMAL;
+        Current_state = END_PUSH;
         break;
 
     case GET_RX_FIR_CONFIG_ID:
         memset(&RX_FIR,0,sizeof(AD9361_RXFIRConfig));
-        Current_state = NORMAL;
+        Current_state = END_PUSH;
         break;
 
     case GET_TX_FIR_CONFIG_ID:
         memset(&TX_FIR,0,sizeof(AD9361_RXFIRConfig));
-        Current_state = NORMAL;
+        Current_state = END_PUSH;
         break;
 
     case SET_TX_FIR_CONFIG_ID:
+        assign_memory_to_FIR_RX(mem,&RX_FIR);
+        break;
     case SET_RX_FIR_CONFIG_ID:
-        
+        assign_memory_to_FIR_TX(mem,&TX_FIR);
         break;
     case TRX_LOAD_ENABLE_FIR_ID:
-
+        
         break;
 
     default:

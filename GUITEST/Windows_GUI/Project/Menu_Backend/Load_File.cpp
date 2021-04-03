@@ -25,7 +25,7 @@ trx_load_enable_fir
 class Parser
 {
     public:
-    std::vector<int> args;
+    std::vector<uint32_t> args;
     std::string input_string;
     std::string delimiter = ",";
     void comma_parser();
@@ -37,16 +37,16 @@ void Parser::comma_parser()
     std::string token;
     size_t lim_pos;
 
-    auto get_value = [&] ()-> int
+    auto get_value = [&] ()-> uint32_t
     {
         lim_pos = input_string.find(delimiter); // find ","
         token   = input_string.substr(0,lim_pos);
         input_string.erase(0,lim_pos+1);
-        return (int)(strtol(token.c_str(),NULL,10));
+        return (uint32_t)(strtoul(token.c_str(),NULL,10));
     };
     args.resize((size_t)get_value()); // allocate vector size
     std::generate (args.begin(), args.end(), get_value); // fill data parser
-    std::for_each (args.begin(), args.end(), [](int i){std::cout << i << std::endl;});//print
+    std::for_each (args.begin(), args.end(), [](uint32_t i){std::cout << i << std::endl;});//print
 }
 
 void MainWindow ::Special_ones(int set_get)

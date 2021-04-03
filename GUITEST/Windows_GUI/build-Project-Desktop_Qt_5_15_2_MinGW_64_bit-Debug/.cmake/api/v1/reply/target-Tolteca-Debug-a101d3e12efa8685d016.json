@@ -1,0 +1,363 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "Tolteca.exe"
+		},
+		{
+			"path" : "Tolteca.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "QT_CORE_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_GUI_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WIDGETS_LIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 0,
+					"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/QT_cmake"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/QT_cmake/../Bridge"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/Bridge"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/Bridge/../QT_cmake"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/ipdi/wrappers/Qt/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/ipdi/base/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/Menu_Backend"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/Menu_Backend/../QT_cmake"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "Z:/Project/Menu_Backend/../Bridge"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/include/QtWidgets"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/include/QtGui"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/include/QtANGLE"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/include/QtCore"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "E:/5.15.2/mingw81_64/./mkspecs/win32-g++"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				4
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "Tolteca_GUI::@e8aa367ece3f8710aed7"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Backend::@cd413520d4e0307f78e0"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "Tolteca_autogen::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "Tolteca_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "Tolteca::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "QT_cmake\\libTolteca_GUI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "Bridge\\libBridge.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "Menu_Backend\\libBackend.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "QT_cmake\\libTolteca_GUI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "Bridge\\libBridge.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "QT_cmake\\libTolteca_GUI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "Bridge\\libBridge.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Widgets.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Gui.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Core.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-L/lib/",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lqtmw",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lmw",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Widgets.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Gui.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Core.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-LC:/ipdi/wrappers/Qt/lib/",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-LC:/ipdi/base/lib/",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Widgets.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Gui.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "E:\\5.15.2\\mingw81_64\\lib\\libQt5Core.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "Tolteca",
+	"nameOnDisk" : "Tolteca.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				4
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				2,
+				3
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				5,
+				6
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "QT_cmake/logo.qrc",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/timestamp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/4IYL7V2WWR/qrc_logo.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/timestamp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Tolteca_autogen/4IYL7V2WWR/qrc_logo.cpp.rule",
+			"sourceGroupIndex" : 2
+		}
+	],
+	"type" : "EXECUTABLE"
+}

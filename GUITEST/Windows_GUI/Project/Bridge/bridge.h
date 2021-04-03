@@ -19,7 +19,7 @@ class IPDI_Bridge
     qaip *aip;
     Param_chunk data_in;
     Param_chunk data_out;
-    char block_size = 10;
+    char block_size = 16;
     IPDI_Bridge();
     void ReadData();
     void WriteData();

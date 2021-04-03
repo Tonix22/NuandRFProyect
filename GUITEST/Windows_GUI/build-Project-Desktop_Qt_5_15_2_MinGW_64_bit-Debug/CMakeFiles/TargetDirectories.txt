@@ -1,0 +1,16 @@
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/CMakeFiles/Tolteca.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/CMakeFiles/Tolteca_autogen_timestamp_deps.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/CMakeFiles/Tolteca_autogen.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/Tolteca_GUI.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/edit_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/rebuild_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/Tolteca_GUI_autogen_timestamp_deps.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/QT_cmake/CMakeFiles/Tolteca_GUI_autogen.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Bridge/CMakeFiles/edit_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Bridge/CMakeFiles/Bridge.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Bridge/CMakeFiles/rebuild_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Menu_Backend/CMakeFiles/Backend.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Menu_Backend/CMakeFiles/edit_cache.dir
+Z:/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/Menu_Backend/CMakeFiles/rebuild_cache.dir
