@@ -13,6 +13,6 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_library(Bridge bridge.cpp)
 
-target_link_libraries(Bridge Qt5::Widgets Tolteca_GUI -L${QTMW}/lib/ -lqtmw -L${LMW}/lib/ -lmw)
+target_link_libraries(Bridge Qt5::Widgets Tolteca_GUI -L${QTMW}/lib/ -lqtmw -L${LMW}/lib/ -lmw -lshlwapi)
 
 target_include_directories (Bridge PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../QT_cmake ${QTMW}/include ${LMW}/include)

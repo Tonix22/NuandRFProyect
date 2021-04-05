@@ -23,6 +23,7 @@ class IPDI_Bridge
     IPDI_Bridge();
     void ReadData();
     void WriteData();
+    void Example();
     ~IPDI_Bridge();
 };
 

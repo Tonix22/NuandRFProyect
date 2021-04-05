@@ -294,26 +294,31 @@ typedef enum
     set_rx_fir_config_num   = 0x1885,
     get_rx_fir_config_num   = 0xC496,
     rx_fastlock_load_num    = 0x2914,
+    rx_fastlock_save_num    = 0x2924,
     set_tx_fir_config_num   = 0x1C89,
     get_tx_fir_config_num   = 0xE49A,
     tx_fastlock_load_num    = 0x2918,
+    tx_fastlock_save_num    = 0x2928,
     set_trx_path_clks_num   = 0x496D,
+    get_trx_path_clks_num   = 0x496,
     trx_load_enable_fir_num = 0xF9BC,
 }SPECIAL_IDs;
 
 
 
 
- #define Special_ones_IDS()   get_rx_rssi_num,\
-                              set_rx_fir_config_num,\
-                              get_rx_fir_config_num,\
-                              rx_fastlock_load_num,\
-                              set_tx_fir_config_num,\
-                              get_tx_fir_config_num,\
-                              tx_fastlock_load_num,\
-                              set_trx_path_clks_num,\
-                              trx_load_enable_fir_num
-
+ #define Special_ones_IDS() get_rx_rssi_num,\
+                            set_rx_fir_config_num,\
+                            get_rx_fir_config_num,\
+                            rx_fastlock_load_num,\
+                            rx_fastlock_save_num,\
+                            set_tx_fir_config_num,\
+                            get_tx_fir_config_num,\
+                            tx_fastlock_load_num,\
+                            tx_fastlock_save_num,\
+                            set_trx_path_clks_num,\
+                            get_trx_path_clks_num,\
+                            trx_load_enable_fir_num\
 
 
 /**************************************************************

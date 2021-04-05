@@ -1,6 +1,6 @@
 
 #include "my_mainwindow.h"
-
+#include<windows.h>
 extern QString addr;
 
 bool isNumeric(std::string& str) {
@@ -55,45 +55,53 @@ void MainWindow :: Read_special(QTextStream& out)
 {
     //QString text =;
     uint32_t* p = new uint32_t[bridge->block_size];
-    int data_size = 0;
     std::string output_data;
     bool first_time =true;
+    uint32_t* tx = &(bridge->data_in.op);
+    uint32_t max_count = 0;
+    bridge->aip->writeMem("MDATAIN", (tx), 1, 0, addr);
 
-    output_data.resize(bridge->block_size);
-
-    do
+    while(1)
     {
-        output_data.clear();
-        bridge->aip->readMem("MDATAOUT", p, bridge->block_size, 0, addr);
-        /*decrement size*/
-        if(first_time)
+        max_count++;
+        bridge->aip->start(addr);
+        //wait to data being different from 0
+        do
         {
-            data_size  = p[1]-bridge->block_size;
-            first_time = false;
-        }
-        else{
-            data_size-=bridge->block_size;
-        }
+            Sleep(1);
+            memset(p,0,sizeof(uint32_t)*bridge->block_size);
+            bridge->aip->readMem("MDATAOUT", p, bridge->block_size, 0, addr);
+        } while(!(p[0]|p[1]|p[2]));
 
-        /*parser format*/
-        for(int i=0;i<bridge->block_size;i++){
-           output_data+= std::to_string(p[i]);
-           output_data+=", ";
+        // loop ends when EOF is reached of prevent counting reaches 1000
+        if(max_count >1000){break;}
+        if(p[0]=='E' && p[1]=='O' && p[2] == 'F'){break;}
+
+        //read data and send it to file
+        output_data.clear();
+        for(int i=0; i < bridge->block_size;i++){
+            output_data+= std::to_string(p[i]);
+            output_data+=", ";
         }
         output_data+="\n";
-
         out<<output_data.c_str();
-    }while(data_size > 0);
+    }
+
     
 }   
 
 void MainWindow :: Write_Special(std::vector<uint32_t>& data)
 {
+    
     uint32_t* p ;
     std::vector<uint32_t>::iterator it;
     int curr_pos = 0;
     int estimate = 0;
     int data_size = data.size();
+
+    bool Sync = true;
+    uint32_t data_ack[4];
+
     data.insert(data.begin(),bridge->data_in.op);
     it = data.begin();
     while(curr_pos <= data_size)
@@ -106,20 +114,44 @@ void MainWindow :: Write_Special(std::vector<uint32_t>& data)
         {
             bridge->aip->writeMem("MDATAIN", (uint32_t*)p, estimate+1, 0, addr);
             bridge->aip->start(addr);
+
             for (int i=curr_pos;i<=(curr_pos+estimate);i++)
                 std::cout << data[i] << " ,";
             std::cout<<std::endl;
-            
+
             break;
         }
         else
         {
+
             bridge->aip->writeMem("MDATAIN", (uint32_t*)p, bridge->block_size - 1, 0, addr);
             bridge->aip->start(addr);
+
             for (int i=curr_pos;i<=curr_pos+(bridge->block_size - 1);i++)
                 std::cout << data[i] << " ,";
             std::cout<<std::endl;
+
             it+=(bridge->block_size - 1);
+
+            Sync = true;
+
+            while(Sync)
+            {
+                Sleep(1);
+                bridge->aip->readMem("MDATAOUT", data_ack, 4, 0, addr);
+
+                if(data_ack[0]=='A' && data_ack[1]=='C' && data_ack[2]=='K')
+                {
+                    Sync = false;
+                    memset(data_ack,0,sizeof(uint32_t)*4);
+                    bridge->aip->writeMem("MDATAOUT", data_ack, 4, 0, addr);
+                }else
+                {
+                   memset(data_ack,0,sizeof(uint32_t)*4);
+                }
+
+            }
         }   
     }
+
 }

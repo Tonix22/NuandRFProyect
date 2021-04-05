@@ -357,6 +357,10 @@ void MainWindow :: Slider_Calc(std::string& str)
         (*(ParamN_slider_val[1]))->setText("None");
         return;
     }
+    if(str == "get_fir_config")
+    {
+        return;
+    }
 
     // These are the functions that left
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);
