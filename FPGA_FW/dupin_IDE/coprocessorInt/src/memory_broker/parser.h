@@ -66,6 +66,7 @@ typedef struct Action
 
 void opcode_callback(struct ad9361_rf_phy *phy);
 void push_special (uint32_t* mem);
+void pull_special(uint32_t* mem);
 void push_param(uint32_t var,unsigned char idx);
 void set_opcode_to_ptypes(long opcode);
 paramaters_pair* get_opcode_types();

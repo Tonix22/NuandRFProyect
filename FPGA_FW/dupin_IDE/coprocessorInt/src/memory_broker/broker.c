@@ -37,7 +37,6 @@ void read_memory()
     }
     else if(Current_state == SPECIAL_SET)
     {
-
         aip_read(0x0, data, MAX_READ_SIZE, 0);
     }
 
@@ -84,25 +83,53 @@ void load_memory()
     }
     else /*The special 13*%*/
     {
-        while(Current_state == SPECIAL_SET)
+        if(Current_state == SPECIAL_SET)
+        {
+            clear_OUT_BUFF();
+            
+            while(Current_state == SPECIAL_SET)
+            {
+                if(ISR_FLAG == READ)
+                {
+                    ISR_FLAG = IDLE;
+                    read_memory();
+                    clear_OUT_BUFF();
+                    push_special(data);//update state internally
+                }
+            }
+            Current_state = NORMAL;
+        }
+        else
         {
             read_memory();
-            push_special(data);//update state internally
+            push_special(NULL);//clear data
+            Current_state = SPECIAL_GET;
         }
+        clear_OUT_BUFF();
     }
-
+    
 }
 
-void request_special_fir()
+void send_ACK()
 {
-    uint32_t code[6];
-    code[0]='P';
-    code[1]='A';
-    code[2]='D';
-    code[3]='I';
-    code[4]='N';
-    code[5]='G';
-    aip_write(0x2, &code[0], 6, 0);
+    uint32_t code[4] = {0};
+    code[0]='A';
+    code[1]='C';
+    code[2]='K';
+    aip_write(0x2, &code[0], 4, 0);
+}
+void send_EOF()
+{
+    uint32_t code[4] = {0};
+    code[0]='E';
+    code[1]='O';
+    code[2]='F';
+    aip_write(0x2, &code[0], 4, 0);
+}
+void clear_OUT_BUFF()
+{
+    uint32_t code[4] = {0};
+    aip_write(0x2, &code[0], 4, 0);
 }
 
 void send_response()
@@ -111,24 +138,46 @@ void send_response()
 
     ptypes_ref    = get_opcode_types();
     set_get = ptypes_ref->opcode & 3;
-    if(set_get == GET && ptypes_ref->P2 == EMPTY_PARAM)
+    if(Current_state == SPECIAL_GET)
     {
-        aip_write(0x2, &FLIP_VALUES[0], 1, 0);
+        clear_OUT_BUFF();
+        while(Current_state == SPECIAL_GET)
+        {
+            if(ISR_FLAG == READ) // wait a start as ACK
+            {
+                ISR_FLAG = IDLE;
+                read_memory();
+                clear_OUT_BUFF();
+                pull_special(data);//update state internally
+                aip_write(0x2, &data[0], MAX_READ_SIZE, 0);
+            }
+        }
+        send_EOF();
     }
     else
     {
-        aip_write(0x2, &FLIP_VALUES[1], 1, 0);
+        if(set_get == GET && ptypes_ref->P2 == EMPTY_PARAM)
+        {
+            aip_write(0x2, &FLIP_VALUES[0], 1, 0);
+        }
+        else if(set_get == GET)
+        {
+            // two parameter functions work with one parameter as input
+            // the other one as ouput. That's the reason for FLIP_VALUES[1]
+            aip_write(0x2, &FLIP_VALUES[1], 1, 0); 
+        }
     }
-    
+
 }
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
 {
     int_isr();
+    clear_OUT_BUFF();
 	for(;;)
 	{
 		if(ISR_FLAG == READ) // when an start is sent
 		{
-            //dummy();
+            clear_OUT_BUFF(); // clear MDATA OUT
             read_memory();
             load_memory();
 			opcode_callback(ad9361_phy);

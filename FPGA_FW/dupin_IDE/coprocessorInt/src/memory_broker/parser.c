@@ -205,6 +205,13 @@ void push_param(uint32_t var,unsigned char flip_n)
         FLIP_VALUES[flip_n]=var;
     }
 }
+
+/*
+========================================================
+    SPECIALS
+========================================================
+*/
+
 void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin, int end )
 {
     for(int i=begin; i < end;i++)
@@ -212,17 +219,27 @@ void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin,
         Destination[i] = Source[i];
     }
 }
+void assign_memory_ch_u08_u32(uint32_t* Destination, uint8_t* Source, int begin, int end )
+{
+    for(int i=begin; i < end;i++)
+    {
+        Destination[i] = Source[i];
+    }
+}
+
 
 void assign_memory_to_FIR_RX(uint32_t* Source, AD9361_RXFIRConfig* Destinaion)
 {
     static FIR_STAGE State = GAIN_DEC;
     static unsigned char index = 0;
     unsigned char N   = 0;
+    static unsigned char Last_index = 0;
     uint32_t* begin    = Source;
     uint32_t  Free     = MAX_READ_SIZE-1;
 
     if(GAIN_DEC == State)
     {   
+        Source++;// avoid opcode
         Destinaion->rx      = *Source;
         Source++;
         Destinaion->rx_gain = *Source;
@@ -253,26 +270,30 @@ void assign_memory_to_FIR_RX(uint32_t* Source, AD9361_RXFIRConfig* Destinaion)
         {
             endstate:
             State = LAST;
+            Source++;
         }
     }
     if (LAST == State)
     {
         Free -= (Source-begin);
-        if(Free >= 8)
+        for(int j=0;j<Free;j++,Last_index++, Source++)
         {
-            //rx_coef_size shall be the same as index
-            Destinaion->rx_coef_size = (uint8_t)(*Source);
-            Source++;
-            for(int i = 0;i < 6;i++,Source++)
+            if(Last_index == 0)
             {
-                Destinaion->rx_path_clks[i] = *Source; 
+                Destinaion->rx_coef_size = (uint8_t)(*Source);
             }
-            Destinaion->rx_bandwidth = *Source;
-            Current_state = END_PUSH;
-        }
-        else // request 8 flips to procesor
-        {
-            request_special_fir();
+            else if(Last_index >=1 && Last_index <=6)
+            {
+                Destinaion->rx_path_clks[Last_index-1] = *Source; 
+            }
+            else if(Last_index == 7)
+            {
+                Destinaion->rx_bandwidth = *Source;
+                Current_state = END_PUSH;
+                Last_index = 0;
+                State = GAIN_DEC;
+                break;
+            }
         }
     }
 }
@@ -339,6 +360,139 @@ void assign_memory_to_FIR_TX(uint32_t* Source, AD9361_TXFIRConfig* Destinaion)
                 Destinaion->tx_bandwidth = *Source;
                 Current_state = END_PUSH;
                 Last_index = 0;
+                State = GAIN_DEC;
+                break;
+            }
+        }
+    }
+}
+
+void read_memory_to_FIR_RX(uint32_t* Source)
+{
+    static FIR_STAGE State = GAIN_DEC;
+    static unsigned char index = 0;
+    unsigned char N   = 0;
+    static unsigned char Last_index = 0;
+    uint32_t* begin    = Source;
+    uint32_t  Free     = MAX_READ_SIZE-1;
+
+    if(GAIN_DEC == State)
+    {
+        
+        *Source = RX_FIR.rx;
+        Source++;
+        *Source = RX_FIR.rx_gain;
+        Source++;
+        *Source = RX_FIR.rx_dec;
+        State = COEFCIENTS;
+        index = 0;
+        N = 3; // there are almost 3 elements read
+    }
+    if(COEFCIENTS == State)
+    {
+        // index is saved by a static variable, it will increment until
+        // reach 128 bytes, or if there is a MAX_INT in memory, wich mean 
+        // END OF FILE
+
+        for(; N < MAX_READ_SIZE; N++,Source++,index++)
+        {
+            if(RX_FIR.rx_coef_size != (index-1))
+            {
+               (*Source) =  RX_FIR.rx_coef[index];
+            }
+            else{ break;}
+        }
+        if(RX_FIR.rx_coef_size == (index-1))
+        {
+            State = LAST;
+            Source++;
+        }
+    }
+    if (LAST == State)
+    {
+        Free -= (Source-begin);
+        for(int j=0;j<Free;j++,Last_index++, Source++)
+        {
+            if(Last_index == 0)
+            {
+                *Source = RX_FIR.rx_coef_size ;
+            }
+            else if(Last_index >=1 && Last_index <=6)
+            {
+                *Source = RX_FIR.rx_path_clks[Last_index-1]; 
+            }
+            else if(Last_index == 7)
+            {
+                *Source = RX_FIR.rx_bandwidth;
+                Current_state = END_PULL;
+                Last_index = 0;
+                State = GAIN_DEC;
+                break;
+            }
+        }
+    }
+
+}
+void read_memory_to_FIR_TX(uint32_t* Source)
+{
+    static FIR_STAGE State = GAIN_DEC;
+    static unsigned char index = 0;
+    unsigned char N   = 0;
+    static unsigned char Last_index = 0;
+    uint32_t* begin    = Source;
+    uint32_t  Free     = MAX_READ_SIZE-1;
+
+    if(GAIN_DEC == State)
+    {
+        
+        *Source = TX_FIR.tx;
+        Source++;
+        *Source = TX_FIR.tx_gain;
+        Source++;
+        *Source = TX_FIR.tx_int;
+        State = COEFCIENTS;
+        index = 0;
+        N = 3; // there are almost 3 elements read
+    }
+    if(COEFCIENTS == State)
+    {
+        // index is saved by a static variable, it will increment until
+        // reach 128 bytes, or if there is a MAX_INT in memory, wich mean 
+        // END OF FILE
+
+        for(; N < MAX_READ_SIZE; N++,Source++,index++)
+        {
+            if(TX_FIR.tx_coef_size != (index-1))
+            {
+               (*Source) =  TX_FIR.tx_coef[index];
+            }
+            else{ break;}
+        }
+        if(TX_FIR.tx_coef_size == (index-1))
+        {
+            State = LAST;
+            Source++;
+        }
+    }
+    if (LAST == State)
+    {
+        Free -= (Source-begin);
+        for(int j=0;j<Free;j++,Last_index++, Source++)
+        {
+            if(Last_index == 0)
+            {
+                *Source = TX_FIR.tx_coef_size;
+            }
+            else if(Last_index >=1 && Last_index <=6)
+            {
+                *Source = TX_FIR.tx_path_clks[Last_index-1]; 
+            }
+            else if(Last_index == 7)
+            {
+                *Source = TX_FIR.tx_bandwidth;
+                Current_state = END_PULL;
+                Last_index = 0;
+                State = GAIN_DEC;
                 break;
             }
         }
@@ -388,7 +542,7 @@ void push_special (uint32_t* mem)
         break;
 
     case GET_RX_FIR_CONFIG_ID:
-        memset(&RX_FIR,0,sizeof(AD9361_RXFIRConfig));
+        //memset(&RX_FIR,0,sizeof(AD9361_RXFIRConfig));
         Current_state = END_PUSH;
         break;
 
@@ -398,10 +552,12 @@ void push_special (uint32_t* mem)
         break;
 
     case SET_TX_FIR_CONFIG_ID:
-        assign_memory_to_FIR_RX(mem,&RX_FIR);
+        assign_memory_to_FIR_TX(mem,&TX_FIR);
+        send_ACK();
         break;
     case SET_RX_FIR_CONFIG_ID:
-        assign_memory_to_FIR_TX(mem,&TX_FIR);
+        assign_memory_to_FIR_RX(mem,&RX_FIR);
+        send_ACK();
         break;
     case TRX_LOAD_ENABLE_FIR_ID:
         
@@ -411,10 +567,46 @@ void push_special (uint32_t* mem)
         break;
     }
 }
+void pull_special(uint32_t* mem)
+{
 
+    switch (foo_params.opcode )
+    {
+        /*LOAD*/
+    case RX_FASTLOCK_LOAD_ID: // ad9361_rx_fastlock_load
+    case TX_FASTLOCK_LOAD_ID: // ad9361_tx_fastlock_load
+        assign_memory_ch_u08_u32(mem,fastLock,0,15);
+        Current_state = END_PULL;
+        break;
+    case SET_TRX_PATH_CLKS_ID:
+        memcpy(mem,tx_path_clk,sizeof(tx_path_clk));
+        memcpy(mem+6,rx_path_clk,sizeof(rx_path_clk));
+        Current_state = END_PULL;
+        break;
+    case GET_RX_RSSI_ID:
+        memcpy(mem,tx_path_clk,sizeof(rssi));
+        Current_state = END_PULL;
+        break;
 
+    case GET_RX_FIR_CONFIG_ID:
+        read_memory_to_FIR_RX(mem);
+        break;
+
+    case GET_TX_FIR_CONFIG_ID:
+        read_memory_to_FIR_RX(mem);
+       
+        break;
+    }
+}
+
+/*
+========================================================
+    MEMEORY MANAGMENT
+========================================================
+*/
 
 void set_opcode_to_ptypes(long opcode)
+
 {
     foo_params.opcode = opcode; 
     foo_params.P1 = ((7 << 10) & opcode) >> 10;
@@ -425,7 +617,11 @@ paramaters_pair* get_opcode_types()
 {
     return &foo_params;
 }
-
+/*
+========================================================
+    CALLBACKS
+========================================================
+*/
 void opcode_callback(struct ad9361_rf_phy *phy)
 {
     Caller* lens = NULL;
@@ -561,7 +757,13 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                     ad9361_get_rx_rssi(phy,(uint8_t)FLIP_VALUES[0],&rssi);
                 break;
             case RXFIR_TYPE:
-                    ad9361_get_rx_fir_config(phy,(uint8_t)FLIP_VALUES[0],&RX_FIR);
+            {
+                    //
+                    uint32_t temp = foo_params.opcode;
+                    uint8_t p1 = FLIP_VALUES[0];
+                    //ad9361_get_rx_fir_config(phy,p1,&RX_FIR);
+                    foo_params.opcode  = temp;
+            }
                 break;
             case TXFIR_TYPE:
                 if(foo_params.P1 == NOT_SIGNED_8_BIT)

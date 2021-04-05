@@ -13,7 +13,8 @@
 #define P1_NUM 0 
 #define P2_NUM 1
 
-void request_special_fir();
+void send_ACK();
+void clear_OUT_BUFF();
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy);
 
 
@@ -30,6 +31,7 @@ typedef enum
     SPECIAL_SET,
     SPECIAL_GET,
     END_PUSH,
+    END_PULL
 }InternatlStates;
 
 typedef enum
