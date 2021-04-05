@@ -399,6 +399,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	ad9361_reset(phy);
 
 	ret = ad9361_spi_read_API(phy->spi, REG_PRODUCT_ID);
+	#if RELEASE
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
 		dev_dbg("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
 		ret = -ENODEV;
@@ -411,14 +412,16 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 		phy->pdata->rx1tx1_mode_use_rx_num = 1;
 		phy->pdata->rx1tx1_mode_use_tx_num = 1;
 	}
-
+	#endif
 	phy->ad9361_rfpll_ext_recalc_rate = init_param->ad9361_rfpll_ext_recalc_rate;
 	phy->ad9361_rfpll_ext_round_rate = init_param->ad9361_rfpll_ext_round_rate;
 	phy->ad9361_rfpll_ext_set_rate = init_param->ad9361_rfpll_ext_set_rate;
 
+	#if RELEASE
 	ret = register_clocks(phy);
 	if (ret < 0)
 		goto out;
+	#endif
 
 #ifndef AXI_ADC_NOT_PRESENT
 	axiadc_init(phy);
@@ -426,11 +429,11 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 #endif
 
 	ad9361_init_gain_tables(phy);
-
+	#if RELEASE
 	ret = ad9361_setup(phy);
 	if (ret < 0)
 		goto out;
-
+	#endif
 #ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
 	ret = axiadc_post_setup(phy);
@@ -866,9 +869,10 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 	int32_t ret;
 
 	phy->rx_fir_dec = fir_cfg.rx_dec;
+	#if RELEASE
 	ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)(fir_cfg.rx | FIR_IS_RX),
 			fir_cfg.rx_gain, fir_cfg.rx_coef_size, fir_cfg.rx_coef);
-
+	#endif
 	return ret;
 }
 

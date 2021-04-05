@@ -72,6 +72,7 @@
 //#define PICOZED_SDR_CMOS
 //#define CAPTURE_SCRIPT
 #define AXI_ADC_NOT_PRESENT
+#define RELEASE (0)
 //#define TDD_SWITCH_STATE_EXAMPLE
 
 #endif
