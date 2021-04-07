@@ -71,15 +71,23 @@ void IPDI_Bridge :: WriteData()
 
 void IPDI_Bridge :: ReadData()
 {
-    uint32_t* p   = &data_out.p1;
+    uint32_t p[10]={0};
     uint8_t tries = 0;
-
-    while(tries != 10)
+    uint32_t timeout = 0;
+    do
     {
-        tries ++;
         Sleep(1);
-    }
-    aip->readMem("MDATAOUT", p, 2, 0, addr);
+        memset(p,0,sizeof(uint32_t)*10);
+        aip->readMem("MDATAOUT", p, 10, 0, addr);
+
+    }while(p[0]==0 && p[1]==0 && p[2]==0 && timeout++ < 30);
+
+    timeout=0;
+    data_out.p1 = p[0];
+    data_out.p2 = p[1];
+
+    aip->start(addr);
+
 }
 
 void IPDI_Bridge::Example()

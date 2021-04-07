@@ -35,7 +35,7 @@ void read_memory()
         aip_read(0x0, data, STANDAR_READ_SIZE, 0);
         //aip_write(0x2, data, 10, 0);
     }
-    else if(Current_state == SPECIAL_SET)
+    else if(Current_state == SPECIAL_SET || Current_state == SPECIAL_GET)
     {
         aip_read(0x0, data, MAX_READ_SIZE, 0);
     }
@@ -57,13 +57,15 @@ void load_memory()
     {
         if(ptypes_ref->opcode == Special_Opcodes[i])
         {
-            if((ptypes_ref->opcode >> 1) & 1)
+            if( ptypes_ref->opcode & 1 ||
+                ptypes_ref->opcode == RX_FASTLOCK_SAVE_ID ||
+                ptypes_ref->opcode == TX_FASTLOCK_SAVE_ID )
             {
-                Current_state = SPECIAL_GET;
+                Current_state = SPECIAL_SET;
             }
             else 
             {
-                Current_state = SPECIAL_SET;
+                Current_state = SPECIAL_GET;
             } 
             break;
         }
@@ -135,6 +137,7 @@ void clear_OUT_BUFF()
 void send_response()
 {
     uint32_t set_get;
+    uint32_t cnt;
 
     ptypes_ref    = get_opcode_types();
     set_get = ptypes_ref->opcode & 3;
@@ -152,6 +155,8 @@ void send_response()
                 aip_write(0x2, &data[0], MAX_READ_SIZE, 0);
             }
         }
+        while(ISR_FLAG == IDLE);
+        ISR_FLAG = IDLE;
         send_EOF();
     }
     else
@@ -166,8 +171,10 @@ void send_response()
             // the other one as ouput. That's the reason for FLIP_VALUES[1]
             aip_write(0x2, &FLIP_VALUES[1], 1, 0); 
         }
+        ISR_FLAG = HOLD;
+        while(ISR_FLAG != READ && cnt++ < 60000000);// wait respose from GUI
+        
     }
-
 }
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
 {
@@ -182,6 +189,7 @@ void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)
             load_memory();
 			opcode_callback(ad9361_phy);
             send_response();
+            memset(FLIP_VALUES,0,2*sizeof(uint32_t));
             ISR_FLAG = IDLE;
 		}
 	}

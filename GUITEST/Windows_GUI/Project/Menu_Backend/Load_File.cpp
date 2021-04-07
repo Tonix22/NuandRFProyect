@@ -53,7 +53,9 @@ void MainWindow ::Special_ones(int set_get)
 {
     QString filter = "Text File (*.txt*) ;; All File (*.*)";
 
-    if(Set_param == set_get)
+    if(Set_param == set_get ||
+       bridge->data_in.op == 0x2924 ||
+       bridge->data_in.op == 0x2928)
     {
         QString file_name = QFileDialog::getOpenFileName(this,"List of Parameters",QDir::currentPath(),filter);
         QMessageBox::information(this,"struct selected",file_name);

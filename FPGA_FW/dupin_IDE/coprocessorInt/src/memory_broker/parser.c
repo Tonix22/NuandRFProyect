@@ -110,10 +110,10 @@ Caller One_Param_u32 [22] = {
     {0x94A, &ad9361_get_tx_rf_port_output     },
     {0x8F8, &ad9361_tx_fastlock_store         },
     {0x908, &ad9361_tx_fastlock_recall        },
-    {0x99D, &ad9361_set_trx_rate_gov          },
-    {0x99E, &ad9361_get_trx_rate_gov          },
-    {0x9C3, &ad9361_do_dcxo_tune_coarse       },
-    {0x9D3, &ad9361_do_dcxo_tune_fine         },
+    {0x98D, &ad9361_set_trx_rate_gov          },
+    {0x98E, &ad9361_get_trx_rate_gov          },
+    {0x9B3, &ad9361_do_dcxo_tune_coarse       },
+    {0x9C3, &ad9361_do_dcxo_tune_fine         },
 };
 
 typedef int32_t u64_t_callback (struct ad9361_rf_phy *, uint64_t);
@@ -221,7 +221,7 @@ void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin,
 }
 void assign_memory_ch_u08_u32(uint32_t* Destination, uint8_t* Source, int begin, int end )
 {
-    for(int i=begin; i < end;i++)
+    for(int i=begin; i <= end;i++)
     {
         Destination[i] = Source[i];
     }
@@ -627,7 +627,7 @@ void opcode_callback(struct ad9361_rf_phy *phy)
     Caller* lens = NULL;
     char    size = 0;
     uint32_t set_get = foo_params.opcode & 3;
-
+    uint32_t op_saver = foo_params.opcode;
     /*70% of functions has one parameter*/
     if(foo_params.P2 == EMPTY_PARAM)
     {
@@ -737,16 +737,22 @@ void opcode_callback(struct ad9361_rf_phy *phy)
             case SIGNED_32_BIT:
                 if(foo_params.P1 == NOT_SIGNED_8_BIT)
                 {
+                    uint8_t p1 = (uint8_t)FLIP_VALUES[0];
+                    int32_t p2 = 0;
+
                     lens = Two_Param_u08_i32;
                     size = 2;
+                    
                     if (set_get == SET)
                     {
-                        ((u08_i32_callback*) callback_id(lens,size,foo_params.opcode))(phy,(uint8_t)FLIP_VALUES[0],(int32_t)(FLIP_VALUES[1]));
+                        p2 = (int32_t)(FLIP_VALUES[1]);
+                        ad9361_set_rx_rf_gain(phy,p1,p2);
                     }
                     else
                     {
-                        ((u08_i32_callback_get*) callback_id(lens,size,foo_params.opcode))(phy,(uint8_t)FLIP_VALUES[0],(int32_t*)(&FLIP_VALUES[1]));
+                        ad9361_get_rx_rf_gain(phy,p1,&p2);
                     }
+                    p2 = FLIP_VALUES[2];
                 }
                 else
                 {
@@ -779,5 +785,6 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                 break;
         }
     }
+    foo_params.opcode = op_saver;
 }
 

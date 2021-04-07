@@ -61,7 +61,7 @@
                                             Params = TXFIR;\
                                         }\
                                     }
-    
+
 #define SPECIAL_CASE_FIR_LABELS()   if(box_str == "get_fir_config")\
                                     {\
                                         if(rx_tx_val == Rx_parm)\
@@ -93,10 +93,9 @@
 ****************************************************/
 
 
-#define DO_API_LIST PUSH_TO_LIST("mcs") \
-                    PUSH_TO_LIST( "calib") \
-                    PUSH_TO_LIST( "dcxo_tune_coarse") \
-                    PUSH_TO_LIST( "dcxo_tune_fine")
+#define DO_API_LIST PUSH_TO_LIST("calib") \
+                    PUSH_TO_LIST("dcxo_tune_coarse") \
+                    PUSH_TO_LIST("dcxo_tune_fine")
 
 #define NONE_TX_LIST PUSH_TO_LIST("fastlock_store")\
                      PUSH_TO_LIST("fastlock_recall")\
@@ -174,7 +173,7 @@ typedef enum
                         PUSH_TO_LIST (seter_strings[bbdc_track_en_dis])\
                         PUSH_TO_LIST (seter_strings[quad_track_en_dis])\
                         PUSH_TO_LIST (seter_strings[rf_port_input])
-                       
+
 
 #define SET_API_TX_LIST PUSH_TO_LIST (seter_strings[attenuation])\
                         PUSH_TO_LIST (seter_strings[rf_bandwidth])\
@@ -242,9 +241,12 @@ typedef enum
                     {seter_strings[rf_port_input],         {std::make_pair(0,11)}},\
                     {seter_strings[rf_port_output],        {std::make_pair(0,1)}},\
                     {seter_strings[attenuation],           {std::make_pair(0,1),std::make_pair(0,89750)}},\
-                    {seter_strings[no_ch_mode],             {std::make_pair(1,2)}},\
+                    {seter_strings[no_ch_mode],            {std::make_pair(1,2)}},\
                     {seter_strings[rate_gov],              {std::make_pair(0,1)}},\
                     {seter_strings[auto_cal_en_dis],       {std::make_pair(0,1)}},\
+                    {"calib",                              {std::make_pair(0,32),std::make_pair(1,31)}},\
+                    {"dcxo_tune_coarse",                   {std::make_pair(0,63)}},\
+                    {"dcxo_tune_fine",                     {std::make_pair(0,8191)}}
 
 
 /**************************************************************
@@ -277,12 +279,11 @@ typedef enum
                         {"auto_cal_en_dis"}, \
                         {"path_clks"}, \
                         {"no_ch_mode"}, \
-                        {"mcs"}, \
                         {"rate_gov"}, \
                         {"calib"}, \
                         {"load_enable_fir"}, \
                         {"dcxo_tune_coarse"}, \
-                        {"dcxo_tune_fine"}, 
+                        {"dcxo_tune_fine"},
 
 
 /**************************************************************
@@ -298,27 +299,25 @@ typedef enum
     set_tx_fir_config_num   = 0x1C89,
     get_tx_fir_config_num   = 0xE49A,
     tx_fastlock_load_num    = 0x2918,
-    tx_fastlock_save_num    = 0x2928,
     set_trx_path_clks_num   = 0x496D,
-    get_trx_path_clks_num   = 0x496,
     trx_load_enable_fir_num = 0xF9BC,
+
 }SPECIAL_IDs;
 
 
 
 
- #define Special_ones_IDS() get_rx_rssi_num,\
-                            set_rx_fir_config_num,\
-                            get_rx_fir_config_num,\
-                            rx_fastlock_load_num,\
-                            rx_fastlock_save_num,\
-                            set_tx_fir_config_num,\
-                            get_tx_fir_config_num,\
-                            tx_fastlock_load_num,\
-                            tx_fastlock_save_num,\
-                            set_trx_path_clks_num,\
-                            get_trx_path_clks_num,\
-                            trx_load_enable_fir_num\
+ #define Special_ones_IDS()   get_rx_rssi_num,\
+                              set_rx_fir_config_num,\
+                              get_rx_fir_config_num,\
+                              rx_fastlock_load_num,\
+                              rx_fastlock_save_num,\
+                              set_tx_fir_config_num,\
+                              get_tx_fir_config_num,\
+                              tx_fastlock_load_num,\
+                              set_trx_path_clks_num,\
+                              trx_load_enable_fir_num
+
 
 
 /**************************************************************

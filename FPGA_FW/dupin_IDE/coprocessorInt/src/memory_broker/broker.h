@@ -22,7 +22,8 @@ typedef enum
 {
     IDLE ,
     READ ,
-    WRITE
+    WRITE,
+    HOLD
 }DataStat;
 
 typedef enum

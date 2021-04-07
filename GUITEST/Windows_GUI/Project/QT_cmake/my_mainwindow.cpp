@@ -59,7 +59,6 @@ char ID_to_TYPE_OPCODE[30] =
     No_param << 3 | u8int, //auto_cal_en_dis
     u32int   << 3 | u32int,//path_clk
     No_param << 3 | u8int, //no_ch_mode
-    No_param << 3 |struct_param,//mcs
     No_param << 3 | u32int,//rate_gov
     s32int   << 3 | u32int,//calib
     TXFIR    << 3 | RXFIR, //load_enable_fir
@@ -177,6 +176,8 @@ void MainWindow :: onButtonClicked()
 
     if(Large_items_APIS_set.find(this->OPCODE) != Large_items_APIS_set.end())
     {
+        Load_Sliders_Val_to_bridge();
+        bridge->WriteData();
         Special_ones(set_get_state);
         return;// special ones, all is done here
     }
@@ -188,7 +189,15 @@ void MainWindow :: onButtonClicked()
     {
         Load_Sliders_Val_to_bridge();
     }
+    else if(set_get_state == NONE_param)
+    {
+        if(API_str == "fastlock_store" || API_str == "fastlock_recall" )
+        {
+            Load_Sliders_Val_to_bridge();
+        }
+    }
 
+    Load_Sliders_Val_to_bridge();
     bridge->WriteData();
     
     if(set_get_state == Get_param)
@@ -231,6 +240,7 @@ void MainWindow :: onButtonClicked()
         (*(ParamN_slider_val[1]))->setStyleSheet("QLabel { color : #00FFFF; font: bold 14px; }");
         
     }
+
 }
 
 /**************************************************************
@@ -244,7 +254,9 @@ void MainWindow :: set_get_menu_changed(const QString &text)
     static QStringList normal_state;
     static bool need_refresh = false;
 
-    if( (*(Param_N_val[0]))->isEnabled() == false && box_str!="get")
+    if( ( (*(Param_N_val[0]))->isEnabled() == false   ||
+          (*(Param_N_val[1]))->isEnabled() == false ) &&
+          box_str!="get")
     {
         (*(Param_N_val[0]))->setEnabled(true);
         (*(Param_N_val[1]))->setEnabled(true);

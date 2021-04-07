@@ -49,8 +49,6 @@ void MainWindow :: Write_64()
     bridge->data_in.p2    = (uint32_t) (frequency>>32);
 }
 
-
-
 void MainWindow :: Read_special(QTextStream& out)
 {
     //QString text =;
@@ -59,23 +57,27 @@ void MainWindow :: Read_special(QTextStream& out)
     bool first_time =true;
     uint32_t* tx = &(bridge->data_in.op);
     uint32_t max_count = 0;
+    uint32_t timeout   = 0;
     bridge->aip->writeMem("MDATAIN", (tx), 1, 0, addr);
 
     while(1)
     {
         max_count++;
-        bridge->aip->start(addr);
         //wait to data being different from 0
         do
         {
             Sleep(1);
             memset(p,0,sizeof(uint32_t)*bridge->block_size);
             bridge->aip->readMem("MDATAOUT", p, bridge->block_size, 0, addr);
-        } while(!(p[0]|p[1]|p[2]));
+            timeout++;
+        } while(!(p[0]|p[1]|p[2]) && timeout < 30);
 
         // loop ends when EOF is reached of prevent counting reaches 1000
         if(max_count >1000){break;}
-        if(p[0]=='E' && p[1]=='O' && p[2] == 'F'){break;}
+        if(p[0]=='E' && p[1]=='O' && p[2] == 'F')
+        {
+            break;
+        }
 
         //read data and send it to file
         output_data.clear();
@@ -85,6 +87,7 @@ void MainWindow :: Read_special(QTextStream& out)
         }
         output_data+="\n";
         out<<output_data.c_str();
+        bridge->aip->start(addr);
     }
 
     
