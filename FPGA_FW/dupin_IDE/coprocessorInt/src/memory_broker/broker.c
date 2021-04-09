@@ -88,7 +88,9 @@ void load_memory()
         if(Current_state == SPECIAL_SET)
         {
             clear_OUT_BUFF();
-            
+            push_param(data[P1_IDX] ,P1_NUM);
+            send_ACK();
+            ISR_FLAG = IDLE; // hold until
             while(Current_state == SPECIAL_SET)
             {
                 if(ISR_FLAG == READ)

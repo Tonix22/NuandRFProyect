@@ -214,7 +214,7 @@ void push_param(uint32_t var,unsigned char flip_n)
 
 void assign_memory_ch_u32_u08(uint8_t* Destination, uint32_t* Source, int begin, int end )
 {
-    for(int i=begin; i < end;i++)
+    for(int i=begin; i <= end;i++)
     {
         Destination[i] = Source[i];
     }
@@ -518,8 +518,9 @@ void push_special (uint32_t* mem)
     case TX_FASTLOCK_SAVE_ID:// ad9361_tx_fastlock_save
         
         mem++; // avoid ocpode
-        assign_memory_ch_u32_u08(fastLock,mem,1,16);
+        assign_memory_ch_u32_u08(fastLock,mem,0,15);
         Current_state = END_PUSH;
+        send_ACK();
         break;
 
     case SET_TRX_PATH_CLKS_ID:
