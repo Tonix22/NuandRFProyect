@@ -96,8 +96,8 @@ void load_memory()
                 if(ISR_FLAG == READ)
                 {
                     ISR_FLAG = IDLE;
-                    read_memory();
-                    clear_OUT_BUFF();
+                    read_memory();//mdata in read
+                    clear_OUT_BUFF();//mdaout clear
                     push_special(data);//update state internally
                 }
             }
@@ -139,7 +139,7 @@ void clear_OUT_BUFF()
 void send_response()
 {
     uint32_t set_get;
-    uint32_t cnt;
+    uint32_t cnt = 0;
 
     ptypes_ref    = get_opcode_types();
     set_get = ptypes_ref->opcode & 3;
@@ -166,16 +166,15 @@ void send_response()
         if(set_get == GET && ptypes_ref->P2 == EMPTY_PARAM)
         {
             aip_write(0x2, &FLIP_VALUES[0], 1, 0);
+            while(ISR_FLAG != READ && cnt++ < 60000000);// wait respose from GUI
         }
         else if(set_get == GET)
         {
             // two parameter functions work with one parameter as input
             // the other one as ouput. That's the reason for FLIP_VALUES[1]
-            aip_write(0x2, &FLIP_VALUES[1], 1, 0); 
+            aip_write(0x2, &FLIP_VALUES[1], 1, 0);
+            while(ISR_FLAG != READ && cnt++ < 60000000);// wait respose from GUI
         }
-        ISR_FLAG = HOLD;
-        while(ISR_FLAG != READ && cnt++ < 60000000);// wait respose from GUI
-        
     }
 }
 void Subscribe_broker(struct ad9361_rf_phy *ad9361_phy)

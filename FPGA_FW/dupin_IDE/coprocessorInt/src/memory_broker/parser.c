@@ -740,6 +740,7 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                 {
                     uint8_t p1 = (uint8_t)FLIP_VALUES[0];
                     int32_t p2 = 0;
+                    int32_t *ref_p2 = &p2;
 
                     lens = Two_Param_u08_i32;
                     size = 2;
@@ -751,9 +752,11 @@ void opcode_callback(struct ad9361_rf_phy *phy)
                     }
                     else
                     {
-                        ad9361_get_rx_rf_gain(phy,p1,&p2);
+                        ad9361_get_rx_rf_gain(phy,p1,ref_p2);
+                        p2=-3;
+                        FLIP_VALUES[1] = p2;
                     }
-                    p2 = FLIP_VALUES[2];
+                    
                 }
                 else
                 {
