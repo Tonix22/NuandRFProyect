@@ -11,7 +11,7 @@ endif()
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_library(Bridge bridge.cpp)
+add_library(Bridge bridge.cpp COM_finder.cpp)
 
 target_link_libraries(Bridge Qt5::Widgets Tolteca_GUI -L${QTMW}/lib/ -lqtmw -L${LMW}/lib/ -lmw -lshlwapi)
 

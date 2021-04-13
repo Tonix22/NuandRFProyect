@@ -7,6 +7,8 @@
 #include<windows.h>
 #include "Shlwapi.h"
 
+#include "COM_finder.h"
+
 
 
 /*config Data*/
@@ -20,40 +22,70 @@ IPDI_Bridge :: IPDI_Bridge()
 
     uint32_t id = 0;
     int mode    = 1;
+    std::vector<std::string> COM_list;
+    bool success_COM = false;
+
+    //get_COM_list(COM_list);
     /*mw*/
+    /*
+    for(auto it=COM_list.begin();it!=COM_list.end();it++)
+    {
+        this->mw = new Qmw();
+        this->mw->init(port, mode);
+        if(mw->isBridgeConnected())
+        {
+            success_COM = true;
+            break;
+        }
+        else
+        {
+            this->mw->finish();
+            delete mw;
+        }
+    }*/
+    //QString port = QString::fromStdString(COM_list[1]);
     this->mw = new Qmw();
     this->mw->init(port, mode);
-
-    /*aip*/
-    this->aip = new qaip(mw);
-
-
-    QByteArray ba = csvfile.toLocal8Bit();
-    const char *lpStr1 = ba.data();
-
-    int ret = PathFileExists(lpStr1);
-
-    if(ret == 1)
+    success_COM = true;
+    if(success_COM)
     {
-        this->aip->readconfigs(csvfile, addr);
-        aip->getID(&id, addr);
+        /*aip*/
+        this->aip = new qaip(mw);
 
-        /*debug*/
-        std::cout<<"id : "<< id << std::endl;
-        std::cout <<"USB port connected " << (mw->isBridgeConnected()?"YES":"NO") << std::endl;
+        QByteArray ba = csvfile.toLocal8Bit();
+        const char *lpStr1 = ba.data();
+
+        int ret = PathFileExists(lpStr1);
+
+        if(ret == 1)
+        {
+            this->aip->readconfigs(csvfile, addr);
+            aip->getID(&id, addr);
+
+            /*debug*/
+            std::cout<<"id : "<< id << std::endl;
+            std::cout <<"USB port connected " << (mw->isBridgeConnected()?"YES":"NO") << std::endl;
+        }
+        else
+        {
+            //TODO dar la oprotunidad al usurio del elegir el path y guardar uno nuevo.
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error","wrong .csv path, file path doesnt exist!");
+            messageBox.setFixedSize(500,200);
+            throw std::invalid_argument("invalid .csv file ");
+            this->mw->finish();
+            delete mw;
+            delete aip;
+        }
     }
     else
     {
-        //TODO dar la oprotunidad al usurio del elegir el path y guardar uno nuevo.
         QMessageBox messageBox;
-        messageBox.critical(0,"Error","wrong .csv path, file path doesnt exist!");
+        messageBox.critical(0,"Error","COM port not found, verify USB is connected");
         messageBox.setFixedSize(500,200);
-        throw std::invalid_argument("invalid .csv file ");
-        this->mw->finish();
-        delete mw;
-        delete aip;
-
+        throw std::invalid_argument("invalid COM PORT");
     }
+    
 
     //Example();
 }
@@ -66,7 +98,16 @@ void IPDI_Bridge :: WriteData()
     aip->writeMem("MDATAIN", p, 10, 0, addr);
     aip->start(addr);
 }
-
+void IPDI_Bridge :: Wait_ACK()
+{
+    uint32_t mutex[4];
+    do
+    {
+        Sleep(1);
+        memset(mutex,0,sizeof(uint32_t)*4);
+        aip->readMem("MDATAOUT", mutex, 4, 0, addr);
+    }while(mutex[0]!='A' && mutex[1]!='C' && mutex[2]!='K');
+}
 
 
 void IPDI_Bridge :: ReadData()

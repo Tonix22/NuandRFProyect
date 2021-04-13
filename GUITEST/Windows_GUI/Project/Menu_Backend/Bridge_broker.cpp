@@ -41,8 +41,16 @@ void MainWindow ::Load_Sliders_Val_to_bridge()
 
 void MainWindow :: Write_64()
 {
+    std::string msg    = (*(ParamN_input_text[0]))->toPlainText().toUtf8().constData();
+    uint64_t value_proc = 0;
+    value_proc = Sci_to_int(msg);
     std::string label_val = (*(ParamN_slider_val[0]))->text().toUtf8().constData();
     uint64_t frequency    = Sci_to_int(label_val);
+    if(value_proc >frequency)
+    {
+        frequency = value_proc;
+    }
+
     std::cout<<"lable str "<< label_val<<std::endl;
     std::cout<<"label int " << frequency<<std::endl;
     bridge->data_in.p1    = (uint32_t) frequency;
@@ -105,7 +113,6 @@ void MainWindow :: Write_Special(std::vector<uint32_t>& data)
     bool Sync = true;
     uint32_t data_ack[4];
 
-    data.insert(data.begin(),bridge->data_in.op);
     it = data.begin();
     while(curr_pos <= data_size)
     {

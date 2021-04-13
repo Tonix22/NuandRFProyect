@@ -299,6 +299,7 @@ typedef enum
     set_tx_fir_config_num   = 0x1C89,
     get_tx_fir_config_num   = 0xE49A,
     tx_fastlock_load_num    = 0x2918,
+    tx_fastlock_save_num    = 0x2928,
     set_trx_path_clks_num   = 0x496D,
     trx_load_enable_fir_num = 0xF9BC,
 
@@ -315,6 +316,7 @@ typedef enum
                               set_tx_fir_config_num,\
                               get_tx_fir_config_num,\
                               tx_fastlock_load_num,\
+                              tx_fastlock_save_num,\
                               set_trx_path_clks_num,\
                               trx_load_enable_fir_num
 

@@ -176,44 +176,63 @@ void MainWindow :: onButtonClicked()
 
     if(Large_items_APIS_set.find(this->OPCODE) != Large_items_APIS_set.end())
     {
+
         Load_Sliders_Val_to_bridge();
         bridge->WriteData();
+        bridge->Wait_ACK();
         Special_ones(set_get_state);
         return;// special ones, all is done here
     }
     else if(strcmp(API_menu->currentText().toUtf8().constData(), seter_strings[lo_freq]) == 0)
     {
         Write_64();
+        goto ALREADY_LOAD;
     }
     else if(set_get_state == Set_param || set_get_state == Do_param)
     {
         Load_Sliders_Val_to_bridge();
+         goto ALREADY_LOAD;
     }
     else if(set_get_state == NONE_param)
     {
         if(API_str == "fastlock_store" || API_str == "fastlock_recall" )
         {
             Load_Sliders_Val_to_bridge();
+            goto ALREADY_LOAD;
         }
     }
 
     Load_Sliders_Val_to_bridge();
+    ALREADY_LOAD:
     bridge->WriteData();
     
     if(set_get_state == Get_param)
     {
         uint32_t* p;
+        int sp = 0;
         bridge->ReadData();
         p = &(bridge->data_out.p1);
         this->Slider_Calc(API_str);
         
-        for(int i=0;i < 1;i++,p++)
+        if(strcmp(API_str.c_str(), seter_strings[rf_gain])  == 0)
         {
-            std::cout<<"read data: "<< *p << std::endl;
-            (*(Param_N_val[i]))->setValue(*p);
-            (*(Param_N_val[i]))->setSliderPosition(*p);
-            //(*(Param_N_val[i]))->setEnabled(false);
+            //char sp = (char)(*p);
+            sp = (int) (bridge->data_out.p1);
+            //std::cout<<"read data rf gain: "<< (int) sp << std::endl;
+            (*(Param_N_val[0]))->setValue((int)sp);
+            (*(Param_N_val[0]))->setSliderPosition((int)sp);
+
+            (*(ParamN_slider_val[1]))->setText(std::to_string((int)sp).c_str());
+            Show_get_result->setText(std::to_string((int)sp).c_str());
+            goto end;
+
         }
+        else
+        {
+            (*(Param_N_val[0]))->setValue(*p);
+            (*(Param_N_val[0]))->setSliderPosition(*p);
+        }
+
         if(strcmp(API_str.c_str(), seter_strings[rf_bandwidth])  == 0
         || strcmp(API_str.c_str(), seter_strings[sampling_freq]) == 0
         )
@@ -229,16 +248,21 @@ void MainWindow :: onButtonClicked()
             (*(ParamN_slider_val[0]))->setText(int_to_Sci(p1_plus_p2).c_str());
             Show_get_result->setText(int_to_Sci(p1_plus_p2).c_str());
         }
+        else if(((this->Params & 56)>>3)!= No_param) // two parameter
+        {
+            std::cout<< " p1 value " << bridge->data_out.p1 << std::endl;
+           (*(ParamN_slider_val[1]))->setText(std::to_string(bridge->data_out.p1).c_str());
+           Show_get_result->setText(std::to_string(bridge->data_out.p1).c_str());
+        }
         else
         {
             (*(ParamN_slider_val[0]))->setText(std::to_string(Param_1_val->value()).c_str());
             Show_get_result->setText(std::to_string(Param_1_val->value()).c_str());
         }
-
-        (*(ParamN_slider_val[1]))->setText(std::to_string(Param_2_val->value()).c_str());
+        end:
+        //(*(ParamN_slider_val[1]))->setText(std::to_string(Param_2_val->value()).c_str());
         (*(ParamN_slider_val[0]))->setStyleSheet("QLabel { color : #00FFFF; font: bold 14px; }");
         (*(ParamN_slider_val[1]))->setStyleSheet("QLabel { color : #00FFFF; font: bold 14px; }");
-        
     }
 
 }
