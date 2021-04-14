@@ -8,4 +8,4 @@
 #include <string>
 #include <vector>
 
-void get_COM_list(std::vector<std::string>& vect);
+bool get_COM_cypres_port(std::string& COM_number);

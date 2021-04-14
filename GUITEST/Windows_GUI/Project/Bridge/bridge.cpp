@@ -1,8 +1,13 @@
+
 #include "bridge.h"
-#include "my_mainwindow.h"
 #include <QString>
 #include <iostream>
 #include <stdexcept>
+#include <QMessageBox>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
+#include <QTextStream>
 
 #include<windows.h>
 #include "Shlwapi.h"
@@ -12,50 +17,50 @@
 
 
 /*config Data*/
-QString port  = "COM8";
 QString addr  = "1:0";
-QString csvfile = "Z:\\Project\\Bridge\\id00004001.csv";
+//QString csvfile = "Z:\\Project\\Bridges\\id00004001.csv";
 
 
 IPDI_Bridge :: IPDI_Bridge()
 {
 
+    QString csvfile;
+    QString port;
+    QString addr  = "1:0";
+
     uint32_t id = 0;
     int mode    = 1;
-    std::vector<std::string> COM_list;
     bool success_COM = false;
+    std::string COM_str;
+    success_COM = get_COM_cypres_port(COM_str);
 
-    //get_COM_list(COM_list);
-    /*mw*/
-    /*
-    for(auto it=COM_list.begin();it!=COM_list.end();it++)
-    {
-        this->mw = new Qmw();
-        this->mw->init(port, mode);
-        if(mw->isBridgeConnected())
-        {
-            success_COM = true;
-            break;
-        }
-        else
-        {
-            this->mw->finish();
-            delete mw;
-        }
-    }*/
-    //QString port = QString::fromStdString(COM_list[1]);
-    this->mw = new Qmw();
-    this->mw->init(port, mode);
-    success_COM = true;
     if(success_COM)
     {
+        int ret = 0;
+        
+        /*mw*/
+        port = QString::fromStdString(COM_str);
+        this->mw = new Qmw();
+        this->mw->init(port, mode);
+
         /*aip*/
         this->aip = new qaip(mw);
+
+        csvfile_try:
+        //open File that contains the path
+        {
+            QString fileName = QDir::currentPath()+"\\CSVPATH.txt";
+            QFile file(fileName);
+            file.open(QFile::ReadOnly | QFile::Text);
+            QTextStream in(&file);
+            csvfile = in.readLine();
+            file.close();
+        }
 
         QByteArray ba = csvfile.toLocal8Bit();
         const char *lpStr1 = ba.data();
 
-        int ret = PathFileExists(lpStr1);
+        ret = PathFileExists(lpStr1);
 
         if(ret == 1)
         {
@@ -68,20 +73,35 @@ IPDI_Bridge :: IPDI_Bridge()
         }
         else
         {
-            //TODO dar la oprotunidad al usurio del elegir el path y guardar uno nuevo.
             QMessageBox messageBox;
-            messageBox.critical(0,"Error","wrong .csv path, file path doesnt exist!");
+            //ERROR MESSAGE
+            QString filter = "Text File (*.csv*) ;; All File (*.*)";
+            messageBox.critical(0,"Error","wrong .csv path, file path doesnt exist!, please select a valid path");
             messageBox.setFixedSize(500,200);
-            throw std::invalid_argument("invalid .csv file ");
-            this->mw->finish();
-            delete mw;
-            delete aip;
+            //SELECT NEW PATH
+            QString file_name = QFileDialog::getOpenFileName(NULL,"List of Parameters",QDir::currentPath(),filter);
+            std::cout<<file_name.toStdString()<<std::endl;
+            
+            //OPEN FILE
+            QString fileName = QDir::currentPath()+"\\CSVPATH.txt";
+            QFile file(fileName);
+            file.open(QIODevice::WriteOnly);
+            QTextStream out(&file);
+            out<<file_name<<"\n";
+
+            file.flush();
+            file.close();
+            goto csvfile_try;
+            //win->FilePathCheck();
+            //this->mw->finish();
+            //delete mw;
+            //delete aip;
         }
     }
     else
     {
         QMessageBox messageBox;
-        messageBox.critical(0,"Error","COM port not found, verify USB is connected");
+        messageBox.critical(0,"Error","Cypress COM port not found, verify USB is connected");
         messageBox.setFixedSize(500,200);
         throw std::invalid_argument("invalid COM PORT");
     }
