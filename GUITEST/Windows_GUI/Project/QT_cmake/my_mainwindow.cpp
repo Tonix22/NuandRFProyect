@@ -397,6 +397,19 @@ void MainWindow :: Slider_Calc(std::string& str)
     {
         return;
     }
+    if( str == "rssi")
+    {
+        Param_1_val->setRange(0,1);
+        min_p1_val->setText(TRANSLATE ("0"));
+        max_p1_val->setText(TRANSLATE ("1"));
+        (*(Param_N_val[0]))->setSliderPosition(0);
+
+        Param_2_val->setRange(0,0);
+        min_p2_val->setText(TRANSLATE ("None"));
+        max_p2_val->setText(TRANSLATE ("None"));
+        (*(ParamN_slider_val[1]))->setText("None");
+        return;
+    }
 
     // These are the functions that left
     Param_1_val->setRange(bounds[str][0].first,bounds[str][0].second);

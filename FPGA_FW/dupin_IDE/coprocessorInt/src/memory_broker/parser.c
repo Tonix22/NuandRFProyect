@@ -585,7 +585,11 @@ void pull_special(uint32_t* mem)
         Current_state = END_PULL;
         break;
     case GET_RX_RSSI_ID:
-        memcpy(mem,tx_path_clk,sizeof(rssi));
+        mem[0] = rssi.ant;
+        mem[1] = rssi.symbol;
+        mem[2] = rssi.preamble;
+        mem[3] = rssi.multiplier;
+        mem[4] = rssi.duration;
         Current_state = END_PULL;
         break;
 

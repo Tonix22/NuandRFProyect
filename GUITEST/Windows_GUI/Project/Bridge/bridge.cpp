@@ -127,6 +127,7 @@ void IPDI_Bridge :: Wait_ACK()
         memset(mutex,0,sizeof(uint32_t)*4);
         aip->readMem("MDATAOUT", mutex, 4, 0, addr);
     }while(mutex[0]!='A' && mutex[1]!='C' && mutex[2]!='K');
+    aip->start(addr);
 }
 
 

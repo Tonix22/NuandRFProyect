@@ -146,6 +146,11 @@ void send_response()
     if(Current_state == SPECIAL_GET)
     {
         clear_OUT_BUFF();
+        ISR_FLAG = IDLE;
+        send_ACK();
+        while(ISR_FLAG != READ && cnt++ < 60000000);
+        cnt = 0;
+        clear_OUT_BUFF();
         while(Current_state == SPECIAL_GET)
         {
             if(ISR_FLAG == READ) // wait a start as ACK
@@ -157,7 +162,7 @@ void send_response()
                 aip_write(0x2, &data[0], MAX_READ_SIZE, 0);
             }
         }
-        while(ISR_FLAG == IDLE);
+        while(ISR_FLAG != READ && cnt++ < 60000000);
         ISR_FLAG = IDLE;
         send_EOF();
     }
