@@ -168,10 +168,11 @@ void send_response()
     }
     else
     {
+        ISR_FLAG = IDLE;
         if(set_get == GET && ptypes_ref->P2 == EMPTY_PARAM)
         {
             aip_write(0x2, &FLIP_VALUES[0], 1, 0);
-            while(ISR_FLAG != READ && cnt++ < 60000000);// wait respose from GUI
+            while(ISR_FLAG != READ && cnt++ < 36000000);// wait respose from GUI
         }
         else if(set_get == GET)
         {
