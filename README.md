@@ -8,4 +8,4 @@ This repository contains all the source code required to program and interact wi
 | [host](Nuand_Blade_Base/host)  | PC host, to control de bladeRF project                     |
 | [Documentation](Documentation/Documentation.pdf)  | Project Explanation                   |
 
-![Alt text](General_spec.jpg?raw=true "General Spec")
+![Alt text](GUIoverwiew.jpg?raw=true "General Spec")
