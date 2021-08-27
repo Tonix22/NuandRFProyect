@@ -3,9 +3,23 @@ This repository contains all the source code required to program and interact wi
 
 | Directory         | Description                                                                                       |
 | ----------------- |:--------------------------------------------------------------------------------------------------|
-| [FPGA_FW](FPGA_FW) | Custom softcore firmware to migrate ad9361 library                                |
+| [Installers](Installers) | Dependencies and software required                                |
 | [GUITEST](GUITEST) | Interactive GUI to control the ad3261 drivers                           |
 | [host](Nuand_Blade_Base/host)  | PC host, to control de bladeRF project                     |
 | [Documentation](Documentation/Documentation.pdf)  | Project Explanation                   |
+
+
+To download FPGA bitstream run the following code
+
+RISCV
+
+```bash
+./framework.sh -bitstream
+```
+Memory only IP dummy
+
+```bash
+./framework.sh -dummy
+```
 
 ![Alt text](GUIoverwiew.jpg?raw=true "General Spec")

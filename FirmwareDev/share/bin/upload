@@ -1,0 +1,17 @@
+#!/bin/env bash
+# Run OpenOCD
+/home/diego/EDA/fpga/IP/openocd_riscv/binaries/bin/run_sim&
+sleep 1
+# Upload the binary
+(
+echo reset halt
+sleep 1
+echo load_image .pio/build/debug_emul/firmware.elf
+sleep 1
+echo resume
+sleep 1
+echo exit
+) | telnet localhost 4444
+# Exit
+killall openocd 2>&1
+
