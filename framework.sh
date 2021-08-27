@@ -2,8 +2,8 @@
 BASEDIR=${PWD}
 #Bitstream PATH
 #SOFT_DIR=/dupinSoC/hdl/dupin-cenzontle2.sof
-SOFT_DIR=FPGA_images/hdl/dupinCoprocessor-CNZTL2.sof
-DUMMY_DIR=FPGA_images/hdl/ipmIPDummy-CNZTL2.sof
+SOFT_DIR=/FPGA_images/hdl/dupinCoprocessor-CNZTL2.sof
+DUMMY_DIR=/FPGA_images/hdl/ipmIPDummy-CNZTL2.sof
 #OCD USB CFG
 if [ $1 == "-bitstream" ]; then #download bitstream to FPGA
     echo "bistream: ${BASEDIR}${SOFT_DIR}"
