@@ -7,3 +7,4 @@ FirmwareDev/core
 GUITEST/Windows_GUI/ipdi-qt-wrapper-installer-x64-(20210205)/ipdi-qt-wrapper-installer-x64-(20210205).exe
 GUITEST/Windows_GUI/mysetup.zip
 GUITEST/Windows_GUI/build-Project-Desktop_Qt_5_15_2_MinGW_64_bit-Debug
+GUITEST/Windows_GUI/build-Project-Desktop_Qt_5_12_11_MinGW_64_bit-Debug/*
